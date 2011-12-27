@@ -25,7 +25,8 @@ module Spree
     end
 
     def authorize(amount, creditcard, gateway_options)
-      create_transaction(amount, creditcard, :auth_only)
+      t_options = { :order => {:invoice_number => gateway_options[:order_id] } }
+       create_transaction( amount, creditcard, :auth_only, t_options )
     end
 
     def purchase(amount, creditcard, gateway_options)
