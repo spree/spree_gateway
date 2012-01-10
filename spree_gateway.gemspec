@@ -12,7 +12,6 @@ Gem::Specification.new do |s|
 
   s.require_path = 'lib'
   s.requirements << 'none'
-  s.add_dependency 'samurai'
   s.add_dependency 'spree_core', '>= 1.0.beta'
   s.add_development_dependency 'rspec-rails'
 end
