@@ -10,6 +10,7 @@ module SpreeGateway
     end
 
     initializer "spree.gateway.payment_methods", :after => "spree.register.payment_methods" do |app|
+        app.config.spree.payment_methods << Spree::Gateway::AuthorizeNetCim
         app.config.spree.payment_methods << Spree::Gateway::AuthorizeNet
         app.config.spree.payment_methods << Spree::Gateway::Eway
         app.config.spree.payment_methods << Spree::Gateway::Linkpoint
