@@ -32,7 +32,9 @@ module Spree
 
     def credit(*args)
       if args.size == 4
-        credit_with_payment_profiles(*args)
+        # enables ability to refund instead of credit
+        args.slice!(1,1)
+        credit_without_payment_profiles(*args)
       elsif args.size == 3
         credit_without_payment_profiles(*args)
       else
@@ -40,14 +42,18 @@ module Spree
       end
     end
 
+    # Braintree now disables credits by default, see https://www.braintreepayments.com/docs/ruby/transactions/credit
     def credit_with_payment_profiles(amount, payment, response_code, option)
       provider.credit(amount, payment)
     end
 
     def credit_without_payment_profiles(amount, response_code, options)
+      provider # braintree provider needs to be called here to properly configure braintree gem.
       transaction = ::Braintree::Transaction.find(response_code)
       if BigDecimal.new(amount.to_s) == (transaction.amount * 100)
         provider.refund(response_code)
+      elsif BigDecimal.new(amount.to_s) < (transaction.amount * 100) # support partial refunds
+        provider.refund(amount, response_code)
       else
         raise NotImplementedError
       end
