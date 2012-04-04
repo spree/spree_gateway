@@ -43,6 +43,7 @@ module Spree
 
       options = {}
       options[:email] = payment.order.email
+      options[:login] = preferred_login
       response = provider.store(payment.source, options)
       if response.success?
         payment.source.update_attributes!(:gateway_customer_profile_id => response.params['id'])
