@@ -52,7 +52,7 @@ module Spree
       transaction = ::Braintree::Transaction.find(response_code)
       if BigDecimal.new(amount.to_s) == (transaction.amount * 100)
         provider.refund(response_code)
-      elsif BigDecimal.new(amount.to_s) < (transaction.amount * 100)
+      elsif BigDecimal.new(amount.to_s) < (transaction.amount * 100) # support partial refunds
         provider.refund(amount, response_code)
       else
         raise NotImplementedError
