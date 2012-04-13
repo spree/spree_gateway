@@ -1,6 +1,8 @@
 module Spree
   class Gateway::Eway < Gateway
     preference :login, :string
+    
+    attr_accessible :preferred_login
 
     # Note: EWay supports purchase method only (no authorize method).
     # Ensure Spree::Config[:auto_capture] is set to true

@@ -3,6 +3,8 @@ module Spree
     preference :merchant_id, :string
     preference :public_key, :string
     preference :private_key, :string
+    
+    attr_accessible :preferred_merchant_id, :preferred_public_key, :preferred_private_key
 
     def provider_class
       ActiveMerchant::Billing::BraintreeGateway
