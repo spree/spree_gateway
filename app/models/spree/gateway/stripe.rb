@@ -1,7 +1,7 @@
 module Spree
   class Gateway::Stripe < Gateway
     preference :login, :string
-    
+
     attr_accessible :preferred_login
 
     # Make sure to have Spree::Config[:auto_capture] set to true.
@@ -50,7 +50,7 @@ module Spree
       if response.success?
         payment.source.update_attributes!(:gateway_customer_profile_id => response.params['id'])
       else
-        payment.source.gateway_error(response.message)
+        raise ActiveMerchant::ConnectionError, response.message
       end
     end
   end
