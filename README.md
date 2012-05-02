@@ -12,10 +12,12 @@ Installation
 
 In your gemfile:
 
-gem 'spree'
-gem 'spree_gateway' # make sure to include after spree
+    gem 'spree'
+    gem 'spree_gateway', :git => 'git://github.com/spree/spree_gateway.git' # make sure to include after spree
 
-bundle install
+Then run:
+
+    $ bundle install
 
 Testing
 -------
