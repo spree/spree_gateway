@@ -27,7 +27,7 @@ module Spree
         if response.success?
           payment.source.update_attributes!(:gateway_customer_profile_id => response.params['customer_vault_id'])
         else
-          payment.source.gateway_error response.message
+          payment.send(:gateway_error, response.message)
         end
       end
     end

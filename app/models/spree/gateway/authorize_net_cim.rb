@@ -98,8 +98,7 @@ module Spree
           { :customer_profile_id => response.params['customer_profile_id'],
             :customer_payment_profile_id => response.params['customer_payment_profile_id_list'].values.first }
         else
-          payment.gateway_error(response) if payment.respond_to? :gateway_error
-          payment.source.gateway_error(response)
+          payment.send(:gateway_error, response)
         end
       end
 
