@@ -24,8 +24,7 @@ module Spree
         if result.success?
           creditcard.update_attributes(:gateway_customer_profile_id => result.params['customerCode'], :gateway_payment_profile_id => result.params['customer_vault_id'])
         else
-          creditcard.gateway_error(result) if creditcard.respond_to? :gateway_error
-          creditcard.source.gateway_error(result)
+          payment.send(:gateway_error, result)
         end
       end
     end
