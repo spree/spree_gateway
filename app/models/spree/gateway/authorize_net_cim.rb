@@ -103,7 +103,7 @@ module Spree
       end
 
       def options_for_create_customer_profile(payment)
-        if payment.is_a? Creditcard
+        if payment.is_a? CreditCard
           info = { :bill_to => generate_address_hash(payment.address), :payment => { :credit_card => payment } }
         else
           info = { :bill_to => generate_address_hash(payment.order.bill_address),
