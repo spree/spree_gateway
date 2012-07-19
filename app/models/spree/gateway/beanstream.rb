@@ -163,7 +163,11 @@ module Spree
           if source.is_a?(String) or source.is_a?(Integer)
             post[:customerCode] = source
           else
-            source.type.to_s == 'check' ? add_check(post, source) : add_credit_card(post, source)
+            if source.respond_to?(:type) && source.type.to_s == 'check'
+              add_check(post, source)
+            else
+              add_credit_card(post, source)
+            end
           end
         end
 
