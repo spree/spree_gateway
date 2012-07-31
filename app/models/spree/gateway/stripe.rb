@@ -36,7 +36,7 @@ module Spree
     end
 
     def credit(money, creditcard, response_code, gateway_options)
-      provider.credit(money, response_code, {})
+      provider.refund(money, response_code, {})
     end
 
     def void(response_code, gateway_options)
