@@ -20,6 +20,7 @@ module SpreeGateway
         app.config.spree.payment_methods << Spree::Gateway::Braintree
         app.config.spree.payment_methods << Spree::Gateway::Stripe
         app.config.spree.payment_methods << Spree::Gateway::Samurai
+        app.config.spree.payment_methods << Spree::Gateway::Worldpay
     end
   end
 
