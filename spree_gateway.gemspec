@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_gateway'
-  s.version     = '1.0.0'
+  s.version     = '1.2.0.rc2'
   s.summary     = 'Spree Gateways'
   s.description = 'Additional Payment Gateways for Spree'
   s.required_ruby_version = '>= 1.8.7'
