@@ -4,7 +4,7 @@ describe Spree::Gateway::Braintree do
 
   before(:each) do
     Spree::Gateway.update_all :active => false
-    @gateway = Spree::Gateway::Braintree.create!(:name => "Braintree Gateway", :environment => "test", :active => true)
+    @gateway = Spree::Gateway::Braintree.create!(:name => "Braintree Gateway", :environment => "sandbox", :active => true)
 
     @gateway.set_preference(:merchant_id, "zbn5yzq9t7wmwx42" )
     @gateway.set_preference(:public_key, "ym9djwqpkxbv3xzt")
@@ -28,17 +28,18 @@ describe Spree::Gateway::Braintree do
       @order = Factory(:order_with_totals, :bill_address => @address, :ship_address => @address)
       @order.update!
       @creditcard = Factory(:creditcard, :verification_value => '123', :number => '5105105105105100', :month => 9, :year => Time.now.year + 1, :first_name => 'John', :last_name => 'Doe')
-      @payment = Factory(:payment, :source => @creditcard, :order => @order, :payment_method => @gateway, :amount => @order.total)
+      @payment = Factory(:payment, :source => @creditcard, :order => @order, :payment_method => @gateway, :amount => 10.00)
+      @payment.payment_method.environment = "test"
     end
 
   end
 
-  pending "should be braintree gateway" do
+  it "should be braintree gateway" do
     @gateway.provider_class.should == ::ActiveMerchant::Billing::BraintreeGateway
   end
 
   describe "authorize" do
-    pending "should return a success response with an authorization code" do
+    it "should return a success response with an authorization code" do
       result = @gateway.authorize(500, @creditcard,      {:server=>"test",
                                                         :test =>true,
                                                         :merchant_id=>"zbn5yzq9t7wmwx42",
@@ -54,7 +55,7 @@ describe Spree::Gateway::Braintree do
       Braintree::Transaction::Status::Authorized.should == Braintree::Transaction.find(result.authorization).status
    end
 
-   pending 'should work through the spree payment interface' do
+   it 'should work through the spree payment interface' do
       Spree::Config.set :auto_capture => false
       @payment.log_entries.size.should == 0
       @payment.process!
@@ -73,7 +74,7 @@ describe Spree::Gateway::Braintree do
 
   describe "capture" do
 
-    pending " should capture a previous authorization" do
+    it " should capture a previous authorization" do
       @payment.process!
       assert_equal 1, @payment.log_entries.size
       assert_match /\A\w{6}\z/, @payment.response_code
@@ -102,20 +103,20 @@ describe Spree::Gateway::Braintree do
   end
 
   describe 'purchase' do
-    pending 'should return a success response with an authorization code' do
+    it 'should return a success response with an authorization code' do
       result =  @gateway.purchase(500, @creditcard)
       result.success?.should be_true
       result.authorization.should match(/\A\w{6}\z/)
       Braintree::Transaction::Status::SubmittedForSettlement.should == Braintree::Transaction.find(result.authorization).status
     end
 
-    pending 'should work through the spree payment interface with payment profiles' do
+    it 'should work through the spree payment interface with payment profiles' do
       purchase_using_spree_interface
       transaction = ::Braintree::Transaction.find(@payment.response_code)
       transaction.credit_card_details.token.should_not be_nil
     end
 
-    pending 'should work through the spree payment interface without payment profiles' do
+    it 'should work through the spree payment interface without payment profiles' do
         with_payment_profiles_off do
           purchase_using_spree_interface(false)
           transaction = ::Braintree::Transaction.find(@payment.response_code)
