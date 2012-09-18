@@ -39,7 +39,7 @@ module Spree
       provider.refund(money, response_code, {})
     end
 
-    def void(response_code, gateway_options)
+    def void(response_code, creditcard, gateway_options)
       provider.void(response_code, {})
     end
 
