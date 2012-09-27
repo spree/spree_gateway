@@ -1,5 +1,5 @@
 module Spree
-  class Gateway::Braintree < Gateway
+  class Gateway::BraintreeGateway < Gateway
     preference :merchant_id, :string
     preference :public_key, :string
     preference :private_key, :string
