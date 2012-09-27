@@ -18,7 +18,7 @@ module SpreeGateway
         app.config.spree.payment_methods << Spree::Gateway::PayPal
         app.config.spree.payment_methods << Spree::Gateway::SagePay
         app.config.spree.payment_methods << Spree::Gateway::Beanstream
-        app.config.spree.payment_methods << Spree::Gateway::Braintree
+        app.config.spree.payment_methods << Spree::Gateway::BraintreeGateway
         app.config.spree.payment_methods << Spree::Gateway::Stripe
         app.config.spree.payment_methods << Spree::Gateway::Samurai
         app.config.spree.payment_methods << Spree::Gateway::Worldpay
