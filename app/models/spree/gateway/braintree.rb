@@ -69,7 +69,7 @@ module Spree
       authorize(money, creditcard, options.merge(:submit_for_settlement => true))
     end
 
-    def void(response_code, ignored_options)
+    def void(response_code, *ignored_options)
       provider.void(response_code)
     end
 
