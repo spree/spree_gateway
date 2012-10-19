@@ -2,7 +2,7 @@ module Spree
   class Gateway::Worldpay < Gateway
     preference :login, :string
     preference :password, :string
-    preference :currency, :string, default: 'GBP'
+    preference :currency, :string, :default => 'GBP'
     preference :installation_id, :string
 
     preference :american_express_login, :string
