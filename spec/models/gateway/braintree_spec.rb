@@ -27,7 +27,7 @@ describe Spree::Gateway::Braintree do
       )
       @order = Factory(:order_with_totals, :bill_address => @address, :ship_address => @address)
       @order.update!
-      @creditcard = Factory(:creditcard, :verification_value => '123', :number => '5105105105105100', :month => 9, :year => Time.now.year + 1, :first_name => 'John', :last_name => 'Doe')
+      @creditcard = Factory(:credit_card, :verification_value => '123', :number => '5105105105105100', :month => 9, :year => Time.now.year + 1, :first_name => 'John', :last_name => 'Doe')
       @payment = Factory(:payment, :source => @creditcard, :order => @order, :payment_method => @gateway, :amount => 10.00)
       @payment.payment_method.environment = "test"
     end
