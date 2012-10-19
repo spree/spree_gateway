@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::Gateway::AuthorizeNet do
-  let (:gateway) { Spree::Gateway::AuthorizeNet.new }
+  let (:gateway) { Spree::Gateway::AuthorizeNet.create!(:name => "Authorize.net") }
 
   describe "options" do
     it "should include :test => true when :test_mode is true" do
@@ -11,7 +11,7 @@ describe Spree::Gateway::AuthorizeNet do
 
     it "should not include :test when test_mode is false" do
       gateway.preferred_test_mode = false
-      gateway.options[:test].should be_nil
+      gateway.options[:test].should == false
     end
   end
 end
