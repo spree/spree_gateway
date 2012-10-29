@@ -146,6 +146,15 @@ describe Spree::Gateway::BraintreeGateway do
       transaction.status.should == Braintree::Transaction::Status::Voided
     end
   end
+
+  describe "update_card_number" do
+    it "passes through gateway_payment_profile_id" do
+      credit_card = { 'token' => 'testing', 'last_4' => '1234', 'masked_number' => '5555**5555' }
+      @gateway.update_card_number(@payment.source, credit_card)
+      @payment.source.gateway_payment_profile_id.should == "testing"
+    end
+  end
+
   def credit_using_spree_interface
     @payment.log_entries.size.should == 1
     @payment.source.credit(@payment) # as done in PaymentsController#fire
