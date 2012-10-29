@@ -39,6 +39,7 @@ module Spree
     def update_card_number(source, cc)
       last_4 = cc['last_4']
       source.last_digits = last_4 if last_4
+      source.gateway_payment_profile_id = cc['token']
       masked_number = cc['masked_number']
       if masked_number
         source.cc_type = nil
