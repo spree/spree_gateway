@@ -1,4 +1,4 @@
-class ChangeBraintreePaymentMethodType < ActiveRecord::Migration
+class UpdateBraintreePaymentMethodType < ActiveRecord::Migration
   def up
     Spree::PaymentMethod.where(:type => "Spree::Gateway::Braintree").update_all(:type => "Spree::Gateway::BraintreeGateway")
   end
