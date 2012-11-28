@@ -1,0 +1,27 @@
+<p data-hook="skrill_quick_checkout"></p>
+
+<%
+opts = {}
+opts[:transaction_id] = "#{@order.number}"
+opts[:amount] = @order.total
+opts[:return_url] = skrill_return_order_checkout_url(@order, :token => @order.token,
+                                                             :payment_method_id => payment_method.id)
+opts[:cancel_url] = skrill_cancel_order_checkout_url(@order, :token => @order.token)
+opts[:status_url] = skrill_status_update_url
+opts[:payment_method_id] = payment_method.id
+%>
+
+<style>
+  iframe.skrill_frame{
+    border: 0px;
+    width: 500px;
+    height: 500px;
+  }
+</style>
+
+<fieldset id="skrill_payment__<%= payment_method.id %>" data-hook>
+  <legend><%= t(:payment_information) %></legend>
+  <iframe id="skrill_frame_<%= payment_method.id %>"
+          class="skrill_frame" src="<%= payment_method.redirect_url @order, opts %>"></iframe>
+</fieldset>
+
