@@ -3,10 +3,16 @@ module Spree
     preference :merchant_id, :string
     preference :public_key, :string
     preference :private_key, :string
-    preference :client_side_encryption_key, :string
+    preference :client_side_encryption_key, :text
 
     attr_accessible :preferred_merchant_id, :preferred_public_key, :preferred_private_key,
       :preferred_client_side_encryption_key
+
+    def provider
+      provider_instance = super
+      Braintree::Configuration.custom_user_agent = "Spree #{Spree.version}"
+      provider_instance
+    end
 
     def provider_class
       ActiveMerchant::Billing::BraintreeGateway
