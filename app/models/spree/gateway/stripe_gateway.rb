@@ -5,13 +5,15 @@ module Spree
 
     attr_accessible :preferred_login, :preferred_currency
 
-    # Make sure to have Spree::Config[:auto_capture] set to true.
-
     def provider_class
       ActiveMerchant::Billing::StripeGateway
     end
 
     def payment_profiles_supported?
+      true
+    end
+
+    def auto_capture?
       true
     end
 
@@ -30,11 +32,11 @@ module Spree
     end
 
     def authorize(money, creditcard, gateway_options)
-      raise "Stripe does not currently support separate auth and capture; ensure Spree::Config[:auto_capture] is set to true"
+      raise "Stripe does not currently support separate auth and capture"
     end
 
     def capture(authorization, creditcard, gateway_options)
-      raise "Stripe does not currently support separate auth and capture; ensure Spree::Config[:auto_capture] is set to true"
+      raise "Stripe does not currently support separate auth and capture"
     end
 
     def credit(money, creditcard, response_code, gateway_options)
