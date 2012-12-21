@@ -3,10 +3,8 @@ module Spree
     preference :login, :string
     preference :password, :string
     preference :processor_token, :string
-    
-    attr_accessible :preferred_login, :preferred_password, :preferred_processor_token
 
-    # Make sure to have Spree::Config[:auto_capture] set to true.
+    attr_accessible :preferred_login, :preferred_password, :preferred_processor_token
 
     def provider_class
       ActiveMerchant::Billing::SamuraiGateway
