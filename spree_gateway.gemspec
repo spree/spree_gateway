@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
 
   s.require_path = 'lib'
   s.requirements << 'none'
-  s.add_dependency 'spree_core', '~> 2.0'
+  s.add_dependency 'spree_core', '~> 2.0.0.beta'
   s.add_dependency 'savon'
   s.add_development_dependency 'factory_girl', '~> 2.6'
   s.add_development_dependency 'rspec-rails'
