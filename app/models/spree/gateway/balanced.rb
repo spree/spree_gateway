@@ -2,8 +2,9 @@ module Spree
   class Gateway::Balanced < Gateway
     preference :login, :string
     preference :password, :string
+    preference :on_behalf_of_uri, :string
 
-    attr_accessible :preferred_login, :preferred_password
+    attr_accessible :preferred_login, :preferred_password, :preferred_on_behalf_of_uri
     
     def provider_class
       ActiveMerchant::Billing::BalancedGateway
