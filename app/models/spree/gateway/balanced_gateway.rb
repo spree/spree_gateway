@@ -1,5 +1,5 @@
 module Spree
-  class Gateway::Balanced < Gateway
+  class Gateway::BalancedGateway < Gateway
     preference :login, :string
     preference :on_behalf_of_uri, :string
 
