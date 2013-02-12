@@ -14,4 +14,6 @@ else
   gem "debugger"
 end
 
+gem 'spree', :github => "spree/spree", :branch => "master"
+
 gemspec
