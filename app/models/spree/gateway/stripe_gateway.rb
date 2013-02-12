@@ -1,5 +1,5 @@
 module Spree
-  class Gateway::Stripe < Gateway
+  class Gateway::StripeGateway < Gateway
     preference :login, :string
     preference :currency, :string, :default => 'USD'        #stripes only supports USD and CAD
 
