@@ -9,15 +9,10 @@ module Spree
       ActiveMerchant::Billing::AuthorizeNetGateway
     end
 
-    def options
-      # add :test key in the options hash, as that is what the ActiveMerchant::Billing::AuthorizeNetGateway expects
-      if self.preferred_test_mode
-        self.class.preference :test, :boolean, :default => true
-      else
-        self.class.remove_preference :test
-      end
-
-      super
+    def options_with_test_preference
+      options_without_test_preference.merge(:test => self.preferred_test_mode)
     end
+
+    alias_method_chain :options, :test_preference
   end
 end

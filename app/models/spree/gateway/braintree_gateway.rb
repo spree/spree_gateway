@@ -1,10 +1,18 @@
 module Spree
-  class Gateway::Braintree < Gateway
+  class Gateway::BraintreeGateway < Gateway
     preference :merchant_id, :string
     preference :public_key, :string
     preference :private_key, :string
-    
-    attr_accessible :preferred_merchant_id, :preferred_public_key, :preferred_private_key
+    preference :client_side_encryption_key, :text
+
+    attr_accessible :preferred_merchant_id, :preferred_public_key, :preferred_private_key,
+      :preferred_client_side_encryption_key
+
+    def provider
+      provider_instance = super
+      Braintree::Configuration.custom_user_agent = "Spree #{Spree.version}"
+      provider_instance
+    end
 
     def provider_class
       ActiveMerchant::Billing::BraintreeGateway
@@ -26,10 +34,25 @@ module Spree
         response = provider.store(payment.source)
         if response.success?
           payment.source.update_attributes!(:gateway_customer_profile_id => response.params['customer_vault_id'])
+          cc = response.params['braintree_customer'].fetch('credit_cards',[]).first
+          update_card_number(payment.source, cc) if cc
         else
           payment.send(:gateway_error, response.message)
         end
       end
+    end
+
+    def update_card_number(source, cc)
+      last_4 = cc['last_4']
+      source.last_digits = last_4 if last_4
+      source.gateway_payment_profile_id = cc['token']
+      masked_number = cc['masked_number']
+      if masked_number
+        source.cc_type = nil
+        source.number = masked_number.gsub("*", "1")
+        source.set_card_type
+      end
+      source.save!
     end
 
     def credit(*args)
@@ -69,18 +92,11 @@ module Spree
       authorize(money, creditcard, options.merge(:submit_for_settlement => true))
     end
 
-    def void(response_code, ignored_options)
+    def void(response_code, *ignored_options)
       provider.void(response_code)
     end
 
     protected
-      def adjust_country_name(options)
-        [:billing_address, :shipping_address].each do |address|
-          if options[address] && options[address][:country] == 'US'
-            options[address][:country] = 'United States of America'
-          end
-        end
-      end
 
       def adjust_billing_address(creditcard, options)
         if creditcard.gateway_customer_profile_id
@@ -89,7 +105,6 @@ module Spree
       end
 
       def adjust_options_for_braintree(creditcard, options)
-        adjust_country_name(options)
         adjust_billing_address(creditcard, options)
       end
   end
