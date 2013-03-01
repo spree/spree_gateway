@@ -7,12 +7,6 @@ group :test do
 end
 gem 'braintree'
 
-if RUBY_VERSION < "1.9"
-  gem "ruby-debug"
-else
-  gem "debugger"
-end
-
 gem 'spree', :github => "spree/spree", :branch => "master"
 
 gemspec
