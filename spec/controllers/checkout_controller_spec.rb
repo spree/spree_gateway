@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CheckoutController do
+describe Spree::CheckoutController do
   let(:skrill_gateway) { BillingIntegration::Skrill::QuickCheckout.new :id => 123, :preferred_merchant_id => '987654321' }
   let(:order) { Factory(:order, :state => "payment") }
 
