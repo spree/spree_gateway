@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe BillingIntegration::Skrill::QuickCheckout do
+describe Spree::BillingIntegration::Skrill::QuickCheckout do
   context "redirect_url" do
     let(:payment_method) { Factory :skrill_quick_checkout }
     let(:order) { Factory(:order) }
