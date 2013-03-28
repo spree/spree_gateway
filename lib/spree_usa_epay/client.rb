@@ -93,7 +93,11 @@ module SpreeUsaEpay
       return unless creditcard.gateway_customer_profile_id?
 
       token = security_token(gateway_options)
-      request = customer_transaction_request(amount, creditcard, gateway_options)
+      if command == 'Credit'
+        request = customer_credit_transaction_request(amount, creditcard, gateway_options)
+      else
+        request = customer_transaction_request(amount, creditcard, gateway_options)
+      end
       request['Command'] = command
 
       response = request(:run_customer_transaction,{"Token" => token,
@@ -171,6 +175,17 @@ module SpreeUsaEpay
         'Discount' => double_money(gateway_options[:discount]),
         'OrderID' => gateway_options[:order_id] }
     end
+    
+    def credit_transaction_details(amount, creditcard, gateway_options)
+      gateway_options[:discount] = amount
+      { 'Description' => gateway_options[:customer],
+        'Amount'      => double_money(amount),
+        'Tax'         => double_money(0),
+        'Subtotal'    => double_money(0),
+        'Shipping'    => double_money(0),
+        'Discount'    => double_money(amount),
+        'OrderID'     => gateway_options[:order_id] }
+    end
 
     #http://wiki.usaepay.com/developer/soap-1.4/objects/customerobject
     def customer_data(amount, creditcard, gateway_options)
@@ -194,6 +209,13 @@ module SpreeUsaEpay
         'ClientIP' => gateway_options[:ip],
         'isRecurring' => false,
         'Details' => transaction_details(amount, creditcard, gateway_options) }
+    end
+    
+    def customer_credit_transaction_request(amount, creditcard, gateway_options)
+      { 'Command' => 'Credit',
+        'ClientIP' => gateway_options[:ip],
+        'isRecurring' => false,
+        'Details' => credit_transaction_details(amount, creditcard, gateway_options) }
     end
 
     def double_money(value)
@@ -219,4 +241,3 @@ module SpreeUsaEpay
 
   end
 end
-
