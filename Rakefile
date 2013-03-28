@@ -1,6 +1,6 @@
 require 'rake'
 require 'rspec/core/rake_task'
-require 'spree/core/testing_support/common_rake'
+require 'spree/testing_support/common_rake'
 require 'bundler/gem_tasks'
 
 RSpec::Core::RakeTask.new
