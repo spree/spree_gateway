@@ -38,6 +38,12 @@ describe Spree::Gateway::BraintreeGateway do
     @gateway.provider_class.should == ::ActiveMerchant::Billing::BraintreeGateway
   end
 
+  describe "preferences" do
+    it "should not include server + test_mode" do
+      lambda { @gateway.preferences.fetch(:server) }.should raise_error(StandardError)
+    end
+  end
+
   describe "authorize" do
     it "should return a success response with an authorization code" do
       result = @gateway.authorize(500, @credit_card,      {:server=>"test",

@@ -96,6 +96,10 @@ module Spree
       provider.void(response_code)
     end
 
+    def preferences
+      super.slice(:merchant_id, :public_key, :private_key, :client_side_encryption_key)
+    end
+
     protected
 
       def adjust_billing_address(creditcard, options)
