@@ -48,14 +48,37 @@ module Spree
     def create_profile(payment)
       return unless payment.source.gateway_customer_profile_id.nil?
 
-      options = {}
-      options[:email] = payment.order.email
-      options[:login] = preferred_login
+      options = {
+        email: payment.order.email,
+        login: preferred_login
+      }.merge! address_for(payment)
+
       response = provider.store(payment.source, options)
       if response.success?
         payment.source.update_attributes!(:gateway_customer_profile_id => response.params['id'])
       else
         payment.send(:gateway_error, response.message)
+      end
+    end
+
+    def address_for(payment)
+      {}.tap do |options|
+        if address = payment.order.bill_address
+          options.merge!(address: {
+            address1: address.address1,
+            address2: address.address2,
+            city: address.city,
+            zip: address.zipcode
+          })
+
+          if country = address.country
+            options[:address].merge!(country: country.name)
+          end
+
+          if state = address.state
+            options[:address].merge!(state: state.name)
+          end
+        end
       end
     end
   end
