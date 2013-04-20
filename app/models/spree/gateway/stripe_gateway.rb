@@ -61,6 +61,8 @@ module Spree
       end
     end
 
+    private
+
     def address_for(payment)
       {}.tap do |options|
         if address = payment.order.bill_address
