@@ -106,7 +106,7 @@ module Spree
 
       # Must be either :production or :sandbox, not their string equivalents.
       # Thanks to the Braintree gem.
-      preferences[:environment] = preferences[:environment].to_sym
+      preferences[:environment] = preferences[:environment].try(:to_sym) || :sandbox
       preferences
     end
 
