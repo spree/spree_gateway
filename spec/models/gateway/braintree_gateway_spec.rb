@@ -35,7 +35,7 @@ describe Spree::Gateway::BraintreeGateway do
   end
 
   it "should be braintree gateway" do
-    @gateway.provider_class.should == ::ActiveMerchant::Billing::BraintreeGateway
+    @gateway.provider_class.should == ::ActiveMerchant::Billing::BraintreeBlueGateway
   end
 
   describe "preferences" do
