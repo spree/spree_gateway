@@ -46,13 +46,7 @@ describe Spree::Gateway::BraintreeGateway do
 
   describe "authorize" do
     it "should return a success response with an authorization code" do
-      result = @gateway.authorize(500, @credit_card,      {:server=>"test",
-                                                        :test =>true,
-                                                        :merchant_id=>"zbn5yzq9t7wmwx42",
-                                                        :public_key=> "ym9djwqpkxbv3xzt",
-                                                        :private_key=> "4ghghkyp2yy6yqc8"})
-
-
+      result = @gateway.authorize(500, @credit_card)
 
       result.success?.should be_true
       result.authorization.should match(/\A\w{6}\z/)
