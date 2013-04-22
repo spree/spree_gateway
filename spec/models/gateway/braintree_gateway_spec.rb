@@ -12,9 +12,9 @@ describe Spree::Gateway::BraintreeGateway do
     @gateway.save!
 
     with_payment_profiles_off do
-      @country = Factory(:country, :name => "United States", :iso_name => "UNITED STATES", :iso3 => "USA", :iso => "US", :numcode => 840)
-      @state   = Factory(:state, :name => "Maryland", :abbr => "MD", :country => @country)
-      @address = Factory(:address,
+      @country = FactoryGirl.create(:country, :name => "United States", :iso_name => "UNITED STATES", :iso3 => "USA", :iso => "US", :numcode => 840)
+      @state   = FactoryGirl.create(:state, :name => "Maryland", :abbr => "MD", :country => @country)
+      @address = FactoryGirl.create(:address,
         :firstname => 'John',
         :lastname => 'Doe',
         :address1 => '1234 My Street',
@@ -25,28 +25,28 @@ describe Spree::Gateway::BraintreeGateway do
         :state => @state,
         :country => @country
       )
-      @order = Factory(:order_with_totals, :bill_address => @address, :ship_address => @address)
+      @order = FactoryGirl.create(:order_with_totals, :bill_address => @address, :ship_address => @address)
       @order.update!
-      @credit_card = Factory(:credit_card, :verification_value => '123', :number => '5105105105105100', :month => 9, :year => Time.now.year + 1, :first_name => 'John', :last_name => 'Doe')
-      @payment = Factory(:payment, :source => @credit_card, :order => @order, :payment_method => @gateway, :amount => 10.00)
+      @credit_card = FactoryGirl.create(:credit_card, :verification_value => '123', :number => '5105105105105100', :month => 9, :year => Time.now.year + 1, :first_name => 'John', :last_name => 'Doe')
+      @payment = FactoryGirl.create(:payment, :source => @credit_card, :order => @order, :payment_method => @gateway, :amount => 10.00)
       @payment.payment_method.environment = "test"
     end
 
   end
 
   it "should be braintree gateway" do
-    @gateway.provider_class.should == ::ActiveMerchant::Billing::BraintreeGateway
+    @gateway.provider_class.should == ::ActiveMerchant::Billing::BraintreeBlueGateway
+  end
+
+  describe "preferences" do
+    it "should not include server + test_mode" do
+      lambda { @gateway.preferences.fetch(:server) }.should raise_error(StandardError)
+    end
   end
 
   describe "authorize" do
     it "should return a success response with an authorization code" do
-      result = @gateway.authorize(500, @credit_card,      {:server=>"test",
-                                                        :test =>true,
-                                                        :merchant_id=>"zbn5yzq9t7wmwx42",
-                                                        :public_key=> "ym9djwqpkxbv3xzt",
-                                                        :private_key=> "4ghghkyp2yy6yqc8"})
-
-
+      result = @gateway.authorize(500, @credit_card)
 
       result.success?.should be_true
       result.authorization.should match(/\A\w{6}\z/)

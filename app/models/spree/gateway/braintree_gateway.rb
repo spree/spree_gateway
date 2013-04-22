@@ -1,12 +1,13 @@
 module Spree
   class Gateway::BraintreeGateway < Gateway
+    preference :environment, :string
     preference :merchant_id, :string
     preference :public_key, :string
     preference :private_key, :string
     preference :client_side_encryption_key, :text
 
     attr_accessible :preferred_merchant_id, :preferred_public_key, :preferred_private_key,
-      :preferred_client_side_encryption_key
+      :preferred_client_side_encryption_key, :preferred_environment
 
     def provider
       provider_instance = super
@@ -15,7 +16,7 @@ module Spree
     end
 
     def provider_class
-      ActiveMerchant::Billing::BraintreeGateway
+      ActiveMerchant::Billing::BraintreeBlueGateway
     end
 
     def authorize(money, creditcard, options = {})
@@ -94,6 +95,19 @@ module Spree
 
     def void(response_code, *ignored_options)
       provider.void(response_code)
+    end
+
+    def preferences
+      preferences = super.slice(:merchant_id,
+                                :public_key,
+                                :private_key,
+                                :client_side_encryption_key,
+                                :environment)
+
+      # Must be either :production or :sandbox, not their string equivalents.
+      # Thanks to the Braintree gem.
+      preferences[:environment] = preferences[:environment].try(:to_sym) || :sandbox
+      preferences
     end
 
     protected
