@@ -16,7 +16,7 @@ module Spree
     end
 
     def provider_class
-      ActiveMerchant::Billing::BraintreeGateway
+      ActiveMerchant::Billing::BraintreeBlueGateway
     end
 
     def authorize(money, creditcard, options = {})
