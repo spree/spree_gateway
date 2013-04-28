@@ -68,19 +68,19 @@ module Spree
     def address_for(payment)
       {}.tap do |options|
         if address = payment.order.bill_address
-          options.merge!(address: {
-            address1: address.address1,
-            address2: address.address2,
-            city: address.city,
-            zip: address.zipcode
+          options.merge!(:address => {
+            :address1 => address.address1,
+            :address2 => address.address2,
+            :city => address.city,
+            :zip => address.zipcode
           })
 
           if country = address.country
-            options[:address].merge!(country: country.name)
+            options[:address].merge!(:country => country.name)
           end
 
           if state = address.state
-            options[:address].merge!(state: state.name)
+            options[:address].merge!(:state => state.name)
           end
         end
       end
