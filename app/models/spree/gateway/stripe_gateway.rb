@@ -51,8 +51,8 @@ module Spree
       return unless payment.source.gateway_customer_profile_id.nil?
 
       options = {
-        email: payment.order.email,
-        login: preferred_login
+        :email => payment.order.email,
+        :login => preferred_login
       }.merge! address_for(payment)
 
       response = provider.store(payment.source, options)
