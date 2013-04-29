@@ -14,6 +14,7 @@ module Spree
     end
 
     def capture(authorization, creditcard, gateway_options)
+      gateway_options[:on_behalf_of_uri] = self.preferred_on_behalf_of_uri
       provider.capture((authorization.amount * 100).round, authorization.response_code, gateway_options)
     end
 
