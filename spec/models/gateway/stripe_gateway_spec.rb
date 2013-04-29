@@ -6,10 +6,10 @@ describe Spree::Gateway::StripeGateway do
 
   let(:payment) {
     stub('Spree::Payment',
-      source: stub('Source', gateway_customer_profile_id: nil).as_null_object,
-      order: stub('Spree::Order',
-        email: email,
-        bill_address: bill_address
+      :source => stub('Source', :gateway_customer_profile_id => nil).as_null_object,
+      :order => stub('Spree::Order',
+        :email => email,
+        :bill_address => bill_address
       )
     )
   }
@@ -20,27 +20,27 @@ describe Spree::Gateway::StripeGateway do
     context 'with an order that has a bill address' do
       let(:bill_address) {
         stub('Spree::Address',
-          address1: '123 Happy Road',
-          address2: 'Apt 303',
-          city: 'Suzarac',
-          zipcode: '95671',
-          state: stub('Spree::State', name: 'Oregon'),
-          country: stub('Spree::Country', name: 'United States')
+          :address1 => '123 Happy Road',
+          :address2 => 'Apt 303',
+          :city => 'Suzarac',
+          :zipcode => '95671',
+          :state => stub('Spree::State', :name => 'Oregon'),
+          :country => stub('Spree::Country', :name => 'United States')
         )
       }
 
       it 'stores the bill address with the provider' do
         subject.provider.should_receive(:store).with(payment.source, {
-          email: email,
-          login: login,
+          :email => email,
+          :login => login,
 
-          address: {
-            address1: '123 Happy Road',
-            address2: 'Apt 303',
-            city: 'Suzarac',
-            zip: '95671',
-            state: 'Oregon',
-            country: 'United States'
+          :address => {
+            :address1 => '123 Happy Road',
+            :address2 => 'Apt 303',
+            :city     => 'Suzarac',
+            :zip      => '95671',
+            :state    => 'Oregon',
+            :country  => 'United States'
           }
         }).and_return stub.as_null_object
 
@@ -53,8 +53,8 @@ describe Spree::Gateway::StripeGateway do
 
       it 'does not store a bill address with the provider' do
         subject.provider.should_receive(:store).with(payment.source, {
-          email: email,
-          login: login,
+          :email => email,
+          :login => login,
         }).and_return stub.as_null_object
 
         subject.create_profile payment
