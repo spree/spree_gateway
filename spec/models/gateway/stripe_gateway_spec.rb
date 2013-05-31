@@ -14,7 +14,19 @@ describe Spree::Gateway::StripeGateway do
     )
   }
 
-  before { subject.set_preference :login, login }
+  let(:provider) do
+    double('provider').tap do |p|
+      p.stub!(:purchase)
+      p.stub!(:authorize)
+      p.stub!(:capture)
+    end
+  end
+
+  before do 
+    subject.set_preference :login, login 
+    subject.stub!(:options_for_purchase_or_auth).and_return(['money','cc','opts'])
+    subject.stub!(:provider).and_return provider
+  end
 
   describe '#create_profile' do
     context 'with an order that has a bill address' do
@@ -59,6 +71,52 @@ describe Spree::Gateway::StripeGateway do
 
         subject.create_profile payment
       end
+    end
+  end
+
+  context 'purchasing' do
+
+    after(:each) do
+      subject.purchase(19.99, 'credit card', {})
+    end
+
+    it 'should send the payment to the provider' do
+      provider.should_receive(:purchase).with('money','cc','opts')
+    end
+
+  end
+
+  context 'authorizing' do
+
+    after(:each) do
+      subject.authorize(19.99, 'credit card', {})
+    end
+
+    it 'should send the authorization to the provider' do
+      provider.should_receive(:authorize).with('money','cc','opts')
+    end
+
+  end
+
+  context 'capturing' do
+
+    let(:payment) do
+      double('payment').tap do |p|
+        p.stub!(:amount).and_return(12.34)
+        p.stub!(:response_code).and_return('response_code')
+      end
+    end 
+
+    after(:each) do
+      subject.capture(payment, 'credit card', {})
+    end
+
+    it 'should convert the amount to cents' do
+      provider.should_receive(:capture).with(1234,anything,anything)
+    end
+
+    it 'should use the response code as the authorization' do
+      provider.should_receive(:capture).with(anything,'response_code',anything)
     end
   end
 end
