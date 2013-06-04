@@ -13,30 +13,16 @@ module Spree
       true
     end
 
-    def auto_capture?
-      true
-    end
-
     def purchase(money, creditcard, gateway_options)
-      options = {}
-      options[:description] = "Spree Order ID: #{gateway_options[:order_id]}"
-      options[:currency] = preferred_currency
-      if customer = creditcard.gateway_customer_profile_id
-        options[:customer] = customer
-        creditcard = nil
-      elsif token = creditcard.gateway_payment_profile_id
-        # The Stripe ActiveMerchant gateway supports passing the token directly as the creditcard parameter
-        creditcard = token
-      end
-      provider.purchase(money, creditcard, options)
+      provider.purchase(*options_for_purchase_or_auth(money,creditcard, gateway_options))
     end
 
     def authorize(money, creditcard, gateway_options)
-      raise "Stripe does not currently support separate auth and capture"
+      provider.authorize(*options_for_purchase_or_auth(money,creditcard, gateway_options))
     end
 
-    def capture(authorization, creditcard, gateway_options)
-      raise "Stripe does not currently support separate auth and capture"
+    def capture(payment, creditcard, gateway_options)
+      provider.capture((payment.amount * 100).round,payment.response_code,gateway_options)
     end
 
     def credit(money, creditcard, response_code, gateway_options)
@@ -64,6 +50,20 @@ module Spree
     end
 
     private
+
+    def options_for_purchase_or_auth(money, creditcard, gateway_options)
+      options = {}
+      options[:description] = "Spree Order ID: #{gateway_options[:order_id]}"
+      options[:currency] = preferred_currency
+      if customer = creditcard.gateway_customer_profile_id
+        options[:customer] = customer
+        creditcard = nil
+      elsif token = creditcard.gateway_payment_profile_id
+        # The Stripe ActiveMerchant gateway supports passing the token directly as the creditcard parameter
+        creditcard = token
+      end
+      return money, creditcard, options
+    end
 
     def address_for(payment)
       {}.tap do |options|
