@@ -22,12 +22,12 @@ module Spree
           state_callback(:after)
         end
       end
-      flash.notice = t(:order_processed_successfully)
+      flash.notice = Spree.t(:order_processed_successfully)
       redirect_to completion_route
     end
 
     def skrill_cancel
-      flash[:error] = t(:payment_has_been_cancelled)
+      flash[:error] = Spree.t(:payment_has_been_cancelled)
       redirect_to edit_order_path(@order)
     end
 
@@ -39,9 +39,8 @@ module Spree
       if payment_method.kind_of?(BillingIntegration::Skrill::QuickCheckout)
         #TODO confirming payment method
         redirect_to edit_order_checkout_url(@order, :state => 'payment'),
-                    :notice => t(:complete_skrill_checkout)
+                    :notice => Spree.t(:complete_skrill_checkout)
       end
     end
-
   end
 end
