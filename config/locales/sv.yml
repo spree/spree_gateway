@@ -1,0 +1,11 @@
+---
+sv:
+  spree:
+    payment_has_been_cancelled: Betalningen har avbrutits.
+    complete_skrill_checkout: Var god fyll i Skrill kassan innan du fortsätter
+    skrill: Skrill
+    skrill_transaction: Transaktion
+    skrill_customer_id: Kund ID
+    skrill_transaction_id: Transaktion ID
+    skrill_payment_type: Betalningstyp
+    skrill_payment_currency: Betalningsvaluta

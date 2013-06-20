@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 group :test do
   gem 'ffaker'
@@ -6,6 +6,6 @@ group :test do
 end
 gem 'braintree'
 
-gem 'spree', :github => "spree/spree", :branch => "master"
+gem 'spree', github: 'spree/spree'
 
 gemspec
