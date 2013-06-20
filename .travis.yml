@@ -1,10 +1,12 @@
+language: ruby
 before_script:
-  - "bundle exec rake test_app"
+  - sh -e /etc/init.d/xvfb start
+  - export DISPLAY=:99.0
+  - bundle exec rake test_app
 env:
   - DB=sqlite
 script:
-  - "bundle exec rspec spec"
-
+  - bundle exec rspec spec
 notifications:
   email:
     - ryan@spreecommerce.com
