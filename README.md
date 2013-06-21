@@ -64,5 +64,5 @@ Starting point:
 Copyright (c) 2013 Spree Commerce, released under the [New BSD License][3]
 
 [1]: http://www.fsf.org/licensing/essays/free-sw.html
-[2]: https://github.com/futhr/spree-dibs/issues
+[2]: https://github.com/spree/spree_gateway/issues
 [3]: https://github.com/spree/spree_gateway/tree/master/LICENSE
