@@ -142,6 +142,10 @@ module Spree
 
         def post(data, use_profile_api)
           response = parse(ssl_post((use_profile_api ? SECURE_PROFILE_URL : ActiveMerchant::Billing::BeanstreamGateway::URL), data))
+          if response[:responseCode].eql?("17") # Found matching card
+            response[:responseCode] = "1"
+            response[:customerCode] = response[:matchedCustomerCode]
+          end
           response[:customer_vault_id] = response[:customerCode] if response[:customerCode]
           build_response(success?(response), message_from(response), response,
                          :test => test? || response[:authCode] == 'TEST',
