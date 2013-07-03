@@ -4,9 +4,11 @@ module Spree
     preference :language, :string, :default => 'EN'
     preference :currency, :string, :default => 'EUR'
     preference :payment_options, :string, :default => 'ACC'
+    preference :pay_to_email, :string ,   :default => 'your@merchant.email_here' 
 
     attr_accessible :preferred_merchant_id, :preferred_language, :preferred_currency,
-                    :preferred_payment_options, :preferred_server, :preferred_test_mode
+                    :preferred_payment_options, :preferred_server, :preferred_test_mode,
+                    :preferred_pay_to_email
 
     def provider_class
       ActiveMerchant::Billing::Skrill
@@ -20,7 +22,7 @@ module Spree
       opts[:detail1_text] = order.number
       opts[:detail1_description] = "Order:"
 
-      opts[:pay_from_email] = order.email
+      #opts[:pay_from_email] = order.email
       opts[:firstname] = order.bill_address.firstname
       opts[:lastname] = order.bill_address.lastname
       opts[:address] = order.bill_address.address1
@@ -30,7 +32,7 @@ module Spree
       opts[:postal_code] = order.bill_address.zipcode
       opts[:state] = order.bill_address.state.nil? ? order.bill_address.state_name.to_s : order.bill_address.state.abbr
       opts[:country] = order.bill_address.country.name
-
+      opts[:pay_to_email] = self.preferred_pay_to_email
       opts[:hide_login] = 1
       opts[:merchant_fields] = 'platform,order_id,payment_method_id'
       opts[:platform] = 'Spree'
