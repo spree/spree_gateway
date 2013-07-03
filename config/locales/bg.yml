@@ -1,0 +1,11 @@
+---
+bg:
+  spree:
+    payment_has_been_cancelled: Плащането беше прекъснато.
+    complete_skrill_checkout: Моля довършете Вашето плащане със Skrill преди да продължите
+    skrill: Skrill
+    skrill_transaction: Транзакция
+    skrill_customer_id: Клиентски номер 
+    skrill_transaction_id: Номер на транкцията
+    skrill_payment_type: Вид на плащане
+    skrill_payment_currency: Валута
