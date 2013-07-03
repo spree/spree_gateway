@@ -1,0 +1,11 @@
+---
+de:
+  spree:
+    payment_has_been_cancelled: Die Zahlung wurde abgebrochen.
+    complete_skrill_checkout: Bitte schliessen Sie die Skrill-Zahlung ab
+    skrill: Skrill
+    skrill_transaction: Transaktion
+    skrill_customer_id: Kunden ID
+    skrill_transaction_id: Transaktions ID
+    skrill_payment_type: Bezahlart
+    skrill_payment_currency: Währung
