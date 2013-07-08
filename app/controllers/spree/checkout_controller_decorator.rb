@@ -16,12 +16,17 @@ module Spree
         payment.pend!
       end
 
+      @order.update_attributes({:state => "complete", :completed_at => Time.now}, :without_protection => true)      
+
       until @order.state == "complete"
         if @order.next!
           @order.update!
           state_callback(:after)
         end
       end
+
+      @order.finalize!
+
       flash.notice = Spree.t(:order_processed_successfully)
       redirect_to completion_route
     end
