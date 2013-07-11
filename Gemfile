@@ -13,4 +13,5 @@ else
   gem "debugger"
 end
 
+gem 'spree_core', :github => 'spree/spree', :branch => '1-2-stable'
 gemspec
