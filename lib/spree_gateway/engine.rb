@@ -24,6 +24,7 @@ module SpreeGateway
         app.config.spree.payment_methods << Spree::Gateway::Worldpay
         app.config.spree.payment_methods << Spree::Gateway::Banwire
         app.config.spree.payment_methods << Spree::Gateway::Balanced
+        app.config.spree.payment_methods << Spree::Gateway::UsaEpay
     end
   end
 
