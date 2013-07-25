@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'pry'
 
 describe Spree::Gateway::PinGateway do
 
