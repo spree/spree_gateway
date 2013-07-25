@@ -113,6 +113,7 @@ module Spree
 
         { :profile => { :merchant_customer_id => "#{Time.now.to_f}",
                         #:ship_to_list => generate_address_hash(creditcard.checkout.ship_address),
+                        :email => payment.order.email,
                         :payment_profiles => info },
           :validation_mode => validation_mode }
       end
@@ -121,7 +122,7 @@ module Spree
       def generate_address_hash(address)
         return {} if address.nil?
         {:first_name => address.firstname, :last_name => address.lastname, :address1 => address.address1, :address2 => address.address2, :city => address.city,
-         :state => address.state_text, :zip => address.zipcode, :country => address.country.iso, :phone => address.phone}
+         :state => address.state_text, :zip => address.zipcode, :country => address.country.iso, :phone_number => address.phone}
       end
 
       def cim_gateway
