@@ -6,9 +6,6 @@ module Spree
     preference :private_key, :string
     preference :client_side_encryption_key, :text
 
-    attr_accessible :preferred_merchant_id, :preferred_public_key, :preferred_private_key,
-      :preferred_client_side_encryption_key, :preferred_environment
-
     def provider
       provider_instance = super
       Braintree::Configuration.custom_user_agent = "Spree #{Spree.version}"

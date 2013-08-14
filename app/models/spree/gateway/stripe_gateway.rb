@@ -3,8 +3,6 @@ module Spree
     preference :login, :string
     preference :currency, :string, :default => 'USD'        #stripes only supports USD and CAD
 
-    attr_accessible :preferred_login, :preferred_currency
-
     def provider_class
       ActiveMerchant::Billing::StripeGateway
     end

@@ -12,11 +12,6 @@ module Spree
     preference :maestro_login, :string
     preference :visa_login, :string
 
-    attr_accessible :preferred_login, :preferred_password, :preferred_currency,
-                    :preferred_installation_id, :preferred_american_express_login,
-                    :preferred_discover_login, :preferred_jcb_login, :preferred_maestro_login,
-                    :preferred_mastercard_login, :preferred_visa_login
-
     def provider_class
       ActiveMerchant::Billing::WorldpayGateway
     end

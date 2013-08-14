@@ -4,8 +4,6 @@ module Spree
     preference :password, :string
     preference :processor_token, :string
 
-    attr_accessible :preferred_login, :preferred_password, :preferred_processor_token
-
     def provider_class
       ActiveMerchant::Billing::SamuraiGateway
     end

@@ -2,8 +2,6 @@ module Spree
   class SkrillTransaction < ActiveRecord::Base
     has_many :payments, :as => :source
 
-    attr_accessible :email , :amount , :currency , :transaction_id , :customer_id, :payment_type
-
     def actions
       []
     end

@@ -4,8 +4,6 @@ module Spree
     preference :user, :string
     preference :password, :string
     preference :secure_profile_api_key, :string
-    
-    attr_accessible :preferred_login, :preferred_user, :preferred_password, :preferred_secure_profile_api_key
 
     def provider_class
       ActiveMerchant::Billing::BeanstreamGateway
