@@ -1,4 +1,4 @@
-Spree::Core::Engine.routes.draw do
+Spree::Core::Engine.routes.prepend do
   # Add your extension routes here
   resources :orders do
     resource :checkout, :controller => 'checkout' do
