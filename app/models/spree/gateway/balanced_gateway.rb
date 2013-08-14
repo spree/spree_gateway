@@ -3,8 +3,6 @@ module Spree
     preference :login, :string
     preference :on_behalf_of_uri, :string
 
-    attr_accessible :preferred_login, :preferred_on_behalf_of_uri
-
     def authorize(money, creditcard, gateway_options)
       if token = creditcard.gateway_payment_profile_id
         # The Balanced ActiveMerchant gateway supports passing the token directly as the creditcard parameter
