@@ -5,9 +5,9 @@ describe Spree::Gateway::StripeGateway do
   let(:email) { 'customer@example.com' }
 
   let(:payment) {
-    stub('Spree::Payment',
-      source: stub('Source', gateway_customer_profile_id: nil).as_null_object,
-      order: stub('Spree::Order',
+    double('Spree::Payment',
+      source: double('Source', gateway_customer_profile_id: nil).as_null_object,
+      order: double('Spree::Order',
         email: email,
         bill_address: bill_address
       )
@@ -16,28 +16,28 @@ describe Spree::Gateway::StripeGateway do
 
   let(:provider) do
     double('provider').tap do |p|
-      p.stub!(:purchase)
-      p.stub!(:authorize)
-      p.stub!(:capture)
+      p.stub(:purchase)
+      p.stub(:authorize)
+      p.stub(:capture)
     end
   end
 
   before do 
     subject.set_preference :login, login 
-    subject.stub!(:options_for_purchase_or_auth).and_return(['money','cc','opts'])
-    subject.stub!(:provider).and_return provider
+    subject.stub(:options_for_purchase_or_auth).and_return(['money','cc','opts'])
+    subject.stub(:provider).and_return provider
   end
 
   describe '#create_profile' do
     context 'with an order that has a bill address' do
       let(:bill_address) {
-        stub('Spree::Address',
+        double('Spree::Address',
           address1: '123 Happy Road',
           address2: 'Apt 303',
           city: 'Suzarac',
           zipcode: '95671',
-          state: stub('Spree::State', name: 'Oregon'),
-          country: stub('Spree::Country', name: 'United States')
+          state: double('Spree::State', name: 'Oregon'),
+          country: double('Spree::Country', name: 'United States')
         )
       }
 
@@ -54,7 +54,7 @@ describe Spree::Gateway::StripeGateway do
             state: 'Oregon',
             country: 'United States'
           }
-        }).and_return stub.as_null_object
+        }).and_return double.as_null_object
 
         subject.create_profile payment
       end
@@ -67,7 +67,7 @@ describe Spree::Gateway::StripeGateway do
         subject.provider.should_receive(:store).with(payment.source, {
           email: email,
           login: login,
-        }).and_return stub.as_null_object
+        }).and_return double.as_null_object
 
         subject.create_profile payment
       end
@@ -102,8 +102,8 @@ describe Spree::Gateway::StripeGateway do
 
     let(:payment) do
       double('payment').tap do |p|
-        p.stub!(:amount).and_return(12.34)
-        p.stub!(:response_code).and_return('response_code')
+        p.stub(:amount).and_return(12.34)
+        p.stub(:response_code).and_return('response_code')
       end
     end 
 
