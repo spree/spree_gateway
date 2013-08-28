@@ -9,9 +9,9 @@ describe Spree::Gateway::UsaEpay do
     @gateway.set_preference(:login, "0r19zQBdp5nS8i3t4hFxz0di13yf56q1" )
     @gateway.save!
 
-    @country = Factory(:country, :name => "United States", :iso_name => "UNITED STATES", :iso3 => "USA", :iso => "US", :numcode => 840)
-    @state   = Factory(:state, :name => "Maryland", :abbr => "MD", :country => @country)
-    @address = Factory(:address,
+    @country = create(:country, :name => "United States", :iso_name => "UNITED STATES", :iso3 => "USA", :iso => "US", :numcode => 840)
+    @state   = create(:state, :name => "Maryland", :abbr => "MD", :country => @country)
+    @address = create(:address,
       :firstname => 'John',
       :lastname => 'Doe',
       :address1 => '1234 My Street',
@@ -22,10 +22,10 @@ describe Spree::Gateway::UsaEpay do
       :state => @state,
       :country => @country
     )
-    @order = Factory(:order_with_totals, :bill_address => @address, :ship_address => @address)
+    @order = create(:order_with_totals, :bill_address => @address, :ship_address => @address)
     @order.update!
-    @credit_card = Factory(:credit_card, :verification_value => '123', :number => '4111111111111111', :month => 9, :year => Time.now.year + 1, :first_name => 'John', :last_name => 'Doe')
-    @payment = Factory(:payment, :source => @credit_card, :order => @order, :payment_method => @gateway, :amount => 10.00)
+    @credit_card = create(:credit_card, :verification_value => '123', :number => '4111111111111111', :month => 9, :year => Time.now.year + 1, :first_name => 'John', :last_name => 'Doe')
+    @payment = create(:payment, :source => @credit_card, :order => @order, :payment_method => @gateway, :amount => 10.00)
     @payment.payment_method.environment = "test"
   end
 
