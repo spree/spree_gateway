@@ -9,5 +9,5 @@ Spree::Core::Engine.routes.prepend do
     end
   end
 
-  match '/skrill' => 'skrill_status#update', :via => :post, :as => :skrill_status_update
+  post '/skrill' => 'skrill_status#update'
 end
