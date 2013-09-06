@@ -9,6 +9,19 @@ module Spree
     attr_accessible :preferred_merchant_id, :preferred_public_key, :preferred_private_key,
       :preferred_client_side_encryption_key, :preferred_environment
 
+    CARD_TYPE_MAPPING = {
+      'American Express' => 'american_express',
+      'Diners Club' => 'diners_club',
+      'Discover' => 'discover',
+      'JCB' => 'jcb',
+      'Laser' => 'laser',
+      'Maestro' => 'maestro',
+      'MasterCard' => 'master',
+      'Solo' => 'solo',
+      'Switch' => 'switch',
+      'Visa' => 'visa'
+    }
+
     def provider
       provider_instance = super
       Braintree::Configuration.custom_user_agent = "Spree #{Spree.version}"
@@ -47,12 +60,7 @@ module Spree
       last_4 = cc['last_4']
       source.last_digits = last_4 if last_4
       source.gateway_payment_profile_id = cc['token']
-      masked_number = cc['masked_number']
-      if masked_number
-        source.cc_type = nil
-        source.number = masked_number.gsub("*", "1")
-        source.set_card_type
-      end
+      source.cc_type = CARD_TYPE_MAPPING[cc['card_type']] if cc['card_type']
       source.save!
     end
 
