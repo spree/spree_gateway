@@ -31,6 +31,7 @@ module SpreeGateway
         app.config.spree.payment_methods << Spree::Gateway::DataCash
         app.config.spree.payment_methods << Spree::Gateway::UsaEpay
         app.config.spree.payment_methods << Spree::Gateway::PinGateway
+        app.config.spree.payment_methods << Spree::Gateway::Paymill
     end
   end
 
