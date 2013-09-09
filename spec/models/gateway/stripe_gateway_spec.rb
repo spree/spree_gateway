@@ -16,16 +16,16 @@ describe Spree::Gateway::StripeGateway do
 
   let(:provider) do
     double('provider').tap do |p|
-      p.stub!(:purchase)
-      p.stub!(:authorize)
-      p.stub!(:capture)
+      p.stub(:purchase)
+      p.stub(:authorize)
+      p.stub(:capture)
     end
   end
 
   before do 
     subject.set_preference :login, login 
-    subject.stub!(:options_for_purchase_or_auth).and_return(['money','cc','opts'])
-    subject.stub!(:provider).and_return provider
+    subject.stub(:options_for_purchase_or_auth).and_return(['money','cc','opts'])
+    subject.stub(:provider).and_return provider
   end
 
   describe '#create_profile' do
@@ -102,8 +102,8 @@ describe Spree::Gateway::StripeGateway do
 
     let(:payment) do
       double('payment').tap do |p|
-        p.stub!(:amount).and_return(12.34)
-        p.stub!(:response_code).and_return('response_code')
+        p.stub(:amount).and_return(12.34)
+        p.stub(:response_code).and_return('response_code')
       end
     end 
 
