@@ -114,10 +114,9 @@ describe Spree::Gateway::BraintreeGateway do
       it_behaves_like "a valid credit card"
     end
 
-    pending "when the card is a diners club" do
-      # No example test number for Braintree just yet.
+    context "when the card is a diners club" do
       before do
-        @credit_card.number = '30000000000008'
+        @credit_card.number = '36050000000003'
         @credit_card.cc_type = 'dinersclub'
         @credit_card.save
       end
