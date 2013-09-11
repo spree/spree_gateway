@@ -27,7 +27,7 @@ describe Spree::Gateway::BraintreeGateway do
       )
       @order = FactoryGirl.create(:order_with_totals, :bill_address => @address, :ship_address => @address)
       @order.update!
-      @credit_card = FactoryGirl.create(:credit_card, :verification_value => '123', :number => '5105105105105100', :month => 9, :year => Time.now.year + 1, :first_name => 'John', :last_name => 'Doe')
+      @credit_card = FactoryGirl.create(:credit_card, :verification_value => '123', :number => '5105105105105100', :month => 9, :year => Time.now.year + 1, :first_name => 'John', :last_name => 'Doe', :cc_type => 'master')
       @payment = FactoryGirl.create(:payment, :source => @credit_card, :order => @order, :payment_method => @gateway, :amount => 10.00)
       @payment.payment_method.environment = "test"
     end
@@ -76,7 +76,7 @@ describe Spree::Gateway::BraintreeGateway do
     context "when the card is a mastercard" do
       before do
         @credit_card.number = '5105105105105100'
-        @credit_card.cc_type = 'mastercard'
+        @credit_card.cc_type = 'master'
         @credit_card.save
       end
 
@@ -97,7 +97,7 @@ describe Spree::Gateway::BraintreeGateway do
       before do
         @credit_card.number = '378282246310005'
         @credit_card.verification_value = '1234'
-        @credit_card.cc_type = 'amex'
+        @credit_card.cc_type = 'american_express'
         @credit_card.save
       end
 
