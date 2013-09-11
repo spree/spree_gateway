@@ -53,23 +53,77 @@ describe Spree::Gateway::BraintreeGateway do
 
 
       Braintree::Transaction::Status::Authorized.should == Braintree::Transaction.find(result.authorization).status
-   end
+    end
 
-   it 'should work through the spree payment interface' do
-      Spree::Config.set :auto_capture => false
-      @payment.log_entries.size.should == 0
-      @payment.process!
-      @payment.log_entries.size.should == 1
-      @payment.response_code.should match /\A\w{6}\z/
-      @payment.state.should == 'pending'
-      transaction = ::Braintree::Transaction.find(@payment.response_code)
-      transaction.status.should == Braintree::Transaction::Status::Authorized
-      transaction.credit_card_details.masked_number.should == "510510******5100"
-      transaction.credit_card_details.expiration_date.should == "09/#{Time.now.year + 1}"
-      transaction.customer_details.first_name.should == 'John'
-      transaction.customer_details.last_name.should == 'Doe'
-   end
+    shared_examples "a valid credit card" do
+      it 'should work through the spree payment interface' do
+        Spree::Config.set :auto_capture => false
+        @payment.log_entries.size.should == 0
+        @payment.process!
+        @payment.log_entries.size.should == 1
+        @payment.response_code.should match /\A\w{6}\z/
+        @payment.state.should == 'pending'
+        transaction = ::Braintree::Transaction.find(@payment.response_code)
+        transaction.status.should == Braintree::Transaction::Status::Authorized
+        card_number = @credit_card.number[0..5] + "******" + @credit_card.number[-4..-1]
+        transaction.credit_card_details.masked_number.should == card_number
+        transaction.credit_card_details.expiration_date.should == "09/#{Time.now.year + 1}"
+        transaction.customer_details.first_name.should == 'John'
+        transaction.customer_details.last_name.should == 'Doe'
+      end
+    end
 
+    context "when the card is a mastercard" do
+      before do
+        @credit_card.number = '5105105105105100'
+        @credit_card.cc_type = 'mastercard'
+        @credit_card.save
+      end
+
+      it_behaves_like "a valid credit card"
+    end
+
+    context "when the card is a visa" do
+      before do
+        @credit_card.number = '4111111111111111'
+        @credit_card.cc_type = 'visa'
+        @credit_card.save
+      end
+
+      it_behaves_like "a valid credit card"
+    end
+
+    context "when the card is an amex" do
+      before do
+        @credit_card.number = '378282246310005'
+        @credit_card.verification_value = '1234'
+        @credit_card.cc_type = 'amex'
+        @credit_card.save
+      end
+
+      it_behaves_like "a valid credit card"
+    end
+
+    context "when the card is a JCB" do
+      before do
+        @credit_card.number = '3530111333300000'
+        @credit_card.cc_type = 'jcb'
+        @credit_card.save
+      end
+
+      it_behaves_like "a valid credit card"
+    end
+
+    pending "when the card is a diners club" do
+      # No example test number for Braintree just yet.
+      before do
+        @credit_card.number = '30000000000008'
+        @credit_card.cc_type = 'dinersclub'
+        @credit_card.save
+      end
+
+      it_behaves_like "a valid credit card"
+    end
   end
 
   describe "capture" do
