@@ -7,6 +7,6 @@ group :test do
 end
 gem 'braintree'
 
-gem 'spree', github: 'spree/spree', :branch => 'master'
+gem 'spree', github: 'spree/spree', :branch => '2-1-stable'
 
 gemspec
