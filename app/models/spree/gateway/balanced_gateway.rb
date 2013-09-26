@@ -22,8 +22,15 @@ module Spree
       options = {}
       options[:email] = payment.order.email
       options[:login] = preferred_login
+
       card_uri = provider.store(payment.source, options)
-      payment.source.update_attributes!(:gateway_payment_profile_id => card_uri)
+
+      # A failed request returns a bad request response responding to message, but success just returns a string of the token.
+      if card_uri.response_to?(:message)
+        payment.source.update_attributes!(:gateway_payment_profile_id => card_uri)
+      else
+        payment.send(:gateway_error, card_uri.message)
+      end
     end
 
     def options_with_test_preference
