@@ -28,7 +28,7 @@ module Spree
       card_uri = provider.store(payment.source, options)
 
       # A failed request returns a bad request response responding to message, but success just returns a string of the token.
-      if card_uri.response_to?(:message)
+      if card_uri.respond_to?(:message)
         payment.source.update_attributes!(:gateway_payment_profile_id => card_uri)
       else
         payment.send(:gateway_error, card_uri.message)
