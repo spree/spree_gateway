@@ -31,6 +31,7 @@ describe Spree::Gateway::UsaEpay do
 
   describe "purchasing" do
     it "can purchase a payment" do
+      pending "Broken due to USA EPay missing a source key."
       @payment.purchase!.should be_true
     end
   end
