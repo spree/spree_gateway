@@ -40,7 +40,10 @@ module Spree
 
       response = provider.store(payment.source, options)
       if response.success?
-        payment.source.update_attributes!(:gateway_customer_profile_id => response.params['id'])
+        payment.source.update_attributes!({
+          :gateway_customer_profile_id => response.params['id'],
+          :gateway_payment_profile_id => response.params['default_card']
+        })
       else
         payment.send(:gateway_error, response.message)
       end
