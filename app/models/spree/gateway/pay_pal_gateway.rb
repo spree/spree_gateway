@@ -1,5 +1,5 @@
 module Spree
-  class Gateway::PayPal < Gateway
+  class Gateway::PayPalGateway < Gateway
     preference :login, :string
     preference :password, :string
     preference :signature, :string
