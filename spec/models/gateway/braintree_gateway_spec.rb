@@ -6,6 +6,7 @@ describe Spree::Gateway::BraintreeGateway do
     Spree::Gateway.update_all :active => false
     @gateway = Spree::Gateway::BraintreeGateway.create!(:name => "Braintree Gateway", :environment => "sandbox", :active => true)
 
+    @gateway.set_preference(:environment, "sandbox" )
     @gateway.set_preference(:merchant_id, "zbn5yzq9t7wmwx42" )
     @gateway.set_preference(:public_key, "ym9djwqpkxbv3xzt")
     @gateway.set_preference(:private_key, "4ghghkyp2yy6yqc8")
