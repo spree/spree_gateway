@@ -6,5 +6,10 @@ module Spree
     def provider_class
       ActiveMerchant::Billing::PinGateway
     end
+
+    # Pin does not appear to support authorizing transactions yet
+    def auto_capture
+      true
+    end
   end
 end
