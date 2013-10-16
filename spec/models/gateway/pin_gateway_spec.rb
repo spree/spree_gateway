@@ -30,7 +30,8 @@ describe Spree::Gateway::PinGateway do
       :month => 5,
       :year => Time.now.year + 1,
       :first_name => 'Ronald C',
-      :last_name => 'Robot'
+      :last_name => 'Robot',
+      :cc_type => 'mastercard'
     )
     @payment = FactoryGirl.create(:payment, 
       :source => @credit_card,
@@ -42,5 +43,15 @@ describe Spree::Gateway::PinGateway do
   it "can purchase" do
     @payment.purchase!
     @payment.state.should == 'completed'
+  end
+
+  # Regression test for #106
+  it "uses auto capturing" do
+    expect(@gateway.auto_capture?).to be_true
+  end
+
+  it "always uses purchase" do
+    @payment.should_receive(:purchase!)
+    @payment.process!
   end
 end
