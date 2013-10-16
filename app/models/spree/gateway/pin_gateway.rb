@@ -8,7 +8,7 @@ module Spree
     end
 
     # Pin does not appear to support authorizing transactions yet
-    def auto_capture
+    def auto_capture?
       true
     end
   end
