@@ -34,6 +34,7 @@ module SpreeGateway
         app.config.spree.payment_methods << Spree::Gateway::PinGateway
         app.config.spree.payment_methods << Spree::Gateway::Paymill
         app.config.spree.payment_methods << Spree::Gateway::PayflowPro
+        app.config.spree.payment_methods << Spree::Gateway::SecurePayAU
     end
   end
 
