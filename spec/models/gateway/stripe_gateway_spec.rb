@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::Gateway::StripeGateway do
-  let(:login) { 'nothing' }
+  let(:secret_key) { 'key' }
   let(:email) { 'customer@example.com' }
 
   let(:payment) {
@@ -23,7 +23,7 @@ describe Spree::Gateway::StripeGateway do
   end
 
   before do 
-    subject.set_preference :login, login 
+    subject.set_preference :secret_key, secret_key
     subject.stub(:options_for_purchase_or_auth).and_return(['money','cc','opts'])
     subject.stub(:provider).and_return provider
   end
@@ -44,7 +44,7 @@ describe Spree::Gateway::StripeGateway do
       it 'stores the bill address with the provider' do
         subject.provider.should_receive(:store).with(payment.source, {
           email: email,
-          login: login,
+          login: secret_key,
 
           address: {
             address1: '123 Happy Road',
@@ -66,7 +66,7 @@ describe Spree::Gateway::StripeGateway do
       it 'does not store a bill address with the provider' do
         subject.provider.should_receive(:store).with(payment.source, {
           email: email,
-          login: login,
+          login: secret_key,
         }).and_return double.as_null_object
 
         subject.create_profile payment
