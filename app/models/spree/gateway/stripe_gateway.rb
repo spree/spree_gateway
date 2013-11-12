@@ -1,6 +1,11 @@
 module Spree
   class Gateway::StripeGateway < Gateway
-    preference :login, :string
+    preference :secret_key, :string
+    preference :publishable_key, :string
+
+    def method_type
+      'stripe'
+    end
 
     attr_accessible :preferred_login, :preferred_currency
 
@@ -34,10 +39,9 @@ module Spree
 
     def create_profile(payment)
       return unless payment.source.gateway_customer_profile_id.nil?
-
       options = {
         email: payment.order.email,
-        login: preferred_login
+        login: preferred_secret_key,
       }.merge! address_for(payment)
 
       response = provider.store(payment.source, options)
@@ -52,6 +56,13 @@ module Spree
     end
 
     private
+
+    # In this gateway, what we call 'secret_key' is the 'login'
+    def options
+      options = super
+      options.merge(:login => preferred_secret_key)
+    end
+
 
     def options_for_purchase_or_auth(money, creditcard, gateway_options)
       options = {}
