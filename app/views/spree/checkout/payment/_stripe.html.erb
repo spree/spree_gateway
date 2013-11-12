@@ -1,0 +1,21 @@
+<%= render "spree/checkout/payment/gateway", :payment_method => payment_method %>
+
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript">
+  Stripe.setPublishableKey("<%= payment_method.preferred_publishable_key %>");
+</script>
+<script>
+  Spree.stripePaymentMethod = $('#payment_method_' + <%= payment_method.id %>)
+</script>
+<%= javascript_include_tag "store/gateway/stripe" %>
+<script>
+  Spree.stripeAdditionalInfo = {
+    name: "<%= @order.bill_address.full_name %>",
+    address_line_1: "<%= @order.bill_address.address1 %>",
+    address_line_2: "<%= @order.bill_address.address2 %>",
+    address_city: "<%= @order.bill_address.city %>",
+    address_state: "<%= @order.bill_address.state_text %>",
+    address_zip: "<%= @order.bill_address.zipcode %>",
+    address_country: "<%= @order.bill_address.country %>"
+  }
+</script>
