@@ -3,6 +3,8 @@ module Spree
     preference :secret_key, :string
     preference :publishable_key, :string
 
+    attr_accessible :preferred_secret_key, :preferred_publishable_key
+
     def method_type
       'stripe'
     end
