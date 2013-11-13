@@ -118,7 +118,7 @@ describe Spree::Gateway::BraintreeGateway do
     context "when the card is a diners club" do
       before do
         @credit_card.number = '36050000000003'
-        @credit_card.cc_type = 'dinersclub'
+        @credit_card.cc_type = 'diners_club'
         @credit_card.save
       end
 
