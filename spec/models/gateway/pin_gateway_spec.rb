@@ -31,7 +31,7 @@ describe Spree::Gateway::PinGateway do
       :year => Time.now.year + 1,
       :first_name => 'Ronald C',
       :last_name => 'Robot',
-      :cc_type => 'mastercard'
+      :cc_type => 'master'
     )
     @payment = FactoryGirl.create(:payment, 
       :source => @credit_card,
