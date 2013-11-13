@@ -54,6 +54,7 @@ describe "Stripe checkout" do
     fill_in "Card Code", :with => "123"
     fill_in "Expiration", :with => "01 / #{Time.now.year + 1}"
     click_button "Save and Continue"
+    sleep(5) # Wait for Stripe API to return + form to submit
     page.current_url.should include("/checkout/confirm")
     click_button "Place Order"
     page.should have_content("Your order has been processed successfully")
