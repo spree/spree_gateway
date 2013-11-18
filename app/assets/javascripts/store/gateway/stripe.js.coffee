@@ -33,8 +33,4 @@ stripeResponseHandler = (status, response) ->
     # insert the token into the form so it gets submitted to the server
     paymentMethodId = Spree.stripePaymentMethod.prop('id').split("_")[2]
     Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId  + "][gateway_payment_profile_id]' value='" + token + "'/>");
-    # insert additional card info to save to the payment source
-    expiration = $('.cardExpiry:visible').payment('cardExpiryVal')
-    Spree.stripePaymentMethod.append("<input type='hidden' name='payment_source[" + paymentMethodId + "][month]' value='" + expiration.month + "'/>");
-    Spree.stripePaymentMethod.append("<input type='hidden' name='payment_source[" + paymentMethodId + "][year]' value='" + expiration.year + "'/>");
     Spree.stripePaymentMethod.parents("form").get(0).submit();
