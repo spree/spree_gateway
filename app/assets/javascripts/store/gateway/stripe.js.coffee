@@ -12,8 +12,8 @@ $(document).ready ->
         {
           number: $('.cardNumber:visible').val(),
           cvc: $('.cardCode:visible').val(),
-          exp_month: expiration.month,
-          exp_year: expiration.year,
+          exp_month: expiration.month || 0,
+          exp_year: expiration.year || 0,
         },
         Spree.stripeAdditionalInfo
       )
