@@ -2,6 +2,8 @@ module Spree
   class Gateway::PayflowPro < Gateway
     preference :login, :string
     preference :password, :password
+    
+    attr_accessible :preferred_login, :preferred_password
 
     def provider_class
       ActiveMerchant::Billing::PayflowGateway
