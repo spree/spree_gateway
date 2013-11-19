@@ -33,4 +33,7 @@ stripeResponseHandler = (status, response) ->
     # insert the token into the form so it gets submitted to the server
     paymentMethodId = Spree.stripePaymentMethod.prop('id').split("_")[2]
     Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId  + "][gateway_payment_profile_id]' value='" + token + "'/>");
+    Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId  + "][last_digits]' value='" + response.card.last4 + "'/>");
+    Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId  + "][month]' value='" + response.card.exp_month + "'/>");
+    Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId  + "][year]' value='" + response.card.exp_year + "'/>");
     Spree.stripePaymentMethod.parents("form").get(0).submit();
