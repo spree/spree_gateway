@@ -6,10 +6,12 @@
   <td>Stripe Charge ID</td>
   <td><%= entry.parsed_details.params['id'] %></td>
 </tr>
-<tr>
-  <td>Stripe Card ID</td>
-  <td><%= entry.parsed_details.params['card']['id'] %></td>
-</tr>
+<% if card = entry.parsed_details.params['card'] %>
+  <tr>
+    <td>Stripe Card ID</td>
+    <td><%= card['id'] %></td>
+  </tr>
+<% end %>
 <tr>
   <td>CVV result</td>
   <td><%= entry.parsed_details.cvv_result['message'].to_s %></td>
