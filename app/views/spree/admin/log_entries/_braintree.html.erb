@@ -1,0 +1,31 @@
+<% transaction = entry.parsed_details.params['braintree_transaction'] %>
+<tr>
+  <td>Message</td>
+  <td><%= entry.parsed_details.message %></td>
+</tr>
+<% if transaction %>
+  <tr>
+    <td>Status</td>
+    <td><%= transaction['status'] %></td>
+  </tr>
+  <tr>
+    <td>Braintree Credit Card Token</td>
+    <td><%= transaction['credit_card_details']['token'] %></td>
+  </tr>
+  <tr>
+    <td>Braintree Customer ID</td>
+    <td><%= transaction['customer_details']['id'] %></td>
+  </tr>
+<% end %>
+<tr>
+  <td>CVV result</td>
+  <td><%= entry.parsed_details.cvv_result['message'].to_s %></td>
+</tr>
+<tr>
+  <td>AVS result</td>
+  <td>
+    Message: <%= entry.parsed_details.avs_result['message'] %><br>
+    Street Match: <%= entry.parsed_details.avs_result['street_match'] %><br>
+    Postal Match: <%= entry.parsed_details.avs_result['postal_match'] %>
+  </td>
+</tr>
