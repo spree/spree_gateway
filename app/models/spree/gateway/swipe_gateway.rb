@@ -8,5 +8,9 @@ module Spree
       ActiveMerchant::Billing::SwipeCheckoutGateway
     end
 
+    # (no authorize method).
+    def auto_capture?
+      true
+    end
   end
 end
