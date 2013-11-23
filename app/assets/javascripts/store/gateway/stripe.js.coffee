@@ -1,5 +1,21 @@
 # Inspired by https://stripe.com/docs/stripe.js
 
+# Map cc types from stripe to spree
+mapCC = (ccType) ->
+  if (ccType == 'MasterCard') 
+    'mastercard'
+  else if (ccType == 'Visa') 
+    'visa'
+  else if (ccType == 'American Express')
+    'amex'
+  else if (ccType == 'Discover')
+    'discover'
+  else if (ccType == 'Diners Club')
+    'dinnersclub'
+  else if (ccType == 'JCB')
+    'jcb'
+
+
 $(document).ready ->
   # For errors that happen later.
   Spree.stripePaymentMethod.prepend("<div id='stripeError' class='errorExplanation' style='display:none'></div>")
@@ -21,14 +37,6 @@ $(document).ready ->
       Stripe.card.createToken(params, stripeResponseHandler);
       return false
 
-ccTypes = [
-  'MasterCard': 'master', 
-  'Visa': 'visa', 
-  'American Express': 'american_express',
-  'Discover': 'discover',
-  'Diners Club': 'dinners_club',
-  'JCB': 'jcb']
-
 stripeResponseHandler = (status, response) ->
   if response.error
     $('#stripeError').html(response.error.message)
@@ -36,7 +44,8 @@ stripeResponseHandler = (status, response) ->
   else
     Spree.stripePaymentMethod.find('#card_number, #card_expiry, #card_code').prop("disabled" , true)
     Spree.stripePaymentMethod.find(".ccType").prop("disabled", false)
-    Spree.stripePaymentMethod.find(".ccType").val(response.card.type)
+    Spree.stripePaymentMethod.find(".ccType").val(mapCC(response.card.type))
+
     # token contains id, last4, and card type
     token = response['id'];
     # insert the token into the form so it gets submitted to the server
@@ -45,4 +54,5 @@ stripeResponseHandler = (status, response) ->
     Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId  + "][last_digits]' value='" + response.card.last4 + "'/>");
     Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId  + "][month]' value='" + response.card.exp_month + "'/>");
     Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId  + "][year]' value='" + response.card.exp_year + "'/>");
+    # Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId  + "][cc_type]' value='" + mapCC(response.card.type) + "'/>");
     Spree.stripePaymentMethod.parents("form").get(0).submit();
