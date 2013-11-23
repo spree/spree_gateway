@@ -21,6 +21,14 @@ $(document).ready ->
       Stripe.card.createToken(params, stripeResponseHandler);
       return false
 
+ccTypes = [
+  'MasterCard': 'master', 
+  'Visa': 'visa', 
+  'American Express': 'american_express',
+  'Discover': 'discover',
+  'Diners Club': 'dinners_club',
+  'JCB': 'jcb']
+
 stripeResponseHandler = (status, response) ->
   if response.error
     $('#stripeError').html(response.error.message)
@@ -28,6 +36,7 @@ stripeResponseHandler = (status, response) ->
   else
     Spree.stripePaymentMethod.find('#card_number, #card_expiry, #card_code').prop("disabled" , true)
     Spree.stripePaymentMethod.find(".ccType").prop("disabled", false)
+    Spree.stripePaymentMethod.find(".ccType").val(response.card.type)
     # token contains id, last4, and card type
     token = response['id'];
     # insert the token into the form so it gets submitted to the server
