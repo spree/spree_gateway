@@ -9,15 +9,22 @@ en:
     skrill_transaction_id: Transaction ID
     skrill_payment_type: Payment Type
     skrill_payment_currency: Payment Currency
-  log_entries:
-    braintree:
-      message: Message
-      status: Status
-      cc_token: Braintree Credit Card Token
-      customer_id: Braintree Customer ID
-      cvv_result: CVV Result
-      avs_result_title: AVS result
-      avs_result:
+    log_entry:
+      braintree:
         message: Message
-        street_match: Street Match
-        postal_match: Postal Match
+        status: Status
+        cc_token: Braintree Credit Card Token
+        customer_id: Braintree Customer ID
+        cvv_result: CVV Result
+        avs_result_title: AVS result
+        avs_result:
+          message: Message
+          street_match: Street Match
+          postal_match: Postal Match
+      stripe:
+        message: Message
+        charge_id: Stripe Charge ID
+        card_id: Stripe Card ID
+        cvv_result: CVV Result
+        cvc_check: CVC Check
+        address_zip_check: Address ZIP check
