@@ -1,31 +1,31 @@
 <% transaction = entry.parsed_details.params['braintree_transaction'] %>
 <tr>
-  <td>Message</td>
+  <td><%= Spree.t(:message, :scope => [:log_entries, :braintree]) %></td>
   <td><%= entry.parsed_details.message %></td>
 </tr>
 <% if transaction %>
   <tr>
-    <td>Status</td>
+    <td><%= Spree.t(:status, :scope => [:log_entries, :braintree]) %></td>
     <td><%= transaction['status'] %></td>
   </tr>
   <tr>
-    <td>Braintree Credit Card Token</td>
+    <td><%= Spree.t(:cc_token, :scope => [:log_entries, :braintree]) %></td>
     <td><%= transaction['credit_card_details']['token'] %></td>
   </tr>
   <tr>
-    <td>Braintree Customer ID</td>
+    <td><%= Spree.t(:customer_id, :scope => [:log_entries, :braintree]) %></td>
     <td><%= transaction['customer_details']['id'] %></td>
   </tr>
 <% end %>
 <tr>
-  <td>CVV result</td>
+  <td><%= Spree.t(:cvv_result, :scope => [:log_entries, :braintree]) %></td>
   <td><%= entry.parsed_details.cvv_result['message'].to_s %></td>
 </tr>
 <tr>
-  <td>AVS result</td>
+  <td><%= Spree.t(:avs_result_title, :scope => [:log_entries, :braintree]) %></td>
   <td>
-    Message: <%= entry.parsed_details.avs_result['message'] %><br>
-    Street Match: <%= entry.parsed_details.avs_result['street_match'] %><br>
-    Postal Match: <%= entry.parsed_details.avs_result['postal_match'] %>
+    <%= Spree.t(:message, :scope => [:log_entries, :braintree, :avs_result]) %>: <%= entry.parsed_details.avs_result['message'] %><br>
+    <%= Spree.t(:street_match, :scope => [:log_entries, :braintree, :avs_result]) %>: <%= entry.parsed_details.avs_result['street_match'] %><br>
+    <%= Spree.t(:postal_match, :scope => [:log_entries, :braintree, :avs_result]) %>: <%= entry.parsed_details.avs_result['postal_match'] %>
   </td>
 </tr>
