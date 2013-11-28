@@ -30,8 +30,7 @@ describe Spree::Gateway::Fatzebra do
       :number => '5123456789012346',
       :month => 5,
       :year => Time.now.year + 1,
-      :first_name => 'Ronald C',
-      :last_name => 'Robot'
+      :name => 'Ronald C Robot'
     )
     @payment = FactoryGirl.create(:payment, 
       :source => @credit_card,
