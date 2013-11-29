@@ -11,7 +11,7 @@ mapCC = (ccType) ->
   else if (ccType == 'Discover')
     'discover'
   else if (ccType == 'Diners Club')
-    'dinnersclub'
+    'dinersclub'
   else if (ccType == 'JCB')
     'jcb'
 
