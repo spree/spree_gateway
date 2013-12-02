@@ -2,6 +2,7 @@ module Spree
   class Gateway::BraintreeGateway < Gateway
     preference :environment, :string
     preference :merchant_id, :string
+    preference :merchant_account_id, :string
     preference :public_key, :string
     preference :private_key, :string
     preference :client_side_encryption_key, :text
@@ -109,6 +110,7 @@ module Spree
 
     def preferences
       preferences = super.slice(:merchant_id,
+                                :merchant_account_id,
                                 :public_key,
                                 :private_key,
                                 :client_side_encryption_key,
@@ -129,6 +131,9 @@ module Spree
       end
 
       def adjust_options_for_braintree(creditcard, options)
+        if preferred_merchant_account_id
+          options['merchant_account_id'] = preferred_merchant_account_id
+        end        
         adjust_billing_address(creditcard, options)
       end
   end
