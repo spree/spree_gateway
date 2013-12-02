@@ -2,12 +2,13 @@ module Spree
   class Gateway::BraintreeGateway < Gateway
     preference :environment, :string
     preference :merchant_id, :string
+    preference :merchant_account_id, :string
     preference :public_key, :string
     preference :private_key, :string
     preference :client_side_encryption_key, :text
 
     attr_accessible :preferred_merchant_id, :preferred_public_key, :preferred_private_key,
-      :preferred_client_side_encryption_key, :preferred_environment
+      :preferred_client_side_encryption_key, :preferred_environment, :preferred_merchant_account_id
 
     CARD_TYPE_MAPPING = {
       'American Express' => 'american_express',
@@ -112,6 +113,7 @@ module Spree
 
     def preferences
       preferences = super.slice(:merchant_id,
+                                :merchant_account_id,
                                 :public_key,
                                 :private_key,
                                 :client_side_encryption_key,
@@ -132,6 +134,9 @@ module Spree
       end
 
       def adjust_options_for_braintree(creditcard, options)
+        if preferred_merchant_account_id
+          options['merchant_account_id'] = preferred_merchant_account_id
+        end        
         adjust_billing_address(creditcard, options)
       end
   end

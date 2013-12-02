@@ -35,6 +35,31 @@ describe Spree::Gateway::BraintreeGateway do
 
   end
 
+  describe 'merchant_account_id' do
+    context 'with merchant_account_id set on gateway' do
+      let(:merchant_account_id) { 'test' }
+
+      before do
+        @gateway.set_preference(:merchant_account_id, merchant_account_id)
+      end
+
+      it 'should have a perferred_merchant_account_id' do
+        @gateway.preferred_merchant_account_id.should == merchant_account_id
+      end
+
+      it 'should have a preferences[:merchant_account_id]' do
+        @gateway.preferences.keys.include?(:merchant_account_id).should be_true
+      end
+      
+      it 'should adjust options to include merchant_account_id' do
+        options = {}
+        @gateway.should_receive(:adjust_billing_address).once
+        @gateway.send(:adjust_options_for_braintree, double, options)
+        options['merchant_account_id'].should == merchant_account_id
+      end
+    end
+  end
+
   it "should be braintree gateway" do
     @gateway.provider_class.should == ::ActiveMerchant::Billing::BraintreeBlueGateway
   end
