@@ -131,7 +131,7 @@ module Spree
       end
 
       def adjust_options_for_braintree(creditcard, options)
-        if preferred_merchant_account_id
+        unless preferred_merchant_account_id.blank?
           options['merchant_account_id'] = preferred_merchant_account_id
         end        
         adjust_billing_address(creditcard, options)
