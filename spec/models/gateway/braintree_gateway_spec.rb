@@ -36,12 +36,20 @@ describe Spree::Gateway::BraintreeGateway do
   end
 
   describe 'merchant_account_id' do
+    before do
+      @gateway.set_preference(:merchant_account_id, merchant_account_id)
+    end
+
+    context "with merchant_account_id empty" do
+      let(:merchant_account_id) { "" }
+
+      it 'should not be present in options' do
+        @gateway.options.keys.include?(:merchant_account_id).should be_false
+      end
+    end
+
     context 'with merchant_account_id set on gateway' do
       let(:merchant_account_id) { 'test' }
-
-      before do
-        @gateway.set_preference(:merchant_account_id, merchant_account_id)
-      end
 
       it 'should have a perferred_merchant_account_id' do
         @gateway.preferred_merchant_account_id.should == merchant_account_id
@@ -50,12 +58,9 @@ describe Spree::Gateway::BraintreeGateway do
       it 'should have a preferences[:merchant_account_id]' do
         @gateway.preferences.keys.include?(:merchant_account_id).should be_true
       end
-      
-      it 'should adjust options to include merchant_account_id' do
-        options = {}
-        @gateway.should_receive(:adjust_billing_address).once
-        @gateway.send(:adjust_options_for_braintree, double, options)
-        options['merchant_account_id'].should == merchant_account_id
+
+      it 'should be present in options' do
+        @gateway.options.keys.include?(:merchant_account_id).should be_true
       end
     end
   end
