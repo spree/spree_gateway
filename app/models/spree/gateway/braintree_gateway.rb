@@ -108,6 +108,16 @@ module Spree
       provider.void(response_code)
     end
 
+    def options
+      h = super
+      # We need to add merchant_account_id only if present when creating BraintreeBlueGateway
+      # Remove it since it is always part of the preferences hash.
+      if h[:merchant_account_id].blank?
+        h.delete(:merchant_account_id) 
+      end 
+      h
+    end
+
     def preferences
       preferences = super.slice(:merchant_id,
                                 :merchant_account_id,
@@ -131,9 +141,6 @@ module Spree
       end
 
       def adjust_options_for_braintree(creditcard, options)
-        if preferred_merchant_account_id
-          options['merchant_account_id'] = preferred_merchant_account_id
-        end        
         adjust_billing_address(creditcard, options)
       end
   end
