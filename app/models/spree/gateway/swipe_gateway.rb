@@ -12,5 +12,11 @@ module Spree
     def auto_capture?
       true
     end
+
+    def purchase(money, creditcard, gateway_options)
+      gateway_options[:description] = "Spree Checkout - Order " + gateway_options[:order_id]
+      money = money.to_f / 100
+      provider.purchase(money, creditcard, gateway_options)
+    end
   end
 end
