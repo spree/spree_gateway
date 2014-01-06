@@ -231,11 +231,27 @@ describe Spree::Gateway::BraintreeGateway do
     end
   end
 
-  describe "update_card_number" do
+  describe "update_cc_data" do
+    let(:credit_card) do
+      { 'token' => 'testing', 'last_4' => '1234', 'masked_number' => '5555**5555', 'expiration_date' => '01/2015' }
+    end
+  
+    subject { @gateway.update_cc_data(@payment.source, credit_card) }
+
     it "passes through gateway_payment_profile_id" do
-      credit_card = { 'token' => 'testing', 'last_4' => '1234', 'masked_number' => '5555**5555' }
-      @gateway.update_card_number(@payment.source, credit_card)
+      subject
       @payment.source.gateway_payment_profile_id.should == "testing"
+    end
+
+    it "updates expiry" do
+      subject
+      @payment.source.month.should == '01'
+      @payment.source.year.should == '2015'
+    end
+
+    it "sets encrypted_values to false" do
+      subject
+      @payment.source.encrypted_values.should be_false
     end
   end
 
