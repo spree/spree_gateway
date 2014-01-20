@@ -15,8 +15,8 @@ require 'spree/testing_support/factories'
 require 'spree/testing_support/order_walkthrough'
 require 'spree/testing_support/preferences'
 
-require 'capybara/poltergeist'
-Capybara.javascript_driver = :poltergeist
+# require 'capybara/poltergeist'
+# Capybara.javascript_driver = :poltergeist
 
 RSpec.configure do |config|
   config.include Spree::TestingSupport::Preferences
