@@ -52,18 +52,23 @@ module Spree
         if response.success?
           payment.source.update_attributes!(:gateway_customer_profile_id => response.params['customer_vault_id'])
           cc = response.params['braintree_customer'].fetch('credit_cards',[]).first
-          update_card_number(payment.source, cc) if cc
+          update_cc_data(payment.source, cc) if cc
         else
           payment.send(:gateway_error, response.message)
         end
       end
     end
 
-    def update_card_number(source, cc)
+    ##
+    # Update potentially un-encrypted values from Braintree response.
+    #
+    def update_cc_data(source, cc)
       last_4 = cc['last_4']
+      source.encrypted_values = false
       source.last_digits = last_4 if last_4
       source.gateway_payment_profile_id = cc['token']
       source.cc_type = CARD_TYPE_MAPPING[cc['card_type']] if cc['card_type']
+      source.expiry = cc['expiration_date']
       source.save!
     end
 
