@@ -164,7 +164,7 @@ describe Spree::Gateway::BraintreeGateway do
       assert_match /\A\w{6}\z/, @payment.response_code
       transaction = ::Braintree::Transaction.find(@payment.response_code)
       transaction.status.should == Braintree::Transaction::Status::Authorized
-      capture_result = @gateway.capture(@payment,:ignored_arg_credit_card, :ignored_arg_options)
+      capture_result = @gateway.capture(@payment.money.cents, @payment.response_code, :ignored_arg_options)
       capture_result.success?.should be_true
       transaction = ::Braintree::Transaction.find(@payment.response_code)
       transaction.status.should == Braintree::Transaction::Status::SubmittedForSettlement
