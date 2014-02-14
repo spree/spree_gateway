@@ -12,6 +12,8 @@ Gem::Specification.new do |s|
   s.homepage     = 'http://www.spreecommerce.org'
   s.license      = %q{BSD-3}
 
+  s.files       = `git ls-files`.split("\n")
+  s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_path = 'lib'
   s.requirements << 'none'
 
