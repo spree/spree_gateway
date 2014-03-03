@@ -1,7 +1,8 @@
-require 'rake'
+require 'bundler'
+Bundler::GemHelper.install_tasks
+
 require 'rspec/core/rake_task'
 require 'spree/testing_support/common_rake'
-require 'bundler/gem_tasks'
 
 RSpec::Core::RakeTask.new
 
