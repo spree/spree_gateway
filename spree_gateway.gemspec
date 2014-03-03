@@ -18,8 +18,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'spree_core', '~> 2.2.0'
   s.add_dependency 'savon', '~> 1.2'
 
-  s.add_dependency 'braintree'
-
   s.add_development_dependency 'factory_girl', '~> 4.4'
   s.add_development_dependency 'rspec-rails', '~> 2.14'
   s.add_development_dependency 'capybara', '2.2.1'
