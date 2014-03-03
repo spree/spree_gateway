@@ -113,8 +113,8 @@ module Spree
       # We need to add merchant_account_id only if present when creating BraintreeBlueGateway
       # Remove it since it is always part of the preferences hash.
       if h[:merchant_account_id].blank?
-        h.delete(:merchant_account_id) 
-      end 
+        h.delete(:merchant_account_id)
+      end
       h
     end
 

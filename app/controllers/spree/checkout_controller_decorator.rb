@@ -16,7 +16,7 @@ module Spree
         payment.pend!
       end
 
-      @order.update_attributes({:state => "complete", :completed_at => Time.now}, :without_protection => true)      
+      @order.update_attributes({:state => "complete", :completed_at => Time.now}, :without_protection => true)
 
       until @order.state == "complete"
         if @order.next!

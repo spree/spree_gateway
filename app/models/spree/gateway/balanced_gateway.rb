@@ -25,7 +25,7 @@ module Spree
 
       card_store_response = provider.store(payment.source, options)
       card_uri = card_store_response.authorization.split(';').first
-      
+
       # A success just returns a string of the token. A failed request returns a bad request response with a message.
       payment.source.update_attributes!(:gateway_payment_profile_id => card_uri)
     rescue Error => ex

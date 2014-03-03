@@ -4,7 +4,7 @@ module Spree
     preference :language, :string, :default => 'EN'
     preference :currency, :string, :default => 'EUR'
     preference :payment_options, :string, :default => 'ACC'
-    preference :pay_to_email, :string ,   :default => 'your@merchant.email_here' 
+    preference :pay_to_email, :string ,   :default => 'your@merchant.email_here'
 
     def provider_class
       ActiveMerchant::Billing::Skrill

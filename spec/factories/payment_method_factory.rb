@@ -1,4 +1,6 @@
-Factory.define(:skrill_quick_checkout, :class => BillingIntegration::Skrill::QuickCheckout) do |record|
-  record.name 'Skrill - Quick Checkout'
-  record.environment 'test'
+FactoryGirl.define do
+  factory :skrill_quick_checkout, class: Spree::BillingIntegration::Skrill::QuickCheckout do
+    name 'Skrill - Quick Checkout'
+    environment 'test'
+  end
 end

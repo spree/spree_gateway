@@ -1,7 +1,7 @@
 module Spree
   class Gateway::Fatzebra < Gateway
     preference :username, :string, default: "TEST"
-    preference :token, :string, default: "TEST" 
+    preference :token, :string, default: "TEST"
 
     def provider_class
       ActiveMerchant::Billing::FatZebraGateway
