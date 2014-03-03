@@ -6,6 +6,5 @@ module Spree
     def provider_class
       ActiveMerchant::Billing::MonerisGateway
     end
-    
   end
 end

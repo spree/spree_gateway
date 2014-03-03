@@ -4,7 +4,7 @@ module Spree
     preference :password, :string
 
     def provider_class
-      ActiveMerchant::Billing::SecurePayAU
+      ActiveMerchant::Billing::SecurePayAuGateway
     end
   end
 end

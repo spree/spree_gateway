@@ -2,9 +2,9 @@
 
 # Map cc types from stripe to spree
 mapCC = (ccType) ->
-  if (ccType == 'MasterCard') 
+  if (ccType == 'MasterCard')
     'mastercard'
-  else if (ccType == 'Visa') 
+  else if (ccType == 'Visa')
     'visa'
   else if (ccType == 'American Express')
     'amex'

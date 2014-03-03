@@ -2,13 +2,8 @@
 *~
 .#*
 .DS_Store
-.idea
-.project
 tmp
-nbproject
-*.swp
 spec/dummy
 Gemfile.lock
 .rvmrc
-.localeapp
-.coveralls.yml
+coverage
