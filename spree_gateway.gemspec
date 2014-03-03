@@ -8,10 +8,12 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.3'
 
   s.author       = 'Spree Commerce'
-  s.email        = 'ryan@spreecommerce.com'
-  s.homepage     = 'http://www.spreecommerce.org'
+  s.email        = 'gems@spreecommerce.com'
+  s.homepage     = 'http://www.spreecommerce.com'
   s.license      = %q{BSD-3}
 
+  s.files        = `git ls-files`.split("\n")
+  s.test_files   = `git ls-files -- spec/*`.split("\n")
   s.require_path = 'lib'
   s.requirements << 'none'
 
