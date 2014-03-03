@@ -22,7 +22,7 @@ describe Spree::Gateway::StripeGateway do
     end
   end
 
-  before do 
+  before do
     subject.set_preference :secret_key, secret_key
     subject.stub(:options_for_purchase_or_auth).and_return(['money','cc','opts'])
     subject.stub(:provider).and_return provider
@@ -75,47 +75,42 @@ describe Spree::Gateway::StripeGateway do
   end
 
   context 'purchasing' do
-
-    after(:each) do
+    after do
       subject.purchase(19.99, 'credit card', {})
     end
 
-    it 'should send the payment to the provider' do
+    it 'send the payment to the provider' do
       provider.should_receive(:purchase).with('money','cc','opts')
     end
-
   end
 
   context 'authorizing' do
-
-    after(:each) do
+    after do
       subject.authorize(19.99, 'credit card', {})
     end
 
-    it 'should send the authorization to the provider' do
+    it 'send the authorization to the provider' do
       provider.should_receive(:authorize).with('money','cc','opts')
     end
-
   end
 
   context 'capturing' do
-
     let(:payment) do
       double('payment').tap do |p|
         p.stub(:amount).and_return(12.34)
         p.stub(:response_code).and_return('response_code')
       end
-    end 
+    end
 
-    after(:each) do
+    after do
       subject.capture(payment, 'credit card', {})
     end
 
-    it 'should convert the amount to cents' do
+    it 'convert the amount to cents' do
       provider.should_receive(:capture).with(1234,anything,anything)
     end
 
-    it 'should use the response code as the authorization' do
+    it 'use the response code as the authorization' do
       provider.should_receive(:capture).with(anything,'response_code',anything)
     end
   end

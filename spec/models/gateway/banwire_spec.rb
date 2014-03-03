@@ -1,9 +1,11 @@
 require 'spec_helper'
 
 describe Spree::Gateway::Banwire do
-  let(:gateway) { Spree::Gateway::Banwire.create!(:name => "Banwire") }
+  let(:gateway) { described_class.create!(name: 'Banwire') }
 
-  it "should be Banwire gateway" do
-    gateway.provider_class.should == ::ActiveMerchant::Billing::BanwireGateway
+  context '.provider_class' do
+    it 'is a Banwire gateway' do
+      expect(gateway.provider_class).to eq ::ActiveMerchant::Billing::BanwireGateway
+    end
   end
 end
