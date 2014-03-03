@@ -1,6 +1,7 @@
 # Spree Gateway
 
-[![Build Status](https://secure.travis-ci.org/spree/spree_gateway.png?branch=master)](http://travis-ci.org/spree/spree_gateway)
+[![Build Status](https://api.travis-ci.org/spree/spree_gateway.png?branch=master)](https://travis-ci.org/spree/spree_gateway)
+[![Code Climate](https://codeclimate.com/github/spree/spree_gateway.png)](https://codeclimate.com/github/spree/spree_gateway)
 
 Community supported Spree Payment Method Gateways.
 
@@ -16,7 +17,7 @@ In your Gemfile:
 
 ```ruby
 gem 'spree'
-gem 'spree_gateway', github: 'spree/spree_gateway'
+gem 'spree_gateway', github: 'spree/spree_gateway', branch: 'master'
 ```
 
 **Spree 1.3**
@@ -61,8 +62,10 @@ Starting point:
 * Ensure specs pass by running `bundle exec rspec spec`
 * Submit your pull request
 
-Copyright (c) 2013 Spree Commerce, released under the [New BSD License][3]
+Copyright (c) 2014 [Spree Commerce][4] and other [contributors][5], released under the [New BSD License][3]
 
 [1]: http://www.fsf.org/licensing/essays/free-sw.html
 [2]: https://github.com/spree/spree_gateway/issues
-[3]: https://github.com/spree/spree_gateway/tree/master/LICENSE
+[3]: https://github.com/spree/spree_gateway/blob/master/LICENSE.md
+[4]: https://github.com/spree
+[5]: https://github.com/spree/spree_gateway/graphs/contributors

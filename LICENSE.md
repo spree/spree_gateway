@@ -1,4 +1,4 @@
-Copyright (c) 2013 Spree Commerce
+Copyright (c) 2014 Spree Commerce Inc. and other contributors.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
