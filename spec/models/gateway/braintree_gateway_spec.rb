@@ -182,7 +182,7 @@ describe Spree::Gateway::BraintreeGateway do
       transaction = ::Braintree::Transaction.find(@payment.response_code)
       expect(transaction.status).to eq Braintree::Transaction::Status::Authorized
 
-      capture_result = @gateway.capture(@payment,:ignored_arg_credit_card, :ignored_arg_options)
+      capture_result = @gateway.capture(@payment.amount, @payment.response_code)
       expect(capture_result.success?).to be_true
 
       transaction = ::Braintree::Transaction.find(@payment.response_code)
