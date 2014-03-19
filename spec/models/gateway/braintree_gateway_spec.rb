@@ -231,9 +231,9 @@ describe Spree::Gateway::BraintreeGateway do
 
   context 'credit' do
     it 'work through the spree interface' do
-      pending 'undefined method credit for #<TestCard:0x007fdba1809ad8>'
       @payment.amount += 100.00
       purchase_using_spree_interface
+      pending "Braintree does not provide a way to settle a transaction manually: https://twitter.com/braintree/status/446099537224933376"
       credit_using_spree_interface
     end
   end
