@@ -202,13 +202,10 @@ describe Spree::Gateway::BraintreeGateway do
       transaction = ::Braintree::Transaction.find(@payment.response_code)
       expect(transaction.status).to eq Braintree::Transaction::Status::Authorized
 
-      pending 'undefined method reopen for nil:NilClass'
-      @payment.payment_source.capture(@payment) # as done in PaymentsController#fire
+      @payment.capture! # as done in PaymentsController#fire
       transaction = ::Braintree::Transaction.find(@payment.response_code)
       expect(transaction.status).to eq Braintree::Transaction::Status::SubmittedForSettlement
-      expect {
-        @payment.payment_source.capture(@payment)
-      }.to raise_error(Spree::Core::GatewayError, 'Cannot submit for settlement unless status is authorized. (91507)')
+      expect(@payment.completed?).to be_true
     end
   end
 
