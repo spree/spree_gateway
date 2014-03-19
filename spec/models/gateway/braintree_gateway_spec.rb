@@ -272,7 +272,7 @@ describe Spree::Gateway::BraintreeGateway do
 
   def credit_using_spree_interface
     expect(@payment.log_entries.size).to eq(1)
-    @payment.source.credit(@payment) # as done in PaymentsController#fire
+    @payment.credit!
     expect(@payment.log_entries.size).to eq(2)
 
     # Let's get the payment record associated with the credit
