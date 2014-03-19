@@ -117,20 +117,6 @@ module Spree
       h
     end
 
-    def preferences
-      preferences = super.slice(:merchant_id,
-                                :merchant_account_id,
-                                :public_key,
-                                :private_key,
-                                :client_side_encryption_key,
-                                :environment)
-
-      # Must be either :production or :sandbox, not their string equivalents.
-      # Thanks to the Braintree gem.
-      preferences[:environment] = preferences[:environment].try(:to_sym) || :sandbox
-      preferences
-    end
-
     protected
 
       def adjust_billing_address(creditcard, options)
