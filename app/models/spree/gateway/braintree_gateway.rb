@@ -41,9 +41,8 @@ module Spree
       provider.authorize(money, payment_method, options)
     end
 
-    def capture(authorization, ignored_creditcard, ignored_options)
-      amount = (authorization.amount * 100).to_i
-      provider.capture(amount, authorization.response_code)
+    def capture(amount, authorization_code, ignored_options)
+      provider.capture(amount, authorization_code)
     end
 
     def create_profile(payment)
