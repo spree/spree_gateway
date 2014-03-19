@@ -41,7 +41,7 @@ module Spree
       provider.authorize(money, payment_method, options)
     end
 
-    def capture(amount, authorization_code, ignored_options)
+    def capture(amount, authorization_code, ignored_options = {})
       provider.capture(amount, authorization_code)
     end
 
