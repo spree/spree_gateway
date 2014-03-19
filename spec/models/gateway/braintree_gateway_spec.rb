@@ -239,6 +239,10 @@ describe Spree::Gateway::BraintreeGateway do
   end
 
   context 'void' do
+    before do
+      Spree::Config.set(auto_capture: true)
+    end
+
     it 'work through the spree credit_card / payment interface' do
       expect(@payment.log_entries.size).to eq(0)
       @payment.process!
@@ -246,11 +250,10 @@ describe Spree::Gateway::BraintreeGateway do
       expect(@payment.log_entries.size).to eq(1)
       expect(@payment.response_code).to match /\A\w{6}\z/
 
-      pending 'expected: submitted_for_settlement got: authorized'
       transaction = Braintree::Transaction.find(@payment.response_code)
       expect(transaction.status).to eq Braintree::Transaction::Status::SubmittedForSettlement
 
-      @credit_card.void(@payment)
+      @payment.void_transaction!
       transaction = Braintree::Transaction.find(transaction.id)
       expect(transaction.status).to eq Braintree::Transaction::Status::Voided
     end
