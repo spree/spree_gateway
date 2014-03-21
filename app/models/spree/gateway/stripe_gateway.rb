@@ -3,6 +3,12 @@ module Spree
     preference :secret_key, :string
     preference :publishable_key, :string
 
+    CARD_TYPE_MAPPING = {
+      'American Express' => 'american_express',
+      'Diners Club' => 'diners_club',
+      'Visa' => 'visa'
+    }
+
     def method_type
       'stripe'
     end
@@ -42,12 +48,15 @@ module Spree
         login: preferred_secret_key,
       }.merge! address_for(payment)
 
-      response = provider.store(payment.source, options)
+      source = update_source!(payment.source)
+
+      response = provider.store(source, options)
       if response.success?
         payment.source.update_attributes!({
           :gateway_customer_profile_id => response.params['id'],
           :gateway_payment_profile_id => response.params['default_card']
         })
+
       else
         payment.send(:gateway_error, response.message)
       end
@@ -60,7 +69,6 @@ module Spree
       options = super
       options.merge(:login => preferred_secret_key)
     end
-
 
     def options_for_purchase_or_auth(money, creditcard, gateway_options)
       options = {}
@@ -98,6 +106,11 @@ module Spree
           end
         end
       end
+    end
+
+    def update_source!(source)
+      source.cc_type = CARD_TYPE_MAPPING[source.cc_type] if CARD_TYPE_MAPPING.include?(source.cc_type)
+      source
     end
   end
 end
