@@ -4,6 +4,12 @@ module Spree
 
     attr_accessible :preferred_login, :preferred_currency
 
+    CARD_TYPE_MAPPING = {
+      'American Express' => 'american_express',
+      'Diners Club' => 'diners_club',
+      'Visa' => 'visa'
+    }
+
     def provider_class
       ActiveMerchant::Billing::StripeGateway
     end
@@ -40,12 +46,16 @@ module Spree
         login: preferred_login
       }.merge! address_for(payment)
 
-      response = provider.store(payment.source, options)
+      source = update_source!(payment.source)
+
+      response = provider.store(source, options)
       if response.success?
-        payment.source.update_attributes!({
+        payment.source.update_attributes!({ 
+          :cc_type => payment.source.cc_type, # side-effect of update_source!
           :gateway_customer_profile_id => response.params['id'],
           :gateway_payment_profile_id => response.params['default_card']
         })
+
       else
         payment.send(:gateway_error, response.message)
       end
@@ -89,6 +99,11 @@ module Spree
           end
         end
       end
+    end
+
+    def update_source!(source)
+      source.cc_type = CARD_TYPE_MAPPING[source.cc_type] if CARD_TYPE_MAPPING.include?(source.cc_type)
+      source
     end
   end
 end
