@@ -6,7 +6,7 @@ describe Spree::Gateway::StripeGateway do
 
   let(:payment) {
     double('Spree::Payment',
-      source: double('Source', gateway_customer_profile_id: nil).as_null_object,
+      source: Spree::CreditCard.new,
       order: double('Spree::Order',
         email: email,
         bill_address: bill_address
@@ -29,6 +29,10 @@ describe Spree::Gateway::StripeGateway do
   end
 
   describe '#create_profile' do
+    before do
+      payment.source.stub(:update_attributes!)
+    end
+
     context 'with an order that has a bill address' do
       let(:bill_address) {
         double('Spree::Address',
@@ -70,6 +74,32 @@ describe Spree::Gateway::StripeGateway do
         }).and_return double.as_null_object
 
         subject.create_profile payment
+      end
+
+      # Regression test for #141
+      context "correcting the card type" do
+        before do
+          # We don't care about this method for these tests
+          subject.provider.stub(:store).and_return(double.as_null_object)
+        end
+
+        it "converts 'American Express' to 'american_express'" do
+          payment.source.cc_type = 'American Express'
+          subject.create_profile(payment)
+          expect(payment.source.cc_type).to eq('american_express')
+        end
+
+        it "converts 'Diners Club' to 'diners_club'" do
+          payment.source.cc_type = 'Diners Club'
+          subject.create_profile(payment)
+          expect(payment.source.cc_type).to eq('diners_club')
+        end
+
+        it "converts 'Visa' to 'visa'" do
+          payment.source.cc_type = 'Visa'
+          subject.create_profile(payment)
+          expect(payment.source.cc_type).to eq('visa')
+        end
       end
     end
   end
