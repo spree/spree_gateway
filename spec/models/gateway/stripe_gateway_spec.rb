@@ -95,15 +95,9 @@ describe Spree::Gateway::StripeGateway do
   end
 
   context 'capturing' do
-    let(:payment) do
-      double('payment').tap do |p|
-        p.stub(:amount).and_return(12.34)
-        p.stub(:response_code).and_return('response_code')
-      end
-    end
 
     after do
-      subject.capture(payment, 'credit card', {})
+      subject.capture(1234, 'response_code', {})
     end
 
     it 'convert the amount to cents' do
@@ -112,6 +106,50 @@ describe Spree::Gateway::StripeGateway do
 
     it 'use the response code as the authorization' do
       provider.should_receive(:capture).with(anything,'response_code',anything)
+    end
+  end
+
+  context 'capture with payment class' do
+    let(:gateway) do
+      gateway = described_class.new(:environment => 'test', :active => true)
+      gateway.set_preference :secret_key, secret_key
+      gateway.stub(:options_for_purchase_or_auth).and_return(['money','cc','opts'])
+      gateway.stub(:provider).and_return provider
+      gateway.stub :source_required => true
+      gateway
+    end
+
+    let(:order) { Spree::Order.create }
+
+    let(:card) do
+      mock_model(Spree::CreditCard, :number => "4111111111111111",
+                                    :has_payment_profile? => true)
+    end
+
+    let(:payment) do
+      payment = Spree::Payment.new
+      payment.source = card
+      payment.order = order
+      payment.payment_method = gateway
+      payment.amount = 98.55
+      payment.state = 'pending'
+      payment.response_code = '12345'
+      payment
+    end
+
+    let!(:success_response) do
+      double('success_response', :success? => true,
+                               :authorization => '123',
+                               :avs_result => { 'code' => 'avs-code' },
+                               :cvv_result => { 'code' => 'cvv-code', 'message' => "CVV Result"})
+    end
+
+    after do
+      payment.capture!
+    end
+
+    it 'gets correct amount' do
+      provider.should_receive(:capture).with(9855,'12345',anything).and_return(success_response)
     end
   end
 end

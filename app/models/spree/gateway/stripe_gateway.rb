@@ -23,8 +23,8 @@ module Spree
       provider.authorize(*options_for_purchase_or_auth(money, creditcard, gateway_options))
     end
 
-    def capture(payment, creditcard, gateway_options)
-      provider.capture((payment.amount * 100).round, payment.response_code, gateway_options)
+    def capture(money, response_code, gateway_options)
+      provider.capture(money, response_code, gateway_options)
     end
 
     def credit(money, creditcard, response_code, gateway_options)
