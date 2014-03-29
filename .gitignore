@@ -7,3 +7,4 @@ spec/dummy
 Gemfile.lock
 .rvmrc
 coverage
+.idea
