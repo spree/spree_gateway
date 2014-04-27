@@ -25,12 +25,11 @@ module Spree
     end
 
     def authorize(amount, creditcard, gateway_options)
-      t_options = { :order => {:invoice_number => gateway_options[:order_id] } }
-       create_transaction( amount, creditcard, :auth_only, t_options )
+      create_transaction(amount, creditcard, :auth_only, transaction_options(gateway_options))
     end
 
     def purchase(amount, creditcard, gateway_options)
-      create_transaction(amount, creditcard, :auth_capture)
+      create_transaction(amount, creditcard, :auth_capture, transaction_options(gateway_options))
     end
 
     def capture(authorization, creditcard, gateway_options)
@@ -66,6 +65,11 @@ module Spree
     end
 
     private
+
+      def transaction_options(gateway_options)
+        { :order => { :invoice_number => gateway_options[:order_id] } }
+      end
+
       # Create a transaction on a creditcard
       # Set up a CIM profile for the card if one doesn't exist
       # Valid transaction_types are :auth_only, :capture_only and :auth_capture
