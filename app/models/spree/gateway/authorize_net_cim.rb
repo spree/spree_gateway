@@ -126,6 +126,7 @@ module Spree
       def cim_gateway
         ActiveMerchant::Billing::Base.gateway_mode = preferred_server.to_sym
         gateway_options = options
+        gateway_options[:test_requests] = gateway_options[:test_mode]
         ActiveMerchant::Billing::AuthorizeNetCimGateway.new(gateway_options)
       end
   end
