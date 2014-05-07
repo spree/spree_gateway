@@ -111,7 +111,7 @@ module Spree
           info = { :bill_to => generate_address_hash(payment.order.bill_address),
                    :payment => { :credit_card => payment.source } }
         end
-        validation_mode = preferred_validate_on_profile_create ? preferred_server.to_sym : :none
+        validation_mode = preferred_validate_on_profile_create ? :live  : :none
 
         { :profile => { :merchant_customer_id => "#{Time.now.to_f}",
                         #:ship_to_list => generate_address_hash(creditcard.checkout.ship_address),
