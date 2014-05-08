@@ -112,6 +112,7 @@ module Spree
     end
 
     def cancel(response_code)
+      provider
       transaction = ::Braintree::Transaction.find(response_code)
       # From: https://www.braintreepayments.com/docs/ruby/transactions/refund
       # "A transaction can be refunded if its status is settled or settling.
