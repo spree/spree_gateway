@@ -37,7 +37,7 @@ module Spree
     end
 
     def credit(amount, creditcard, response_code, gateway_options)
-      create_transaction(amount, creditcard, :refund, :trans_id => response_code)
+      create_transaction(amount, creditcard, :refund, { :trans_id => response_code }.merge( transaction_options( gateway_options ) ))
     end
 
     def void(response_code, creditcard, gateway_options)
