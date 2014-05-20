@@ -100,6 +100,15 @@ module Spree
           { :customer_profile_id => response.params['customer_profile_id'],
             :customer_payment_profile_id => response.params['customer_payment_profile_id_list'].values.first }
         else
+          if response && response.params['validation_direct_response_list'] && response.params['validation_direct_response_list']['string']
+            r = response.params['validation_direct_response_list']['string'].split(',')
+            if r.present? && r[2].present?
+              rc = r[2].to_i
+              if rc == 65 || rc == 44 || rc == 45
+                response.params['message'] = 'Incorrect security code.'
+              end
+            end
+          end 
           payment.send(:gateway_error, response)
         end
       end
