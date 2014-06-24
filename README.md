@@ -27,8 +27,6 @@ gem 'spree', '~> 1.3'
 gem 'spree_gateway', github: 'spree/spree_gateway', branch: '1-3-stable'
 ```
 
-**Note:** *Please consult the Versionfile at the root of the repository to determine which branch to use.*
-
 Then run from the command line:
 
     $ bundle install
