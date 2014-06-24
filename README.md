@@ -3,7 +3,11 @@
 [![Build Status](https://api.travis-ci.org/spree/spree_gateway.png?branch=master)](https://travis-ci.org/spree/spree_gateway)
 [![Code Climate](https://codeclimate.com/github/spree/spree_gateway.png)](https://codeclimate.com/github/spree/spree_gateway)
 
-Community supported Spree Payment Method Gateways.
+Community supported Spree Payment Method Gateways. It works as a wrapper for
+active_merchant gateway. Note that for some gateways you might still need to
+add another gem to your Gemfile to make it work. For example active_merchant
+require `braintree` but it doesn't include that gem on its gemspec. So you
+need to manually add it to your rails app Gemfile.
 
 These can be used with Spree >= 1.0.x (but see note below for necessary changes)
 
