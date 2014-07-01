@@ -42,6 +42,54 @@ describe Spree::Gateway::BraintreeGateway do
     end
   end
 
+  describe 'payment profile creation' do
+    before do
+      country = create(:country, name: 'United States', iso_name: 'UNITED STATES', iso3: 'USA', iso: 'US', numcode: 840)
+      state   = create(:state, name: 'Maryland', abbr: 'MD', country: country)
+      address = create(:address,
+        firstname: 'John',
+        lastname:  'Doe',
+        address1:  '1234 My Street',
+        address2:  'Apt 1',
+        city:      'Washington DC',
+        zipcode:   '20123',
+        phone:     '(555)555-5555',
+        state:     state,
+        country:   country
+      )
+      @address = address
+
+      order = create(:order_with_totals, bill_address: address, ship_address: address)
+      order.update!
+
+      @credit_card = create(:credit_card,
+        verification_value: '123',
+        number:             '5105105105105100',
+        month:              9,
+        year:               Time.now.year + 1,
+        name:               'John Doe',
+        cc_type:            'mastercard')
+
+      @payment = create(:payment, source: @credit_card, order: order, payment_method: @gateway, amount: 10.00)
+      @payment.payment_method.environment = 'test'
+    end
+
+    context 'when a credit card is created' do
+      it 'it has the address associated on the remote payment profile' do
+        remote_customer = @gateway.provider.instance_variable_get(:@braintree_gateway).customer.find(@credit_card.gateway_customer_profile_id)
+        remote_address = remote_customer.addresses.first rescue nil
+        expect(remote_address).not_to be_nil
+        expect(remote_address.street_address).to eq(@address.address1)
+        expect(remote_address.extended_address).to eq(@address.address2)
+        expect(remote_address.locality).to eq(@address.city)
+        expect(remote_address.region).to eq(@address.state.name)
+        expect(remote_address.country_code_alpha2).to eq(@address.country.iso)
+        expect(remote_address.postal_code).to eq(@address.zipcode)
+      end
+    end
+
+  end
+
   describe 'merchant_account_id' do
     before do
       @gateway.set_preference(:merchant_account_id, merchant_account_id)
