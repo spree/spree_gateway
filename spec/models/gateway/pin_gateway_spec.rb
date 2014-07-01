@@ -30,8 +30,7 @@ describe Spree::Gateway::PinGateway do
       number:             '5520000000000000',
       month:              5,
       year:               Time.now.year + 1,
-      first_name:         'Ronald C',
-      last_name:          'Robot',
+      name:               'Ronald C Robot',
       cc_type:            'mastercard'
     )
 
