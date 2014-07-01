@@ -37,8 +37,7 @@ describe Spree::Gateway::BraintreeGateway do
         number:             '5105105105105100',
         month:              9,
         year:               Time.now.year + 1,
-        first_name:         'John',
-        last_name:          'Doe',
+        name:               'John Doe',
         cc_type:            'mastercard')
 
       @payment = create(:payment, source: @credit_card, order: order, payment_method: @gateway, amount: 10.00)
