@@ -47,7 +47,17 @@ module Spree
 
     def create_profile(payment)
       if payment.source.gateway_customer_profile_id.nil?
-        response = provider.store(payment.source)
+        ba_address = payment.order.billing_address
+        billing_address = {
+          :address1   => ba_address.address1,
+          :address2   => ba_address.address2,
+          :company    => ba_address.company,
+          :city       => ba_address.city,
+          :state      => ba_address.state.try(:name),
+          :zip        => ba_address.zipcode,
+          :country    => ba_address.country.try(:iso)
+        }
+        response = provider.store(payment.source, {billing_address: billing_address})
         if response.success?
           payment.source.update_attributes!(:gateway_customer_profile_id => response.params['customer_vault_id'])
           cc = response.params['braintree_customer'].fetch('credit_cards',[]).first
