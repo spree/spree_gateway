@@ -28,8 +28,7 @@ describe Spree::Gateway::UsaEpay do
       number:             '4111111111111111',
       month:              9,
       year:               Time.now.year + 1,
-      first_name:         'John',
-      last_name:          'Doe')
+      name:               'John Doe')
 
     @payment = create(:payment, source: credit_card, order: order, payment_method: @gateway, amount: 10.00)
     @payment.payment_method.environment = 'test'
