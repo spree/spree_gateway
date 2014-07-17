@@ -12,3 +12,4 @@ Gemfile.lock
 .rvmrc
 .localeapp
 .coveralls.yml
+coverage
