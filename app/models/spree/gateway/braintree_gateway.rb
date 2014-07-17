@@ -58,7 +58,7 @@ module Spree
           :zip        => ba_address.zipcode,
           :country    => ba_address.country.try(:iso)
         }
-        response = provider.store(payment.source, {billing_address: billing_address})
+        response = provider.store(payment.source, {billing_address: billing_address, verify_card: true})
         if response.success?
           payment.source.update_attributes!(:gateway_customer_profile_id => response.params['customer_vault_id'])
           cc = response.params['braintree_customer'].fetch('credit_cards',[]).first

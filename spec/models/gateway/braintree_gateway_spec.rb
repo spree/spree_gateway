@@ -13,9 +13,9 @@ describe Spree::Gateway::BraintreeGateway do
     @gateway.save!
 
     with_payment_profiles_off do
-      @country = FactoryGirl.create(:country, :name => "United States", :iso_name => "UNITED STATES", :iso3 => "USA", :iso => "US", :numcode => 840)
-      @state   = FactoryGirl.create(:state, :name => "Maryland", :abbr => "MD", :country => @country)
-      @address = FactoryGirl.create(:address,
+      @country = create(:country, :name => "United States", :iso_name => "UNITED STATES", :iso3 => "USA", :iso => "US", :numcode => 840)
+      @state   = create(:state, :name => "Maryland", :abbr => "MD", :country => @country)
+      @address = create(:address,
         :firstname => 'John',
         :lastname => 'Doe',
         :address1 => '1234 My Street',
@@ -26,11 +26,29 @@ describe Spree::Gateway::BraintreeGateway do
         :state => @state,
         :country => @country
       )
-      @order = FactoryGirl.create(:order_with_totals, :bill_address => @address, :ship_address => @address)
+      @order = create(:order_with_totals, :bill_address => @address, :ship_address => @address)
       @order.update!
-      @credit_card = FactoryGirl.create(:credit_card, :verification_value => '123', :number => '5105105105105100', :month => 9, :year => Time.now.year + 1, :first_name => 'John', :last_name => 'Doe', :cc_type => 'mastercard')
-      @payment = FactoryGirl.create(:payment, :source => @credit_card, :order => @order, :payment_method => @gateway, :amount => 10.00)
+      @credit_card = create(:credit_card, :verification_value => '123', :number => '5105105105105100', :month => 9, :year => Time.now.year + 1, :first_name => 'John', :last_name => 'Doe', :cc_type => 'mastercard')
+      @payment = create(:payment, :source => @credit_card, :order => @order, :payment_method => @gateway, :amount => 10.00)
       @payment.payment_method.environment = "test"
+
+
+      order = create(:order_with_totals, bill_address: @address, ship_address: @address)
+      order.update!
+      
+      # Use a valid CC from braintree sandbox: https://www.braintreepayments.com/docs/ruby/reference/sandbox
+
+      @credit_card = create(:credit_card,
+        verification_value: '123',
+        number:             '5555555555554444', 
+        month:              9,
+        year:               Time.now.year + 1,
+        first_name:               'John',
+        last_name:                'Doe',
+        cc_type:            'mastercard')
+
+      @payment = create(:payment, source: @credit_card, order: order, payment_method: @gateway, amount: 10.00)
+      @payment.payment_method.environment = 'test'
     end
 
   end
@@ -57,10 +75,11 @@ describe Spree::Gateway::BraintreeGateway do
 
       @credit_card = create(:credit_card,
         verification_value: '123',
-        number:             '5105105105105100',
+        number:             '5555555555554444',
         month:              9,
         year:               Time.now.year + 1,
-        name:               'John Doe',
+        first_name:               'John',
+        last_name:                'Doe',
         cc_type:            'mastercard')
 
       @payment = create(:payment, source: @credit_card, order: order, payment_method: @gateway, amount: 10.00)
@@ -79,6 +98,42 @@ describe Spree::Gateway::BraintreeGateway do
         expect(remote_address.country_code_alpha2).to eq(@address.country.iso)
         expect(remote_address.postal_code).to eq(@address.zipcode)
       end
+    end
+
+  end
+
+  describe 'payment profile failure' do
+    before do
+      country = create(:country, name: 'United States', iso_name: 'UNITED STATES', iso3: 'USA', iso: 'US', numcode: 840)
+      state   = create(:state, name: 'Maryland', abbr: 'MD', country: country)
+      address = create(:address,
+        firstname: 'John',
+        lastname:  'Doe',
+        address1:  '1234 My Street',
+        address2:  'Apt 1',
+        city:      'Washington DC',
+        zipcode:   '20123',
+        phone:     '(555)555-5555',
+        state:     state,
+        country:   country
+      )
+      @address = address
+
+      order = create(:order_with_totals, bill_address: address, ship_address: address)
+      order.update!
+
+      @credit_card = create(:credit_card,
+        verification_value: '123',
+        number:             '5105105105105100',
+        month:              9,
+        year:               Time.now.year + 1,
+        first_name:               'John',
+        last_name:                'Doe',
+        cc_type:            'mastercard')
+    end
+
+    it 'should fail creation' do
+      expect{ create(:payment, source: @credit_card, order: order, payment_method: @gateway, amount: 10.00) }.to raise_error
     end
 
   end
@@ -154,7 +209,7 @@ describe Spree::Gateway::BraintreeGateway do
 
     context "when the card is a mastercard" do
       before do
-        @credit_card.number = '5105105105105100'
+        @credit_card.number = '5555555555554444'
         @credit_card.cc_type = 'mastercard'
         @credit_card.save
       end
@@ -279,9 +334,9 @@ describe Spree::Gateway::BraintreeGateway do
     end
   end
 
-  describe "update_card_number" do
-    it "passes through gateway_payment_profile_id" do
-      credit_card = { 'token' => 'testing', 'last_4' => '1234', 'masked_number' => '5555**5555' }
+  context 'update_card_number' do
+    it 'passes through gateway_payment_profile_id' do
+      credit_card = { 'token' => 'testing', 'last_4' => '1234', 'masked_number' => '555555******4444' }
       @gateway.update_card_number(@payment.source, credit_card)
       @payment.source.gateway_payment_profile_id.should == "testing"
     end
@@ -295,12 +350,12 @@ describe Spree::Gateway::BraintreeGateway do
     @payment = @order.payments.last
     @payment.response_code.should match(/\A\w{6}\z/)
     transaction = ::Braintree::Transaction.find(@payment.response_code)
-    transaction.type.should == Braintree::Transaction::Type::Credit
-    transaction.status.should == Braintree::Transaction::Status::SubmittedForSettlement
-    transaction.credit_card_details.masked_number.should == "510510******5100"
-    transaction.credit_card_details.expiration_date.should == "09/#{Time.now.year + 1}"
-    transaction.customer_details.first_name.should == "John"
-    transaction.customer_details.last_name.should == "Doe"
+    expect(transaction.type).to eq Braintree::Transaction::Type::Credit
+    expect(transaction.status).to eq Braintree::Transaction::Status::SubmittedForSettlement
+    expect(transaction.credit_card_details.masked_number).to eq '555555******4444'
+    expect(transaction.credit_card_details.expiration_date).to eq "09/#{Time.now.year + 1}"
+    expect(transaction.customer_details.first_name).to eq 'John'
+    expect(transaction.customer_details.last_name).to eq 'Doe'
   end
 
   def purchase_using_spree_interface(profile=true)
@@ -312,11 +367,11 @@ describe Spree::Gateway::BraintreeGateway do
     @payment.response_code.should match /\A\w{6}\z/
     @payment.state.should == 'completed'
     transaction = ::Braintree::Transaction.find(@payment.response_code)
-    Braintree::Transaction::Status::SubmittedForSettlement.should == transaction.status
-    transaction.credit_card_details.masked_number.should == "510510******5100"
-    transaction.credit_card_details.expiration_date.should == "09/#{Time.now.year + 1}"
-    transaction.customer_details.first_name.should == 'John'
-    transaction.customer_details.last_name.should == 'Doe'
+    expect(Braintree::Transaction::Status::SubmittedForSettlement).to eq transaction.status
+    expect(transaction.credit_card_details.masked_number).to eq '555555******4444'
+    expect(transaction.credit_card_details.expiration_date).to eq "09/#{Time.now.year + 1}"
+    expect(transaction.customer_details.first_name).to eq 'John'
+    expect(transaction.customer_details.last_name).to eq 'Doe'
   end
 
   def with_payment_profiles_off(&block)
