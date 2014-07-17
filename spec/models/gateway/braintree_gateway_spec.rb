@@ -31,12 +31,12 @@ describe Spree::Gateway::BraintreeGateway do
 
       order = create(:order_with_totals, bill_address: address, ship_address: address)
       order.update!
-      
+
       # Use a valid CC from braintree sandbox: https://www.braintreepayments.com/docs/ruby/reference/sandbox
 
       @credit_card = create(:credit_card,
         verification_value: '123',
-        number:             '5555555555554444', 
+        number:             '5555555555554444',
         month:              9,
         year:               Time.now.year + 1,
         name:               'John Doe',
@@ -139,7 +139,7 @@ describe Spree::Gateway::BraintreeGateway do
       let(:merchant_account_id) { '' }
 
       it 'does not be present in options' do
-        expect(@gateway.options.keys.include?(:merchant_account_id)).to be_false
+        expect(@gateway.options.keys.include?(:merchant_account_id)).to be false
       end
     end
 
@@ -151,11 +151,11 @@ describe Spree::Gateway::BraintreeGateway do
       end
 
       it 'have a preferences[:merchant_account_id]' do
-        expect(@gateway.preferences.keys.include?(:merchant_account_id)).to be_true
+        expect(@gateway.preferences.keys.include?(:merchant_account_id)).to be true
       end
 
       it 'is present in options' do
-        expect(@gateway.options.keys.include?(:merchant_account_id)).to be_true
+        expect(@gateway.options.keys.include?(:merchant_account_id)).to be true
       end
     end
   end
@@ -168,7 +168,7 @@ describe Spree::Gateway::BraintreeGateway do
 
   context '.payment_profiles_supported?' do
     it 'return true' do
-      expect(@gateway.payment_profiles_supported?).to be_true
+      expect(@gateway.payment_profiles_supported?).to be true
     end
   end
 
@@ -182,7 +182,7 @@ describe Spree::Gateway::BraintreeGateway do
     it 'return a success response with an authorization code' do
       result = @gateway.authorize(500, @credit_card)
 
-      expect(result.success?).to be_true
+      expect(result.success?).to be true
       expect(result.authorization).to match /\A\w{6}\z/
       expect(Braintree::Transaction::Status::Authorized).to eq Braintree::Transaction.find(result.authorization).status
     end
@@ -270,7 +270,7 @@ describe Spree::Gateway::BraintreeGateway do
       expect(transaction.status).to eq Braintree::Transaction::Status::Authorized
 
       capture_result = @gateway.capture(@payment.amount, @payment.response_code)
-      expect(capture_result.success?).to be_true
+      expect(capture_result.success?).to be true
 
       transaction = ::Braintree::Transaction.find(@payment.response_code)
       expect(transaction.status).to eq Braintree::Transaction::Status::SubmittedForSettlement
@@ -289,14 +289,14 @@ describe Spree::Gateway::BraintreeGateway do
       @payment.capture! # as done in PaymentsController#fire
       transaction = ::Braintree::Transaction.find(@payment.response_code)
       expect(transaction.status).to eq Braintree::Transaction::Status::SubmittedForSettlement
-      expect(@payment.completed?).to be_true
+      expect(@payment.completed?).to be true
     end
   end
 
   context 'purchase' do
     it 'return a success response with an authorization code' do
       result =  @gateway.purchase(500, @credit_card)
-      expect(result.success?).to be_true
+      expect(result.success?).to be true
       expect(result.authorization).to match /\A\w{6}\z/
       expect(Braintree::Transaction::Status::SubmittedForSettlement).to eq Braintree::Transaction.find(result.authorization).status
     end
@@ -320,7 +320,7 @@ describe Spree::Gateway::BraintreeGateway do
     it 'work through the spree interface' do
       @payment.amount += 100.00
       purchase_using_spree_interface
-      pending "Braintree does not provide a way to settle a transaction manually: https://twitter.com/braintree/status/446099537224933376"
+      skip "Braintree does not provide a way to settle a transaction manually: https://twitter.com/braintree/status/446099537224933376"
       credit_using_spree_interface
     end
   end

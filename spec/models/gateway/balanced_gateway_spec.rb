@@ -11,7 +11,7 @@ describe Spree::Gateway::BalancedGateway do
 
   context '.payment_profiles_supported?' do
     it 'return true' do
-      expect(gateway.payment_profiles_supported?).to be_true
+      expect(gateway.payment_profiles_supported?).to be true
     end
   end
 end
