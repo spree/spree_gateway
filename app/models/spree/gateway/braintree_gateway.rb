@@ -43,9 +43,41 @@ module Spree
       provider.capture(amount, authorization.response_code)
     end
 
+
+    def options_for_payment(p)
+      o = Hash.new
+      o[:email] = p.order.email
+      
+      unless p.source.gateway_customer_profile_id.blank?
+        o[:customer] = p.source.gateway_customer_profile_id
+      end
+
+      if p.order.bill_address
+        bill_addr = p.order.bill_address
+
+        o[:first_name] = bill_addr.firstname
+        o[:last_name] = bill_addr.lastname
+
+        o[:billing_address] = {
+          :address1 => bill_addr.address1,
+          :address2 => bill_addr.address2,
+          :company => bill_addr.company,
+          :city => bill_addr.city,
+          :state => bill_addr.state ? bill_addr.state.abbr : bill_addr.state_name,
+          :country_code_alpha3 => bill_addr.country.iso3,
+          :zip => bill_addr.zipcode 
+        }
+      end
+
+      o[:verify_card] = "true"
+
+      return o
+    end
+
     def create_profile(payment)
       if payment.source.gateway_customer_profile_id.nil?
-        response = provider.store(payment.source)
+        response = provider.store(payment.source, options_for_payment(payment))
+
         if response.success?
           payment.source.update_attributes!(:gateway_customer_profile_id => response.params['customer_vault_id'])
           cc = response.params['braintree_customer'].fetch('credit_cards',[]).first
@@ -54,7 +86,7 @@ module Spree
           payment.send(:gateway_error, response.message)
         end
       end
-    end
+    end  
 
     def update_card_number(source, cc)
       last_4 = cc['last_4']
