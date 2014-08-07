@@ -44,7 +44,7 @@ stripeResponseHandler = (status, response) ->
   else
     Spree.stripePaymentMethod.find('#card_number, #card_expiry, #card_code').prop("disabled" , true)
     Spree.stripePaymentMethod.find(".ccType").prop("disabled", false)
-    Spree.stripePaymentMethod.find(".ccType").val(mapCC(response.card.type))
+    Spree.stripePaymentMethod.find(".ccType").val(mapCC(response.card.brand))
 
     # token contains id, last4, and card type
     token = response['id'];
