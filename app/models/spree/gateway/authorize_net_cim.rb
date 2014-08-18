@@ -38,12 +38,22 @@ module Spree
       create_transaction(amount, nil, :prior_auth_capture, trans_id: response_code)
     end
 
-    def credit(amount, creditcard, response_code, gateway_options)
+    def credit(amount, creditcard, response_code, gateway_options = {})
       create_transaction(amount, creditcard, :refund, transaction_options(gateway_options).merge(trans_id: response_code))
     end
 
-    def void(response_code, creditcard, gateway_options)
+    def void(response_code, creditcard, gateway_options = {})
       create_transaction(nil, creditcard, :void, transaction_options(gateway_options).merge(trans_id: response_code))
+    end
+
+    def cancel(response_code)      
+      # From: http://community.developer.authorize.net/t5/The-Authorize-Net-Developer-Blog/Refunds-in-Retail-A-user-friendly-approach-using-AIM/ba-p/9848
+      # DD: if unsettled, void needed
+      response = void(response_code, nil)
+      # DD: if settled, credit/refund needed
+      response = credit(nil, nil, response_code) unless response.success?
+
+      response
     end
 
     def payment_profiles_supported?
@@ -61,43 +71,50 @@ module Spree
     # Get the CIM payment profile; Needed for updates.
     def get_profile(payment)
       if payment.source.has_payment_profile?
-        cim_gateway.get_customer_profile({
+        profile = cim_gateway.get_customer_profile({
           customer_profile_id: payment.source.gateway_customer_profile_id
-        }).params['profile'].deep_symbolize_keys!
+        })
+        if profile
+          profile.params['profile'].deep_symbolize_keys!
+        end
       end
     end
 
     # Get the CIM payment profile; Needed for updates.
     def get_payment_profile(payment)
       if payment.source.has_payment_profile?
-        cim_gateway.get_customer_payment_profile({
-          :customer_profile_id => payment.source.gateway_customer_profile_id,
-          :customer_payment_profile_id => payment.source.gateway_payment_profile_id
-        }).params['payment_profile'].deep_symbolize_keys!
+        profile = cim_gateway.get_customer_payment_profile({
+          customer_profile_id: payment.source.gateway_customer_profile_id,
+          customer_payment_profile_id: payment.source.gateway_payment_profile_id
+        })
+        if profile
+          profile.params['payment_profile'].deep_symbolize_keys!
+        end
       end
     end
 
     # Update billing address on the CIM payment profile
     def update_payment_profile(payment)
       if payment.source.has_payment_profile?
-        hash = get_payment_profile(payment)
-        hash[:bill_to] = generate_address_hash(payment.order.bill_address)
-        if hash[:payment][:credit_card]
-          # activemerchant expects a credit card object with 'number', 'year', 'month', and 'verification_value?' defined
-          payment.source.define_singleton_method(:number) { "XXXXXXXXX#{payment.source.last_digits}" }
-          hash[:payment][:credit_card] = payment.source
+        if hash = get_payment_profile(payment)
+          hash[:bill_to] = generate_address_hash(payment.order.bill_address) 
+          if hash[:payment][:credit_card]
+            # activemerchant expects a credit card object with 'number', 'year', 'month', and 'verification_value?' defined
+            payment.source.define_singleton_method(:number) { "XXXXXXXXX#{payment.source.last_digits}" }
+            hash[:payment][:credit_card] = payment.source
+          end
+          cim_gateway.update_customer_payment_profile({ 
+            customer_profile_id: payment.source.gateway_customer_profile_id,
+            payment_profile: hash
+          })
         end
-        cim_gateway.update_customer_payment_profile({
-          :customer_profile_id => payment.source.gateway_customer_profile_id,
-          :payment_profile => hash
-        })
       end
     end
 
     private
 
-      def transaction_options(gateway_options)
-        { order: { invoice_number: gateway_options[:order_id] } }
+      def transaction_options(gateway_options = {})
+        { order: { invoice_number: gateway_options[:order_id] } } 
       end
 
       # Create a transaction on a creditcard
@@ -176,10 +193,12 @@ module Spree
       end
 
       def cim_gateway
-        ActiveMerchant::Billing::Base.gateway_mode = preferred_server.to_sym
-        gateway_options = options
-        gateway_options[:test_requests] = false # DD: never ever do test requests because just returns transaction_id = 0
-        ActiveMerchant::Billing::AuthorizeNetCimGateway.new(gateway_options)
+        @_cim_gateway ||= begin
+          ActiveMerchant::Billing::Base.gateway_mode = preferred_server.to_sym
+          gateway_options = options
+          gateway_options[:test_requests] = false # DD: never ever do test requests because just returns transaction_id = 0
+          ActiveMerchant::Billing::AuthorizeNetCimGateway.new(gateway_options)
+        end
       end
 
   end
