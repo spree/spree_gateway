@@ -158,13 +158,13 @@ module Spree
           o[:last_name] = bill_addr.lastname
 
           o[:billing_address] = {
-            :address1 => bill_addr.address1,
-            :address2 => bill_addr.address2,
-            :company => bill_addr.company,
-            :city => bill_addr.city,
-            :state => bill_addr.state ? bill_addr.state.abbr : bill_addr.state_name,
-            :country_code_alpha3 => bill_addr.country.iso3,
-            :zip => bill_addr.zipcode
+            address1: bill_addr.address1,
+            address2: bill_addr.address2,
+            company: bill_addr.company,
+            city: bill_addr.city,
+            state: bill_addr.state ? bill_addr.state.name : bill_addr.state_name,
+            country_code_alpha3: bill_addr.country.iso3,
+            zip: bill_addr.zipcode
           }
         end
 
