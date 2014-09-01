@@ -3,10 +3,11 @@ require 'spec_helper'
 describe Spree::Gateway::StripeGateway do
   let(:secret_key) { 'key' }
   let(:email) { 'customer@example.com' }
+  let(:source) { Spree::CreditCard.new }
 
   let(:payment) {
     double('Spree::Payment',
-      source: Spree::CreditCard.new,
+      source: source,
       order: double('Spree::Order',
         email: email,
         bill_address: bill_address
@@ -102,6 +103,17 @@ describe Spree::Gateway::StripeGateway do
         end
       end
     end
+
+    context 'with a card represents payment_profile' do
+      let(:source) { Spree::CreditCard.new(gateway_payment_profile_id: 'tok_profileid') }
+      let(:bill_address) { nil }
+
+      it 'stores the profile_id as a card' do
+        subject.provider.should_receive(:store).with(source.gateway_payment_profile_id, anything).and_return double.as_null_object
+
+        subject.create_profile payment
+      end
+    end
   end
 
   context 'purchasing' do
@@ -152,8 +164,8 @@ describe Spree::Gateway::StripeGateway do
     let(:order) { Spree::Order.create }
 
     let(:card) do
-      mock_model(Spree::CreditCard, :number => "4111111111111111",
-                                    :has_payment_profile? => true)
+      mock_model(Spree::CreditCard, :gateway_customer_profile_id => 'cus_abcde',
+                                    :imported => false)
     end
 
     let(:payment) do

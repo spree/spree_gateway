@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'factory_girl', '~> 4.4'
   s.add_development_dependency 'rspec-rails', '~> 2.14'
+  s.add_development_dependency 'rspec-activemodel-mocks', '~> 1.0.1'
   s.add_development_dependency 'capybara', '2.2.1'
   s.add_development_dependency 'launchy'
   s.add_development_dependency 'ffaker'
