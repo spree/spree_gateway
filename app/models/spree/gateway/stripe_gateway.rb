@@ -49,10 +49,15 @@ module Spree
       }.merge! address_for(payment)
 
       source = update_source!(payment.source)
+      if source.number.blank? && source.gateway_payment_profile_id.present?
+        creditcard = source.gateway_payment_profile_id
+      else
+        creditcard = source
+      end
 
-      response = provider.store(source, options)
+      response = provider.store(creditcard, options)
       if response.success?
-        payment.source.update_attributes!({ 
+        payment.source.update_attributes!({
           :cc_type => payment.source.cc_type, # side-effect of update_source!
           :gateway_customer_profile_id => response.params['id'],
           :gateway_payment_profile_id => response.params['default_card']
