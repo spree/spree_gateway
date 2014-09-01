@@ -152,8 +152,8 @@ describe Spree::Gateway::StripeGateway do
     let(:order) { Spree::Order.create }
 
     let(:card) do
-      mock_model(Spree::CreditCard, :number => "4111111111111111",
-                                    :has_payment_profile? => true)
+      mock_model(Spree::CreditCard, :gateway_customer_profile_id => 'cus_abcde',
+                                    :imported => false)
     end
 
     let(:payment) do
