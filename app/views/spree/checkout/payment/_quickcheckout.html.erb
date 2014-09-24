@@ -4,9 +4,9 @@
 opts = {}
 opts[:transaction_id] = "#{@order.number}"
 opts[:amount] = @order.total
-opts[:return_url] = skrill_return_order_checkout_url(@order, :token => @order.token,
+opts[:return_url] = skrill_return_order_checkout_url(@order, :token => @order.guest_token,
                                                              :payment_method_id => payment_method.id)
-opts[:cancel_url] = skrill_cancel_order_checkout_url(@order, :token => @order.token)
+opts[:cancel_url] = skrill_cancel_order_checkout_url(@order, :token => @order.guest_token)
 opts[:status_url] = skrill_url
 opts[:payment_method_id] = payment_method.id
 %>
