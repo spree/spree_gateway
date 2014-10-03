@@ -60,8 +60,6 @@ module SpreeGateway
     end
 
     if self.frontend_available?
-      paths['app/assets'] << 'lib/assets/javascripts'
-      paths['app/assets'] << 'lib/assets/stylesheets'
       paths["app/controllers"] << "lib/controllers/frontend"
       paths["app/views"] << "lib/views/frontend"
     end
