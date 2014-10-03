@@ -36,7 +36,7 @@ describe Spree::Gateway::UsaEpay do
 
   context 'purchasing' do
     it 'can purchase a payment' do
-      expect { @payment.purchase! }.to be_true
+      expect { @payment.purchase! }.to be_truthy
     end
   end
 
