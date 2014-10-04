@@ -35,7 +35,7 @@ module Spree
     # capture is only one where source is not passed in for payment profile
     def capture(amount, response_code, gateway_options)
       # no credit card needed
-      create_transaction(amount, nil, :prior_auth_capture, transaction_options(gateway_options).merge(trans_id: response_code))
+      create_transaction(amount, nil, :prior_auth_capture, trans_id: response_code)
     end
 
     def credit(amount, creditcard, response_code, gateway_options)
