@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version     = '2.3.0.beta'
   s.summary     = 'Additional Payment Gateways for Spree Commerce'
   s.description = s.summary
-  s.required_ruby_version = '>= 1.9.3'
+  s.required_ruby_version = '>= 2.0.0'
 
   s.author       = 'Spree Commerce'
   s.email        = 'gems@spreecommerce.com'
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'spree_core', '~> 2.4.0.beta'
+  s.add_dependency 'spree_core', '~> 3.0.0.beta'
 
   s.add_development_dependency 'braintree'
   s.add_development_dependency 'capybara'
