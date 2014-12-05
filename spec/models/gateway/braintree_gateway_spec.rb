@@ -179,6 +179,37 @@ describe Spree::Gateway::BraintreeGateway do
   end
 
   describe 'authorize' do
+    context "the credit card has a token" do
+      before(:each) do
+        @credit_card.update_attributes(gateway_payment_profile_id: 'test')
+      end
+
+      it 'calls provider#authorize using the gateway_payment_profile_id' do
+        expect(@gateway.provider).to receive(:authorize).with(500, 'test', { payment_method_token: true } )
+        @gateway.authorize(500, @credit_card)
+      end
+    end
+
+    context "the given credit card does not have a token" do
+      context "the credit card has a customer profile id" do
+        before(:each) do
+          @credit_card.update_attributes(gateway_customer_profile_id: '12345')
+        end
+
+        it 'calls provider#authorize using the gateway_customer_profile_id' do
+          expect(@gateway.provider).to receive(:authorize).with(500, '12345', {})
+          @gateway.authorize(500, @credit_card)
+        end
+      end
+
+      context "no customer profile id" do
+        it 'calls provider#authorize with the credit card object' do
+          expect(@gateway.provider).to receive(:authorize).with(500, @credit_card, {})
+          @gateway.authorize(500, @credit_card)
+        end
+      end
+    end
+
     it 'return a success response with an authorization code' do
       result = @gateway.authorize(500, @credit_card)
 
