@@ -130,6 +130,7 @@ module Spree
       def cim_gateway
         ActiveMerchant::Billing::Base.gateway_mode = preferred_server.to_sym
         gateway_options = options
+        gateway_options[:test_requests] = false # DD: never ever do test requests because just returns transaction_id = 0
         ActiveMerchant::Billing::AuthorizeNetCimGateway.new(gateway_options)
       end
   end
