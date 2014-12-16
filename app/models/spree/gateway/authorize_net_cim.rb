@@ -15,7 +15,7 @@ module Spree
 
     def options
       # add :test key in the options hash, as that is what the ActiveMerchant::Billing::AuthorizeNetGateway expects
-      if self.preferred_server == "test"
+      if self.preferred_server != "live"
         self.preferences[:test] = true
       else
         self.preferences.delete(:test)
