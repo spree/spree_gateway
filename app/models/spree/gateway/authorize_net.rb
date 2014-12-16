@@ -9,7 +9,7 @@ module Spree
     end
 
     def options_with_test_preference
-      options_without_test_preference.merge(:test => (self.preferred_server == "test") )
+      options_without_test_preference.merge(:test => (self.preferred_server != "live") )
     end
 
     alias_method_chain :options, :test_preference
