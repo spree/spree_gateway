@@ -13,6 +13,7 @@ module SpreeGateway
       app.config.spree.payment_methods << Spree::Gateway::Beanstream
       app.config.spree.payment_methods << Spree::Gateway::BraintreeGateway
       app.config.spree.payment_methods << Spree::Gateway::CardSave
+      app.config.spree.payment_methods << Spree::Gateway::CyberSource
       app.config.spree.payment_methods << Spree::Gateway::DataCash
       app.config.spree.payment_methods << Spree::Gateway::Eway
       app.config.spree.payment_methods << Spree::Gateway::Linkpoint
