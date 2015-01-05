@@ -5,33 +5,32 @@ module SpreeGateway
     config.autoload_paths += %W(#{config.root}/lib)
 
     initializer "spree.gateway.payment_methods", :after => "spree.register.payment_methods" do |app|
-        app.config.spree.payment_methods << Spree::Gateway::AuthorizeNetCim
-        app.config.spree.payment_methods << Spree::Gateway::AuthorizeNet
-        app.config.spree.payment_methods << Spree::Gateway::CardSave
-        app.config.spree.payment_methods << Spree::Gateway::Eway
-        app.config.spree.payment_methods << Spree::Gateway::Linkpoint
-        app.config.spree.payment_methods << Spree::Gateway::Moneris
-        app.config.spree.payment_methods << Spree::Gateway::PayJunction
-        app.config.spree.payment_methods << Spree::Gateway::PayPalGateway
-        app.config.spree.payment_methods << Spree::Gateway::SagePay
-        app.config.spree.payment_methods << Spree::Gateway::Beanstream
-        app.config.spree.payment_methods << Spree::Gateway::BraintreeGateway
-        app.config.spree.payment_methods << Spree::Gateway::StripeGateway
-        app.config.spree.payment_methods << Spree::Gateway::Samurai
-        app.config.spree.payment_methods << Spree::Gateway::Worldpay
-        app.config.spree.payment_methods << Spree::Gateway::Banwire
-        app.config.spree.payment_methods << Spree::Gateway::UsaEpay
-        app.config.spree.payment_methods << Spree::BillingIntegration::Skrill::QuickCheckout
-        app.config.spree.payment_methods << Spree::Gateway::BalancedGateway
-        app.config.spree.payment_methods << Spree::Gateway::DataCash
-        app.config.spree.payment_methods << Spree::Gateway::UsaEpay
-        app.config.spree.payment_methods << Spree::Gateway::PinGateway
-        app.config.spree.payment_methods << Spree::Gateway::Paymill
-        app.config.spree.payment_methods << Spree::Gateway::PayflowPro
-        app.config.spree.payment_methods << Spree::Gateway::SecurePayAU
-        app.config.spree.payment_methods << Spree::Gateway::Maxipago
-        app.config.spree.payment_methods << Spree::Gateway::Migs
-        app.config.spree.payment_methods << Spree::Gateway::SpreedlyCoreGateway
+      app.config.spree.payment_methods << Spree::BillingIntegration::Skrill::QuickCheckout
+      app.config.spree.payment_methods << Spree::Gateway::AuthorizeNet
+      app.config.spree.payment_methods << Spree::Gateway::AuthorizeNetCim
+      app.config.spree.payment_methods << Spree::Gateway::BalancedGateway
+      app.config.spree.payment_methods << Spree::Gateway::Banwire
+      app.config.spree.payment_methods << Spree::Gateway::Beanstream
+      app.config.spree.payment_methods << Spree::Gateway::BraintreeGateway
+      app.config.spree.payment_methods << Spree::Gateway::CardSave
+      app.config.spree.payment_methods << Spree::Gateway::DataCash
+      app.config.spree.payment_methods << Spree::Gateway::Eway
+      app.config.spree.payment_methods << Spree::Gateway::Linkpoint
+      app.config.spree.payment_methods << Spree::Gateway::Maxipago
+      app.config.spree.payment_methods << Spree::Gateway::Migs
+      app.config.spree.payment_methods << Spree::Gateway::Moneris
+      app.config.spree.payment_methods << Spree::Gateway::PayJunction
+      app.config.spree.payment_methods << Spree::Gateway::PayPalGateway
+      app.config.spree.payment_methods << Spree::Gateway::PayflowPro
+      app.config.spree.payment_methods << Spree::Gateway::Paymill
+      app.config.spree.payment_methods << Spree::Gateway::PinGateway
+      app.config.spree.payment_methods << Spree::Gateway::SagePay
+      app.config.spree.payment_methods << Spree::Gateway::Samurai
+      app.config.spree.payment_methods << Spree::Gateway::SecurePayAU
+      app.config.spree.payment_methods << Spree::Gateway::SpreedlyCoreGateway
+      app.config.spree.payment_methods << Spree::Gateway::StripeGateway
+      app.config.spree.payment_methods << Spree::Gateway::UsaEpayTransaction
+      app.config.spree.payment_methods << Spree::Gateway::Worldpay
     end
 
     def self.activate
