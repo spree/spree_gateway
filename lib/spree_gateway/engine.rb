@@ -34,5 +34,36 @@ module SpreeGateway
         app.config.spree.payment_methods << Spree::Gateway::Migs
         app.config.spree.payment_methods << Spree::Gateway::SpreedlyCoreGateway
     end
+
+    def self.activate
+      if SpreeGateway::Engine.frontend_available?
+        Rails.application.config.assets.precompile += [
+          'lib/assets/javascripts/spree/frontend/spree_gateway.js',
+          'lib/assets/javascripts/spree/frontend/spree_gateway.css',
+        ]
+        Dir.glob(File.join(File.dirname(__FILE__), "../../controllers/frontend/*/*_decorator*.rb")) do |c|
+          Rails.configuration.cache_classes ? require(c) : load(c)
+        end
+      end
+    end
+
+    def self.backend_available?
+      @@backend_available ||= ::Rails::Engine.subclasses.map(&:instance).map{ |e| e.class.to_s }.include?('Spree::Backend::Engine')
+    end
+
+    def self.frontend_available?
+      @@frontend_available ||= ::Rails::Engine.subclasses.map(&:instance).map{ |e| e.class.to_s }.include?('Spree::Frontend::Engine')
+    end
+
+    if self.backend_available?
+      paths["app/views"] << "lib/views/backend"
+    end
+
+    if self.frontend_available?
+      paths["app/controllers"] << "lib/controllers/frontend"
+      paths["app/views"] << "lib/views/frontend"
+    end
+
+    config.to_prepare &method(:activate).to_proc
   end
 end

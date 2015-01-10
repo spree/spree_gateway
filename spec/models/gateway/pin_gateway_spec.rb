@@ -45,7 +45,7 @@ describe Spree::Gateway::PinGateway do
 
   # Regression test for #106
   it 'uses auto capturing' do
-    expect(@gateway.auto_capture?).to be_true
+    expect(@gateway.auto_capture?).to be true
   end
 
   it 'always uses purchase' do

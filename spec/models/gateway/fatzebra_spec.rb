@@ -45,7 +45,7 @@ describe Spree::Gateway::Fatzebra do
 
   context '.auto_capture?' do
     it 'return true' do
-      expect(@gateway.auto_capture?).to be_true
+      expect(@gateway.auto_capture?).to be true
     end
   end
 end

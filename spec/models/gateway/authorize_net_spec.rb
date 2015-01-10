@@ -12,12 +12,12 @@ describe Spree::Gateway::AuthorizeNet do
   describe 'options' do
     it 'include :test => true when :test_mode is true' do
       gateway.preferred_test_mode = true
-      expect(gateway.options[:test]).to be_true
+      expect(gateway.options[:test]).to be true
     end
 
     it 'does not include :test when test_mode is false' do
       gateway.preferred_test_mode = false
-      expect(gateway.options[:test]).to be_false
+      expect(gateway.options[:test]).to be false
     end
   end
 end

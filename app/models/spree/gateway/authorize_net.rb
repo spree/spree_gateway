@@ -8,7 +8,7 @@ module Spree
     end
 
     def options_with_test_preference
-      options_without_test_preference.merge(:test => self.preferred_test_mode)
+      options_without_test_preference.merge(test: self.preferred_test_mode)
     end
 
     def cancel(response_code)

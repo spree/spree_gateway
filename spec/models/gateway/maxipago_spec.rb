@@ -11,7 +11,7 @@ describe Spree::Gateway::Maxipago do
 
   context '.auto_capture?' do
     it 'return true' do
-      expect(subject.auto_capture?).to be_true
+      expect(subject.auto_capture?).to be true
     end
   end
 end
