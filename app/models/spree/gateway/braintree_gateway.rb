@@ -37,7 +37,14 @@ module Spree
 
     def authorize(money, creditcard, options = {})
       adjust_options_for_braintree(creditcard, options)
-      payment_method = creditcard.gateway_customer_profile_id || creditcard
+
+      if creditcard.gateway_payment_profile_id
+        payment_method = creditcard.gateway_payment_profile_id
+        options[:payment_method_token] = true
+      else
+        payment_method = creditcard.gateway_customer_profile_id || creditcard
+      end
+
       provider.authorize(money, payment_method, options)
     end
 
@@ -47,17 +54,8 @@ module Spree
 
     def create_profile(payment)
       if payment.source.gateway_customer_profile_id.nil?
-        ba_address = payment.order.billing_address
-        billing_address = {
-          :address1   => ba_address.address1,
-          :address2   => ba_address.address2,
-          :company    => ba_address.company,
-          :city       => ba_address.city,
-          :state      => ba_address.state.try(:name),
-          :zip        => ba_address.zipcode,
-          :country    => ba_address.country.try(:iso)
-        }
-        response = provider.store(payment.source, {billing_address: billing_address, verify_card: true})
+        response = provider.store(payment.source, options_for_payment(payment))
+
         if response.success?
           payment.source.update_attributes!(:gateway_customer_profile_id => response.params['customer_vault_id'])
           cc = response.params['braintree_customer'].fetch('credit_cards',[]).first
@@ -151,5 +149,36 @@ module Spree
       def adjust_options_for_braintree(creditcard, options)
         adjust_billing_address(creditcard, options)
       end
+
+      def options_for_payment(p)
+        o = Hash.new
+        o[:email] = p.order.email
+
+        if p.source.gateway_customer_profile_id.present?
+          o[:customer] = p.source.gateway_customer_profile_id
+        end
+
+        if p.order.bill_address
+          bill_addr = p.order.bill_address
+
+          o[:first_name] = bill_addr.firstname
+          o[:last_name] = bill_addr.lastname
+
+          o[:billing_address] = {
+            address1: bill_addr.address1,
+            address2: bill_addr.address2,
+            company: bill_addr.company,
+            city: bill_addr.city,
+            state: bill_addr.state ? bill_addr.state.name : bill_addr.state_name,
+            country_code_alpha3: bill_addr.country.iso3,
+            zip: bill_addr.zipcode
+          }
+        end
+
+        o[:verify_card] = "true"
+
+        return o
+      end
+
   end
 end

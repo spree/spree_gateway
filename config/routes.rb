@@ -1,6 +1,6 @@
 Spree::Core::Engine.add_routes do
   # Add your extension routes here
-  resources :orders do
+  resources :orders, :only => [] do
     resource :checkout, :controller => 'checkout' do
       member do
         get :skrill_cancel

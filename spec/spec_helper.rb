@@ -6,11 +6,13 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 
 require 'rspec/rails'
+require 'rspec/active_model/mocks'
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'capybara/poltergeist'
 require 'database_cleaner'
 require 'ffaker'
+require 'rspec/active_model/mocks'
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
@@ -23,8 +25,8 @@ FactoryGirl.find_definitions
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
   config.mock_with :rspec
+  config.raise_errors_for_deprecations!
   config.use_transactional_fixtures = false
-
   #config.filter_run focus: true
   #config.filter_run_excluding slow: true
 

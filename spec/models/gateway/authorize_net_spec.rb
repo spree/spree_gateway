@@ -10,13 +10,13 @@ describe Spree::Gateway::AuthorizeNet do
   end
 
   describe 'options' do
-    it 'include :test => true when :test_mode is true' do
-      gateway.preferred_test_mode = true
+    it 'include :test => true when server is "test"' do
+      gateway.preferred_server = "test"
       expect(gateway.options[:test]).to be true
     end
 
-    it 'does not include :test when test_mode is false' do
-      gateway.preferred_test_mode = false
+    it 'does not include :test when server is "live"' do
+      gateway.preferred_server = "live"
       expect(gateway.options[:test]).to be false
     end
   end

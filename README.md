@@ -59,10 +59,13 @@ Starting point:
 * Fork the repo
 * Clone your repo
 * Run `bundle`
+* (You may need to `bundle update` if bundler gets stuck)
 * Run `bundle exec rake test_app` to create the test application in `spec/test_app`
 * Make your changes
 * Ensure specs pass by running `bundle exec rspec spec`
+* (You will need to `brew install phantomjs` if you don't already have it installed)
 * Submit your pull request
+
 
 Copyright (c) 2014 [Spree Commerce][4] and other [contributors][5], released under the [New BSD License][3]
 
