@@ -41,7 +41,7 @@ module Spree
       provider.void(response_code, {})
     end
     
-    def cancel(response_code, creditcard, gateway_options)
+    def cancel(response_code)
       provider.void(response_code, {})
     end
 
