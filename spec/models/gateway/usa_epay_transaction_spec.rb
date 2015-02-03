@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Spree::Gateway::UsaEpayTransaction do
   before do
     Spree::Gateway.update_all(active: false)
-    @gateway = Spree::Gateway::UsaEpayTransaction.create!(name: 'USA EPay Gateway', environment: 'sandbox', active: true)
+    @gateway = Spree::Gateway::UsaEpayTransaction.create!(name: 'USA EPay Gateway', active: true)
     @gateway.set_preference(:login, '0r19zQBdp5nS8i3t4hFxz0di13yf56q1')
     @gateway.save!
 
@@ -32,7 +32,6 @@ describe Spree::Gateway::UsaEpayTransaction do
       cc_type:            '')
 
     @payment = create(:payment, source: credit_card, order: order, payment_method: @gateway, amount: 10.00)
-    @payment.payment_method.environment = 'test'
   end
 
   context 'purchasing' do

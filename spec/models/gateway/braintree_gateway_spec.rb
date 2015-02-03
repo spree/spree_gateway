@@ -5,7 +5,7 @@ describe Spree::Gateway::BraintreeGateway do
 
   before do
     Spree::Gateway.update_all(active: false)
-    @gateway = Spree::Gateway::BraintreeGateway.create!(name: 'Braintree Gateway', environment: 'sandbox', active: true)
+    @gateway = Spree::Gateway::BraintreeGateway.create!(name: 'Braintree Gateway', active: true)
     @gateway.preferences = {
       environment: 'sandbox',
       merchant_id: 'zbn5yzq9t7wmwx42',
@@ -43,7 +43,6 @@ describe Spree::Gateway::BraintreeGateway do
         cc_type:            'mastercard')
 
       @payment = create(:payment, source: @credit_card, order: order, payment_method: @gateway, amount: 10.00)
-      @payment.payment_method.environment = 'test'
     end
   end
 
@@ -76,7 +75,6 @@ describe Spree::Gateway::BraintreeGateway do
         cc_type:            'mastercard')
 
       @payment = create(:payment, source: @credit_card, order: order, payment_method: @gateway, amount: 10.00)
-      @payment.payment_method.environment = 'test'
     end
 
     context 'when a credit card is created' do

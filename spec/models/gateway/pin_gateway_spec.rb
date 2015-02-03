@@ -4,7 +4,7 @@ describe Spree::Gateway::PinGateway do
 
   before do
     Spree::Gateway.update_all(active: false)
-    @gateway = described_class.create!(name: 'Pin Gateway', environment: 'sandbox', active: true)
+    @gateway = described_class.create!(name: 'Pin Gateway', active: true)
     @gateway.set_preference(:api_key, 'W_VzkRCZSILiKWUS-dndUg')
     @gateway.save!
 
@@ -35,7 +35,6 @@ describe Spree::Gateway::PinGateway do
     )
 
     @payment = create(:payment, source: credit_card, order: order, payment_method: @gateway, amount: 10.00)
-    @payment.payment_method.environment = 'test'
   end
 
   it 'can purchase' do
