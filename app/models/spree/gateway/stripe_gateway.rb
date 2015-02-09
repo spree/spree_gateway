@@ -40,6 +40,10 @@ module Spree
     def void(response_code, creditcard, gateway_options)
       provider.void(response_code, {})
     end
+    
+    def cancel(response_code)
+      provider.void(response_code, {})
+    end
 
     def create_profile(payment)
       return unless payment.source.gateway_customer_profile_id.nil?
