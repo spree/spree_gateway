@@ -15,6 +15,7 @@ module SpreeGateway
       app.config.spree.payment_methods << Spree::Gateway::CardSave
       app.config.spree.payment_methods << Spree::Gateway::CyberSource
       app.config.spree.payment_methods << Spree::Gateway::DataCash
+      app.config.spree.payment_methods << Spree::Gateway::Epay
       app.config.spree.payment_methods << Spree::Gateway::Eway
       app.config.spree.payment_methods << Spree::Gateway::Linkpoint
       app.config.spree.payment_methods << Spree::Gateway::Maxipago
