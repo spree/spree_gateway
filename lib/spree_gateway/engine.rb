@@ -26,7 +26,6 @@ module SpreeGateway
       app.config.spree.payment_methods << Spree::Gateway::Paymill
       app.config.spree.payment_methods << Spree::Gateway::PinGateway
       app.config.spree.payment_methods << Spree::Gateway::SagePay
-      app.config.spree.payment_methods << Spree::Gateway::Samurai
       app.config.spree.payment_methods << Spree::Gateway::SecurePayAU
       app.config.spree.payment_methods << Spree::Gateway::SpreedlyCoreGateway
       app.config.spree.payment_methods << Spree::Gateway::StripeGateway
