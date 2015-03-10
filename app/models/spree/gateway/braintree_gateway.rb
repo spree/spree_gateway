@@ -148,9 +148,10 @@ module Spree
     protected
 
       def adjust_billing_address(creditcard, options)
-        if creditcard.gateway_customer_profile_id
-          options.delete(:billing_address)
-        end
+        # Removed as we want to transmit billing + shipping address
+        # if creditcard.gateway_customer_profile_id
+        #   options.delete(:billing_address)
+        # end
       end
 
       def adjust_options_for_braintree(creditcard, options)
