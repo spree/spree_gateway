@@ -48,7 +48,8 @@ module Spree
 
     def create_profile(payment)
       if payment.source.gateway_customer_profile_id.nil?
-        response = provider.store(payment.source)
+        binding.pry
+        response = provider.store(payment.source, create_profile_options_for_braintree(payment))
         if response.success?
           payment.source.update_attributes!(:gateway_customer_profile_id => response.params['customer_vault_id'])
           cc = response.params['braintree_customer'].fetch('credit_cards',[]).first
@@ -156,6 +157,30 @@ module Spree
 
       def adjust_options_for_braintree(creditcard, options)
         adjust_billing_address(creditcard, options)
+      end
+
+      def create_profile_options_for_braintree(payment, options = {})
+        parameters = options
+        creditcard = payment.source
+        if creditcard.gateway_customer_profile_id
+          parameters[:customer] ||= creditcard.gateway_customer_profile_id
+        end
+        if payment.order && payment.order.user
+          parameters[:email]    ||= payment.order.user.email
+        end
+        if creditcard.bill_address
+          parameters[:billing_address] ||= {
+            :address1     => creditcard.bill_address.address1,
+            :address2     => creditcard.bill_address.address2,
+            :company      => creditcard.bill_address.company,
+            :city         => creditcard.bill_address.city,
+            :state        => creditcard.bill_address.state_text,
+            :zip          => creditcard.bill_address.zipcode,
+            :country      => creditcard.bill_address.country ? creditcard.bill_address.country.iso : nil,
+            :country_name => creditcard.bill_address.country ? creditcard.bill_address.country.name : nil
+          }
+        end
+        parameters
       end
   end
 end
