@@ -58,6 +58,7 @@ Starting point:
 
 * Fork the repo
 * Clone your repo
+* (You will need to `brew install mysql postgres` if you don't already have them installed)
 * Run `bundle`
 * (You may need to `bundle update` if bundler gets stuck)
 * Run `bundle exec rake test_app` to create the test application in `spec/test_app`
