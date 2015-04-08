@@ -30,6 +30,15 @@
     var paymentMethodId, token;
     if (response.error) {
       $('#stripeError').html(response.error.message);
+      var param_map = {
+        number:    '#card_number',
+        exp_month: '#card_expiry',
+        exp_year:  '#card_expiry',
+        cvc:       '#card_code'
+      }
+      if (response.error.param)
+        Spree.stripePaymentMethod.find(param_map[response.error.param]).addClass('error');
+
       return $('#stripeError').show();
     } else {
       Spree.stripePaymentMethod.find('#card_number, #card_expiry, #card_code').prop("disabled", true);
@@ -50,6 +59,7 @@
     return $('#checkout_form_payment [data-hook=buttons]').click(function() {
       var expiration, params;
       $('#stripeError').hide();
+      Spree.stripePaymentMethod.find('#card_number, #card_expiry, #card_code').removeClass('error');
       if (Spree.stripePaymentMethod.is(':visible')) {
         expiration = $('.cardExpiry:visible').payment('cardExpiryVal');
         params = $.extend({

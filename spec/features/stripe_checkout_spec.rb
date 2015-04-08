@@ -62,6 +62,7 @@ describe "Stripe checkout" do
   it "shows an error with an invalid credit card number", :js => true do
     click_button "Save and Continue"
     page.should have_content("This card number looks invalid")
+    page.should have_css('#card_number.error')
   end
 
   it "shows an error with invalid security fields", :js => true do
@@ -69,13 +70,24 @@ describe "Stripe checkout" do
     fill_in "Expiration", :with => "01 / #{Time.now.year + 1}"
     click_button "Save and Continue"
     page.should have_content("Your card's security code is invalid.")
+    page.should have_css('#card_code.error')
   end
 
-  it "shows an error with invalid expiry fields", :js => true do
+  it "shows an error with invalid expiry month field", :js => true do
     fill_in "Card Number", :with => "4242 4242 4242 4242"
     fill_in "Expiration", :with => "00 / #{Time.now.year + 1}"
     fill_in "Card Code", :with => "123"
     click_button "Save and Continue"
     page.should have_content("Your card's expiration month is invalid.")
+    page.should have_css('#card_expiry.error')
+  end
+
+  it "shows an error with invalid expiry year field", :js => true do
+    fill_in "Card Number", :with => "4242 4242 4242 4242"
+    fill_in "Expiration", :with => "12 / "
+    fill_in "Card Code", :with => "123"
+    click_button "Save and Continue"
+    page.should have_content("Your card's expiration year is invalid.")
+    page.should have_css('#card_expiry.error')
   end
 end
