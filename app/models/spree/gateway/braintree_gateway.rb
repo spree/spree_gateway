@@ -53,7 +53,7 @@ module Spree
     end
 
     def create_profile(payment)
-      if payment.source.gateway_customer_profile_id.nil?
+      if payment.source.gateway_customer_profile_id.nil? && payment.source.number.present?
         response = provider.store(payment.source, options_for_payment(payment))
 
         if response.success?
