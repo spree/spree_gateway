@@ -53,6 +53,7 @@ module Spree
     end
 
     def create_profile(payment)
+      self.preferred_merchant_account_id += "-#{payment.currency.downcase}" if Spree::Config.get(:currency) != payment.currency
       if payment.source.gateway_customer_profile_id.nil?
         response = provider.store(payment.source, options_for_payment(payment))
 
