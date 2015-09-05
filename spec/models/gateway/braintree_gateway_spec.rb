@@ -75,12 +75,56 @@ describe Spree::Gateway::BraintreeGateway do
         name:               'John Doe',
         cc_type:            'mastercard')
 
-      @payment = create(:payment, source: @credit_card, order: order, payment_method: @gateway, amount: 10.00)
+      @payment = build(:payment, source: @credit_card, order: order, payment_method: @gateway, amount: 10.00)
       @payment.payment_method.environment = 'test'
+    end
+
+    context 'with a multi currency setup' do
+      before do
+        allow(@payment).to receive(:currency).and_return('EUR')
+        expect(Spree::Config.get(:currency)).not_to eq(@payment.currency)
+      end
+
+      it 'throws an exception if merchant_account_id is not defined' do
+        expect {
+          @payment.save
+        }.to raise_exception('Preference merchant_account_id has to be defined when using multiple currencies')
+      end
+
+      it 'appends a currency code to the merchant_account_id' do
+        @gateway.preferences[:merchant_account_id] = 'my_account_id'
+
+        expect {
+          @payment.save
+        }.to raise_exception
+        expect(@gateway.preferences[:merchant_account_id]).to eq('my_account_id-eur')
+      end
+    end
+
+    context 'with a single currency setup' do
+      before do
+        expect(Spree::Config.get(:currency)).to eq(@payment.currency)
+      end
+
+      it 'does not throw an exception if merchant_account_id is not defined' do
+        expect {
+          @payment.save
+        }.not_to raise_exception
+      end
+
+      it 'does not append a currency code to the merchant_account_id' do
+        @gateway.preferences[:merchant_account_id] = 'my_account_id'
+
+        expect {
+          @payment.save
+        }.to raise_exception
+        expect(@gateway.preferences[:merchant_account_id]).to eq('my_account_id')
+      end
     end
 
     context 'when a credit card is created' do
       it 'it has the address associated on the remote payment profile' do
+        @payment.save
         remote_customer = @gateway.provider.instance_variable_get(:@braintree_gateway).customer.find(@credit_card.gateway_customer_profile_id)
         remote_address = remote_customer.addresses.first rescue nil
         expect(remote_address).not_to be_nil
