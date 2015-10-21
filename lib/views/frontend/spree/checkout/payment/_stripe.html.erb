@@ -36,8 +36,11 @@
         exp_year:  '#card_expiry',
         cvc:       '#card_code'
       }
-      if (response.error.param)
-        Spree.stripePaymentMethod.find(param_map[response.error.param]).addClass('error');
+      if (response.error.param) {
+        errorField = Spree.stripePaymentMethod.find(param_map[response.error.param])
+        errorField.addClass('error');
+        errorField.parent().addClass('has-error');
+      }
 
       return $('#stripeError').show();
     } else {
