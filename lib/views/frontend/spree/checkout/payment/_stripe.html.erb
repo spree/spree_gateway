@@ -58,7 +58,7 @@
   };
 
   $(document).ready(function() {
-    Spree.stripePaymentMethod.prepend("<div id='stripeError' class='errorExplanation' style='display:none'></div>");
+    Spree.stripePaymentMethod.prepend("<div id='stripeError' class='errorExplanation alert alert-danger' style='display:none'></div>");
     return $('#checkout_form_payment [data-hook=buttons]').click(function() {
       var expiration, params;
       $('#stripeError').hide();
