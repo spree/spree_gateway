@@ -61,7 +61,7 @@ describe "Stripe checkout" do
 
   it "shows an error with an invalid credit card number", :js => true do
     click_button "Save and Continue"
-    page.should have_content("This card number looks invalid")
+    page.should have_content("The card number is not a valid credit card number")
     page.should have_css('#card_number.error')
   end
 
