@@ -36,8 +36,11 @@
         exp_year:  '#card_expiry',
         cvc:       '#card_code'
       }
-      if (response.error.param)
-        Spree.stripePaymentMethod.find(param_map[response.error.param]).addClass('error');
+      if (response.error.param) {
+        errorField = Spree.stripePaymentMethod.find(param_map[response.error.param])
+        errorField.addClass('error');
+        errorField.parent().addClass('has-error');
+      }
 
       return $('#stripeError').show();
     } else {
@@ -55,7 +58,7 @@
   };
 
   $(document).ready(function() {
-    Spree.stripePaymentMethod.prepend("<div id='stripeError' class='errorExplanation' style='display:none'></div>");
+    Spree.stripePaymentMethod.prepend("<div id='stripeError' class='errorExplanation alert alert-danger' style='display:none'></div>");
     return $('#checkout_form_payment [data-hook=buttons]').click(function() {
       var expiration, params;
       $('#stripeError').hide();
