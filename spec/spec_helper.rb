@@ -10,6 +10,7 @@ require 'rspec/active_model/mocks'
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'capybara/poltergeist'
+require 'capybara-screenshot/rspec'
 require 'database_cleaner'
 require 'ffaker'
 require 'rspec/active_model/mocks'
@@ -19,6 +20,7 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 require 'spree/testing_support/factories'
 require 'spree/testing_support/order_walkthrough'
 require 'spree/testing_support/preferences'
+require 'spree/testing_support/capybara_ext'
 
 FactoryGirl.find_definitions
 
