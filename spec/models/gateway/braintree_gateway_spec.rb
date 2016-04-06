@@ -2,6 +2,9 @@ require 'spec_helper'
 require 'pry'
 
 describe Spree::Gateway::BraintreeGateway do
+  let!(:country) { create(:country, name: 'United States', iso_name: 'UNITED STATES', iso3: 'USA', iso: 'US', numcode: 840) }
+  let!(:state) { create(:state, name: 'Maryland', abbr: 'MD', country: country) }
+  let!(:address) { create(:address, firstname: 'John', lastname: 'Doe', address1: '1234 My Street', address2: 'Apt 1', city: 'Washington DC', zipcode: '20123', phone: '(555)555-5555', state: state, country: country) }
 
   before do
     Spree::Gateway.update_all(active: false)
@@ -15,20 +18,6 @@ describe Spree::Gateway::BraintreeGateway do
     @gateway.save!
 
     with_payment_profiles_off do
-      country = create(:country, name: 'United States', iso_name: 'UNITED STATES', iso3: 'USA', iso: 'US', numcode: 840)
-      state   = create(:state, name: 'Maryland', abbr: 'MD', country: country)
-      address = create(:address,
-        firstname: 'John',
-        lastname:  'Doe',
-        address1:  '1234 My Street',
-        address2:  'Apt 1',
-        city:      'Washington DC',
-        zipcode:   '20123',
-        phone:     '(555)555-5555',
-        state:     state,
-        country:   country
-      )
-
       order = create(:order_with_totals, bill_address: address, ship_address: address)
       order.update!
 
@@ -48,21 +37,6 @@ describe Spree::Gateway::BraintreeGateway do
 
   describe 'payment profile creation' do
     before do
-      country = create(:country, name: 'United States', iso_name: 'UNITED STATES', iso3: 'USA', iso: 'US', numcode: 840)
-      state   = create(:state, name: 'Maryland', abbr: 'MD', country: country)
-      address = create(:address,
-        firstname: 'John',
-        lastname:  'Doe',
-        address1:  '1234 My Street',
-        address2:  'Apt 1',
-        city:      'Washington DC',
-        zipcode:   '20123',
-        phone:     '(555)555-5555',
-        state:     state,
-        country:   country
-      )
-      @address = address
-
       order = create(:order_with_totals, bill_address: address, ship_address: address)
       order.update!
 
@@ -82,12 +56,12 @@ describe Spree::Gateway::BraintreeGateway do
         remote_customer = @gateway.provider.instance_variable_get(:@braintree_gateway).customer.find(@credit_card.gateway_customer_profile_id)
         remote_address = remote_customer.addresses.first rescue nil
         expect(remote_address).not_to be_nil
-        expect(remote_address.street_address).to eq(@address.address1)
-        expect(remote_address.extended_address).to eq(@address.address2)
-        expect(remote_address.locality).to eq(@address.city)
-        expect(remote_address.region).to eq(@address.state.name)
-        expect(remote_address.country_code_alpha2).to eq(@address.country.iso)
-        expect(remote_address.postal_code).to eq(@address.zipcode)
+        expect(remote_address.street_address).to eq(address.address1)
+        expect(remote_address.extended_address).to eq(address.address2)
+        expect(remote_address.locality).to eq(address.city)
+        expect(remote_address.region).to eq(address.state.name)
+        expect(remote_address.country_code_alpha2).to eq(address.country.iso)
+        expect(remote_address.postal_code).to eq(address.zipcode)
       end
     end
 
@@ -95,21 +69,6 @@ describe Spree::Gateway::BraintreeGateway do
 
   describe 'payment profile failure' do
     before do
-      country = create(:country, name: 'United States', iso_name: 'UNITED STATES', iso3: 'USA', iso: 'US', numcode: 840)
-      state   = create(:state, name: 'Maryland', abbr: 'MD', country: country)
-      address = create(:address,
-        firstname: 'John',
-        lastname:  'Doe',
-        address1:  '1234 My Street',
-        address2:  'Apt 1',
-        city:      'Washington DC',
-        zipcode:   '20123',
-        phone:     '(555)555-5555',
-        state:     state,
-        country:   country
-      )
-      @address = address
-
       order = create(:order_with_totals, bill_address: address, ship_address: address)
       order.update!
 
