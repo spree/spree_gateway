@@ -23,6 +23,19 @@ module Spree
       'Visa' => 'visa'
     }
 
+    CARD_TYPE_MAPPING = {
+      'American Express' => 'american_express',
+      'Diners Club' => 'diners_club',
+      'Discover' => 'discover',
+      'JCB' => 'jcb',
+      'Laser' => 'laser',
+      'Maestro' => 'maestro',
+      'MasterCard' => 'master',
+      'Solo' => 'solo',
+      'Switch' => 'switch',
+      'Visa' => 'visa'
+    }
+
     def provider
       provider_instance = super
       Braintree::Configuration.custom_user_agent = "Spree #{Spree.version}"
