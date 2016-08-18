@@ -19,7 +19,7 @@ describe Spree::Gateway::BraintreeGateway do
 
     with_payment_profiles_off do
       order = create(:order_with_totals, bill_address: address, ship_address: address)
-      order.update!
+      order.update_with_updater!
 
       # Use a valid CC from braintree sandbox: https://www.braintreepayments.com/docs/ruby/reference/sandbox
 
@@ -38,7 +38,7 @@ describe Spree::Gateway::BraintreeGateway do
   describe 'payment profile creation' do
     before do
       order = create(:order_with_totals, bill_address: address, ship_address: address)
-      order.update!
+      order.update_with_updater!
 
       @credit_card = create(:credit_card,
         verification_value: '123',
@@ -70,7 +70,7 @@ describe Spree::Gateway::BraintreeGateway do
   describe 'payment profile failure' do
     before do
       order = create(:order_with_totals, bill_address: address, ship_address: address)
-      order.update!
+      order.update_with_updater!
 
       @credit_card = create(:credit_card,
         verification_value: '123',
