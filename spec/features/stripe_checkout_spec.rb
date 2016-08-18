@@ -24,7 +24,7 @@ describe "Stripe checkout" do
 
     order.reload
     order.user = user
-    order.update!
+    order.update_with_updater!
 
     Spree::CheckoutController.any_instance.stub(:current_order => order)
     Spree::CheckoutController.any_instance.stub(:try_spree_current_user => user)
