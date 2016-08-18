@@ -20,7 +20,7 @@ module Spree
 
       until @order.state == "complete"
         if @order.next!
-          @order.update!
+          @order.update_with_updater!
           state_callback(:after)
         end
       end

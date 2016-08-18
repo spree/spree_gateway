@@ -21,7 +21,7 @@ describe Spree::Gateway::UsaEpayTransaction do
       country:   country)
 
     order = create(:order_with_totals, bill_address: address, ship_address: address)
-    order.update!
+    order.update_with_updater!
 
     credit_card = create(:credit_card,
       verification_value: '123',
