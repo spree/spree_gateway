@@ -24,7 +24,7 @@ describe "Stripe checkout" do
 
     order.reload
     order.user = user
-    order.update!
+    order.update_with_updater!
 
     Spree::CheckoutController.any_instance.stub(:current_order => order)
     Spree::CheckoutController.any_instance.stub(:try_spree_current_user => user)
@@ -60,8 +60,10 @@ describe "Stripe checkout" do
   end
 
   it "shows an error with an invalid credit card number", :js => true do
+    # Card number is NOT valid. Fails Luhn checksum
+    fill_in "Card Number", :with => "4242 4242 4242 4249"
     click_button "Save and Continue"
-    page.should have_content("The card number is not a valid credit card number")
+    page.should have_content("Your card number is incorrect")
     page.should have_css('.has-error #card_number.error')
   end
 

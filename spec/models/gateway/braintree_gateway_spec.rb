@@ -19,7 +19,7 @@ describe Spree::Gateway::BraintreeGateway do
 
     with_payment_profiles_off do
       order = create(:order_with_totals, bill_address: address, ship_address: address)
-      order.update!
+      order.update_with_updater!
 
       # Use a valid CC from braintree sandbox: https://www.braintreepayments.com/docs/ruby/reference/sandbox
 
@@ -38,7 +38,7 @@ describe Spree::Gateway::BraintreeGateway do
   describe 'payment profile creation' do
     before do
       order = create(:order_with_totals, bill_address: address, ship_address: address)
-      order.update!
+      order.update_with_updater!
 
       @credit_card = create(:credit_card,
         verification_value: '123',
@@ -70,7 +70,7 @@ describe Spree::Gateway::BraintreeGateway do
   describe 'payment profile failure' do
     before do
       order = create(:order_with_totals, bill_address: address, ship_address: address)
-      order.update!
+      order.update_with_updater!
 
       @credit_card = create(:credit_card,
         verification_value: '123',
@@ -171,7 +171,7 @@ describe Spree::Gateway::BraintreeGateway do
       result = @gateway.authorize(500, @credit_card)
 
       expect(result.success?).to be true
-      expect(result.authorization).to match /\A\w{6}\z/
+      expect(result.authorization).to match /\A\w{6,}\z/
       expect(Braintree::Transaction::Status::Authorized).to eq Braintree::Transaction.find(result.authorization).status
     end
 
@@ -182,10 +182,10 @@ describe Spree::Gateway::BraintreeGateway do
 
         @payment.process!
         expect(@payment.log_entries.size).to eq(1)
-        expect(@payment.response_code).to match /\A\w{6}\z/
+        expect(@payment.transaction_id).to match /\A\w{6,}\z/
         expect(@payment.state).to eq 'pending'
 
-        transaction = ::Braintree::Transaction.find(@payment.response_code)
+        transaction = ::Braintree::Transaction.find(@payment.transaction_id)
         expect(transaction.status).to eq Braintree::Transaction::Status::Authorized
 
         card_number = @credit_card.number[0..5] + '******' + @credit_card.number[-4..-1]
@@ -252,15 +252,15 @@ describe Spree::Gateway::BraintreeGateway do
     it 'do capture a previous authorization' do
       @payment.process!
       expect(@payment.log_entries.size).to eq(1)
-      expect(@payment.response_code).to match /\A\w{6}\z/
+      expect(@payment.transaction_id).to match /\A\w{6,}\z/
 
-      transaction = ::Braintree::Transaction.find(@payment.response_code)
+      transaction = ::Braintree::Transaction.find(@payment.transaction_id)
       expect(transaction.status).to eq Braintree::Transaction::Status::Authorized
 
-      capture_result = @gateway.capture(@payment.amount, @payment.response_code)
+      capture_result = @gateway.capture(@payment.amount, @payment.transaction_id)
       expect(capture_result.success?).to be true
 
-      transaction = ::Braintree::Transaction.find(@payment.response_code)
+      transaction = ::Braintree::Transaction.find(@payment.transaction_id)
       expect(transaction.status).to eq Braintree::Transaction::Status::SubmittedForSettlement
     end
 
@@ -271,11 +271,11 @@ describe Spree::Gateway::BraintreeGateway do
       @payment.process!
       expect(@payment.log_entries.size).to eq(1)
 
-      transaction = ::Braintree::Transaction.find(@payment.response_code)
+      transaction = ::Braintree::Transaction.find(@payment.transaction_id)
       expect(transaction.status).to eq Braintree::Transaction::Status::Authorized
 
       @payment.capture! # as done in PaymentsController#fire
-      transaction = ::Braintree::Transaction.find(@payment.response_code)
+      transaction = ::Braintree::Transaction.find(@payment.transaction_id)
       expect(transaction.status).to eq Braintree::Transaction::Status::SubmittedForSettlement
       expect(@payment.completed?).to be true
     end
@@ -285,20 +285,20 @@ describe Spree::Gateway::BraintreeGateway do
     it 'return a success response with an authorization code' do
       result =  @gateway.purchase(500, @credit_card)
       expect(result.success?).to be true
-      expect(result.authorization).to match /\A\w{6}\z/
+      expect(result.authorization).to match /\A\w{6,}\z/
       expect(Braintree::Transaction::Status::SubmittedForSettlement).to eq Braintree::Transaction.find(result.authorization).status
     end
 
     it 'work through the spree payment interface with payment profiles' do
       purchase_using_spree_interface
-      transaction = ::Braintree::Transaction.find(@payment.response_code)
+      transaction = ::Braintree::Transaction.find(@payment.transaction_id)
       expect(transaction.credit_card_details.token).not_to be_nil
     end
 
     it 'work through the spree payment interface without payment profiles' do
       with_payment_profiles_off do
         purchase_using_spree_interface(false)
-        transaction = ::Braintree::Transaction.find(@payment.response_code)
+        transaction = ::Braintree::Transaction.find(@payment.transaction_id)
         expect(transaction.credit_card_details.token).to be_nil
       end
     end
@@ -323,9 +323,9 @@ describe Spree::Gateway::BraintreeGateway do
       @payment.process!
 
       expect(@payment.log_entries.size).to eq(1)
-      expect(@payment.response_code).to match /\A\w{6}\z/
+      expect(@payment.transaction_id).to match /\A\w{6,}\z/
 
-      transaction = Braintree::Transaction.find(@payment.response_code)
+      transaction = Braintree::Transaction.find(@payment.transaction_id)
       expect(transaction.status).to eq Braintree::Transaction::Status::SubmittedForSettlement
 
       @payment.void_transaction!
@@ -349,9 +349,9 @@ describe Spree::Gateway::BraintreeGateway do
 
     # Let's get the payment record associated with the credit
     @payment = @order.payments.last
-    expect(@payment.response_code).to match /\A\w{6}\z/
+    expect(@payment.transaction_id).to match /\A\w{6,}\z/
 
-    transaction = ::Braintree::Transaction.find(@payment.response_code)
+    transaction = ::Braintree::Transaction.find(@payment.transaction_id)
     expect(transaction.type).to eq Braintree::Transaction::Type::Credit
     expect(transaction.status).to eq Braintree::Transaction::Status::SubmittedForSettlement
     expect(transaction.credit_card_details.masked_number).to eq '555555******4444'
@@ -366,10 +366,10 @@ describe Spree::Gateway::BraintreeGateway do
     @payment.log_entries.size == 0
     @payment.process! # as done in PaymentsController#create
     @payment.log_entries.size == 1
-    expect(@payment.response_code).to match /\A\w{6}\z/
+    expect(@payment.transaction_id).to match /\A\w{6,}\z/
     expect(@payment.state).to eq 'completed'
 
-    transaction = ::Braintree::Transaction.find(@payment.response_code)
+    transaction = ::Braintree::Transaction.find(@payment.transaction_id)
     expect(Braintree::Transaction::Status::SubmittedForSettlement).to eq transaction.status
     expect(transaction.credit_card_details.masked_number).to eq '555555******4444'
     expect(transaction.credit_card_details.expiration_date).to eq "09/#{Time.now.year + 1}"
