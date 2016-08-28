@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Stripe checkout" do
+describe "Stripe checkout", type: :feature do
   let!(:country) { create(:country, :states_required => true) }
   let!(:state) { create(:state, :country => country) }
   let!(:shipping_method) { create(:shipping_method) }
@@ -30,7 +30,14 @@ describe "Stripe checkout" do
     Spree::CheckoutController.any_instance.stub(:try_spree_current_user => user)
     Spree::CheckoutController.any_instance.stub(:skip_state_validation? => true)
 
+    # Capybara should wait up to 10 seconds for async. changes to be applied
+    Capybara.default_max_wait_time = 10
+
     visit spree.checkout_state_path(:payment)
+    begin
+      setup_stripe_watcher
+    rescue Capybara::NotSupportedByDriverError
+    end
   end
 
   # This will pass the CC data to the server and the StripeGateway class handles it
@@ -53,7 +60,8 @@ describe "Stripe checkout" do
     fill_in "Card Code", :with => "123"
     fill_in "Expiration", :with => "01 / #{Time.now.year + 1}"
     click_button "Save and Continue"
-    sleep(5) # Wait for Stripe API to return + form to submit
+    wait_for_stripe # Wait for Stripe API to return + form to submit
+    page.should have_css('#checkout_form_confirm')
     page.current_url.should include("/checkout/confirm")
     click_button "Place Order"
     page.should have_content("Your order has been processed successfully")
@@ -63,6 +71,7 @@ describe "Stripe checkout" do
     # Card number is NOT valid. Fails Luhn checksum
     fill_in "Card Number", :with => "4242 4242 4242 4249"
     click_button "Save and Continue"
+    wait_for_stripe
     page.should have_content("Your card number is incorrect")
     page.should have_css('.has-error #card_number.error')
   end
@@ -71,6 +80,7 @@ describe "Stripe checkout" do
     fill_in "Card Number", :with => "4242 4242 4242 4242"
     fill_in "Expiration", :with => "01 / #{Time.now.year + 1}"
     click_button "Save and Continue"
+    wait_for_stripe
     page.should have_content("Your card's security code is invalid.")
     page.should have_css('.has-error #card_code.error')
   end
@@ -80,6 +90,7 @@ describe "Stripe checkout" do
     fill_in "Expiration", :with => "00 / #{Time.now.year + 1}"
     fill_in "Card Code", :with => "123"
     click_button "Save and Continue"
+    wait_for_stripe
     page.should have_content("Your card's expiration month is invalid.")
     page.should have_css('.has-error #card_expiry.error')
   end
@@ -89,6 +100,7 @@ describe "Stripe checkout" do
     fill_in "Expiration", :with => "12 / "
     fill_in "Card Code", :with => "123"
     click_button "Save and Continue"
+    wait_for_stripe
     page.should have_content("Your card's expiration year is invalid.")
     page.should have_css('.has-error #card_expiry.error')
   end

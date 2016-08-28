@@ -15,7 +15,7 @@ require 'database_cleaner'
 require 'ffaker'
 require 'rspec/active_model/mocks'
 
-Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+Dir[File.join(File.dirname(__FILE__), "support", "**", "*.rb")].each { |f| require f }
 
 require 'spree/testing_support/factories'
 require 'spree/testing_support/order_walkthrough'
