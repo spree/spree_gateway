@@ -27,7 +27,9 @@ FactoryGirl.find_definitions
 
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
-  config.mock_with :rspec
+  config.mock_with :rspec do |mock|
+    mock.syntax = [:should, :expect]
+  end
   config.raise_errors_for_deprecations!
   config.use_transactional_fixtures = false
   #config.filter_run focus: true

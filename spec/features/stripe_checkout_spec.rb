@@ -46,9 +46,9 @@ describe "Stripe checkout", type: :feature do
     fill_in "Card Code", :with => "123"
     fill_in "Expiration", :with => "01 / #{Time.now.year + 1}"
     click_button "Save and Continue"
-    page.current_url.should include("/checkout/confirm")
+    expect(page.current_url).to include("/checkout/confirm")
     click_button "Place Order"
-    page.should have_content("Your order has been processed successfully")
+    expect(page).to have_content("Your order has been processed successfully")
   end
 
   # This will fetch a token from Stripe.com and then pass that to the webserver.
@@ -61,10 +61,10 @@ describe "Stripe checkout", type: :feature do
     fill_in "Expiration", :with => "01 / #{Time.now.year + 1}"
     click_button "Save and Continue"
     wait_for_stripe # Wait for Stripe API to return + form to submit
-    page.should have_css('#checkout_form_confirm')
-    page.current_url.should include("/checkout/confirm")
+    expect(page).to have_css('#checkout_form_confirm')
+    expect(page.current_url).to include("/checkout/confirm")
     click_button "Place Order"
-    page.should have_content("Your order has been processed successfully")
+    expect(page).to have_content("Your order has been processed successfully")
   end
 
   it "shows an error with an invalid credit card number", :js => true do
@@ -72,8 +72,8 @@ describe "Stripe checkout", type: :feature do
     fill_in "Card Number", :with => "4242 4242 4242 4249"
     click_button "Save and Continue"
     wait_for_stripe
-    page.should have_content("Your card number is incorrect")
-    page.should have_css('.has-error #card_number.error')
+    expect(page).to have_content("Your card number is incorrect")
+    expect(page).to have_css('.has-error #card_number.error')
   end
 
   it "shows an error with invalid security fields", :js => true do
@@ -81,8 +81,8 @@ describe "Stripe checkout", type: :feature do
     fill_in "Expiration", :with => "01 / #{Time.now.year + 1}"
     click_button "Save and Continue"
     wait_for_stripe
-    page.should have_content("Your card's security code is invalid.")
-    page.should have_css('.has-error #card_code.error')
+    expect(page).to have_content("Your card's security code is invalid.")
+    expect(page).to have_css('.has-error #card_code.error')
   end
 
   it "shows an error with invalid expiry month field", :js => true do
@@ -91,8 +91,8 @@ describe "Stripe checkout", type: :feature do
     fill_in "Card Code", :with => "123"
     click_button "Save and Continue"
     wait_for_stripe
-    page.should have_content("Your card's expiration month is invalid.")
-    page.should have_css('.has-error #card_expiry.error')
+    expect(page).to have_content("Your card's expiration month is invalid.")
+    expect(page).to have_css('.has-error #card_expiry.error')
   end
 
   it "shows an error with invalid expiry year field", :js => true do
@@ -101,7 +101,7 @@ describe "Stripe checkout", type: :feature do
     fill_in "Card Code", :with => "123"
     click_button "Save and Continue"
     wait_for_stripe
-    page.should have_content("Your card's expiration year is invalid.")
-    page.should have_css('.has-error #card_expiry.error')
+    expect(page).to have_content("Your card's expiration year is invalid.")
+    expect(page).to have_css('.has-error #card_expiry.error')
   end
 end
