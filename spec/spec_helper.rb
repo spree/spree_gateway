@@ -14,6 +14,7 @@ require 'capybara-screenshot/rspec'
 require 'database_cleaner'
 require 'ffaker'
 require 'rspec/active_model/mocks'
+require 'rails-controller-testing'
 
 Dir[File.join(File.dirname(__FILE__), "support", "**", "*.rb")].each { |f| require f }
 
@@ -26,7 +27,9 @@ FactoryGirl.find_definitions
 
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
-  config.mock_with :rspec
+  config.mock_with :rspec do |mock|
+    mock.syntax = [:should, :expect]
+  end
   config.raise_errors_for_deprecations!
   config.use_transactional_fixtures = false
   #config.filter_run focus: true
@@ -51,4 +54,10 @@ RSpec.configure do |config|
   end
 
   Capybara.javascript_driver = :poltergeist
+
+  [:controller, :view, :request].each do |type|
+    config.include ::Rails::Controller::Testing::TestProcess, type: type
+    config.include ::Rails::Controller::Testing::TemplateAssertions, type: type
+    config.include ::Rails::Controller::Testing::Integration, type: type
+  end
 end
