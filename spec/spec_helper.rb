@@ -14,6 +14,7 @@ require 'capybara-screenshot/rspec'
 require 'database_cleaner'
 require 'ffaker'
 require 'rspec/active_model/mocks'
+require 'rails-controller-testing'
 
 Dir[File.join(File.dirname(__FILE__), "support", "**", "*.rb")].each { |f| require f }
 
@@ -51,4 +52,10 @@ RSpec.configure do |config|
   end
 
   Capybara.javascript_driver = :poltergeist
+
+  [:controller, :view, :request].each do |type|
+    config.include ::Rails::Controller::Testing::TestProcess, type: type
+    config.include ::Rails::Controller::Testing::TemplateAssertions, type: type
+    config.include ::Rails::Controller::Testing::Integration, type: type
+  end
 end
