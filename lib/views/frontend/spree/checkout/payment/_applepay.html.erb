@@ -1,0 +1,20 @@
+<%= stylesheet_link_tag "spree/frontend/applepay", media: "all" %>
+<%= javascript_include_tag 'spree/frontend/applepay' %>
+
+<span id="apple-pay-button" class='hide'></span>
+
+<span class='hide' data-hook='applepay-configuration' data-price=<%= @order.total %> data-payment-method-id=<%= payment_method.id %> data-payment-method-name=<%= payment_method.name %> data-publishable-key=<%= payment_method.preferred_publishable_key %> data-currency=<%= @order.currency %> data-country=<%= @order.bill_address.country.iso %>></span>
+
+<script type="text/javascript">
+
+  var applePay = new ApplePay($('[data-hook=applepay-configuration]'));
+
+  if (typeof Stripe === 'undefined') {
+    $.getScript('https://js.stripe.com/v2/', function(){
+      applePay.init();
+    });
+  } else {
+    applePay.init();
+  };
+
+</script>
