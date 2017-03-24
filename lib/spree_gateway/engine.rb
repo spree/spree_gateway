@@ -17,6 +17,7 @@ module SpreeGateway
       app.config.spree.payment_methods << Spree::Gateway::DataCash
       app.config.spree.payment_methods << Spree::Gateway::Epay
       app.config.spree.payment_methods << Spree::Gateway::Eway
+      app.config.spree.payment_methods << Spree::Gateway::EwayRapid
       app.config.spree.payment_methods << Spree::Gateway::Maxipago
       app.config.spree.payment_methods << Spree::Gateway::Migs
       app.config.spree.payment_methods << Spree::Gateway::Moneris
