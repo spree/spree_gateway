@@ -2,9 +2,19 @@ module Spree
   class Gateway::AuthorizeNetCim < Gateway
     preference :login, :string
     preference :password, :string
-    preference :server, :string, default: "test"
-    preference :test_mode, :boolean, default: false
-    preference :validate_on_profile_create, :boolean, default: false
+
+     # WARNING: Unlike other payment integrations, 'test mode' in Authorize Net's termiminology does not mean use test server
+     # instead, use preferred server set to either 'live' or 'test'
+     # DO NOT TURN TEST MODE TO ON (EVEN IN QA/STAGING ENVIRONMENTS), it will return 0 as transaction ids under all circumstances
+
+     # here, it overloads the setting on the base class, which confusingly defaults to true
+      preference :test_mode, :boolean, :default => false
+       preference :test_mode, :boolean, :default => false
+
+      preference :validate_on_profile_create, :boolean, :default => false
+       preference :validate_on_profile_create, :boolean, :default => false
+     preference :server, :string, :default => "live"
+
 
     ActiveMerchant::Billing::Response.class_eval do
       attr_writer :authorization
@@ -16,11 +26,11 @@ module Spree
 
     def options
       if !['live','test'].include?(self.preferred_server)
-        raise "You must set the 'server' preference in your payment method (Gateway::AuthorizeNetCim) to either 'live' or 'test'"
-      end
+         ActiveSupport::Deprecation.warn("You must set your preferred server to either 'live' or 'test'")
+       end
+      # add :test key in the options hash, as that is what the ActiveMerchant::Billing::AuthorizeNetGateway expects
+      # warning: when passed to the gateway code, :test indicates live/test server; it DOES NOT indicate authorize.net test-mode
 
-      # add :test key in the options hash, as that is what the
-      # ActiveMerchant::Billing::AuthorizeNetGateway expects
       if self.preferred_server != "live"
         self.preferences[:test] = true
       else
