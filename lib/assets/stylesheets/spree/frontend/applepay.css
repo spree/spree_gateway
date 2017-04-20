@@ -1,0 +1,18 @@
+#apple-pay-button {
+  display: block;
+  background-color: black;
+  background-image: -webkit-named-image(apple-pay-logo-white);
+  background-size: 100% 100%;
+  background-origin: content-box;
+  background-repeat: no-repeat;
+  width: 100%;
+  max-width: 150px;
+  height: 20px;
+  padding: 8px 0;
+  border-radius: 4px;
+}
+@media screen and (max-width: 767px) {
+  #apple-pay-button {
+    margin: 0 auto;
+  }
+}
