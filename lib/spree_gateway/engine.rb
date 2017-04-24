@@ -30,13 +30,16 @@ module SpreeGateway
       app.config.spree.payment_methods << Spree::Gateway::StripeGateway
       app.config.spree.payment_methods << Spree::Gateway::UsaEpayTransaction
       app.config.spree.payment_methods << Spree::Gateway::Worldpay
+      app.config.spree.payment_methods << Spree::Gateway::StripeGateway::ApplePayGateway
     end
 
     def self.activate
       if SpreeGateway::Engine.frontend_available?
         Rails.application.config.assets.precompile += [
           'lib/assets/javascripts/spree/frontend/spree_gateway.js',
-          'lib/assets/javascripts/spree/frontend/spree_gateway.css',
+          'lib/assets/stylesheets/spree/frontend/spree_gateway.css',
+          'spree/frontend/applepay.js',
+          'spree/frontend/applepay.css',
         ]
         Dir.glob(File.join(File.dirname(__FILE__), "../../controllers/frontend/*/*_decorator*.rb")) do |c|
           Rails.configuration.cache_classes ? require(c) : load(c)
