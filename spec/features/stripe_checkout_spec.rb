@@ -20,15 +20,15 @@ describe "Stripe checkout" do
     user = create(:user)
 
     order = OrderWalkthrough.up_to(:delivery)
-    order.stub :confirmation_required? => true
+    allow(order).to receive_messages :confirmation_required? => true
 
     order.reload
     order.user = user
     order.update!
 
-    Spree::CheckoutController.any_instance.stub(:current_order => order)
-    Spree::CheckoutController.any_instance.stub(:try_spree_current_user => user)
-    Spree::CheckoutController.any_instance.stub(:skip_state_validation? => true)
+    allow_any_instance_of(Spree::CheckoutController).to receive_messages(:current_order => order)
+    allow_any_instance_of(Spree::CheckoutController).to receive_messages(:try_spree_current_user => user)
+    allow_any_instance_of(Spree::CheckoutController).to receive_messages(:skip_state_validation? => true)
 
     visit spree.checkout_state_path(:payment)
   end
@@ -39,9 +39,9 @@ describe "Stripe checkout" do
     fill_in "Card Code", :with => "123"
     fill_in "Expiration", :with => "01 / #{Time.now.year + 1}"
     click_button "Save and Continue"
-    page.current_url.should include("/checkout/confirm")
+    expect(page.current_url).to include("/checkout/confirm")
     click_button "Place Order"
-    page.should have_content("Your order has been processed successfully")
+    expect(page).to have_content("Your order has been processed successfully")
   end
 
   # This will fetch a token from Stripe.com and then pass that to the webserver.
@@ -54,23 +54,29 @@ describe "Stripe checkout" do
     fill_in "Expiration", :with => "01 / #{Time.now.year + 1}"
     click_button "Save and Continue"
     sleep(5) # Wait for Stripe API to return + form to submit
-    page.current_url.should include("/checkout/confirm")
+    expect(page.current_url).to include("/checkout/confirm")
     click_button "Place Order"
-    page.should have_content("Your order has been processed successfully")
+    expect(page).to have_content("Your order has been processed successfully")
   end
 
   it "shows an error with an invalid credit card number", :js => true do
+    fill_in "Card Number", :with => "4242 4242 4242 4243"
+    page.execute_script("$('.cardNumber').trigger('change')")
+    fill_in "Card Code", :with => "123"
+    fill_in "Expiration", :with => "01 / #{Time.now.year + 1}"
     click_button "Save and Continue"
-    page.should have_content("The card number is not a valid credit card number")
-    page.should have_css('.has-error #card_number.error')
+    expect(page).to have_content("Your card number is incorrect")
+    expect(page).to have_css('#card_number.error')
   end
 
   it "shows an error with invalid security fields", :js => true do
     fill_in "Card Number", :with => "4242 4242 4242 4242"
+    page.execute_script("$('.cardNumber').trigger('change')")
+    fill_in "Card Code", :with => "12x"
     fill_in "Expiration", :with => "01 / #{Time.now.year + 1}"
     click_button "Save and Continue"
-    page.should have_content("Your card's security code is invalid.")
-    page.should have_css('.has-error #card_code.error')
+    expect(page).to have_content("Your card's security code is invalid.")
+    expect(page).to have_css('#card_code.error')
   end
 
   it "shows an error with invalid expiry month field", :js => true do
@@ -78,8 +84,8 @@ describe "Stripe checkout" do
     fill_in "Expiration", :with => "00 / #{Time.now.year + 1}"
     fill_in "Card Code", :with => "123"
     click_button "Save and Continue"
-    page.should have_content("Your card's expiration month is invalid.")
-    page.should have_css('.has-error #card_expiry.error')
+    expect(page).to have_content("Your card's expiration month is invalid.")
+    expect(page).to have_css('#card_expiry.error')
   end
 
   it "shows an error with invalid expiry year field", :js => true do
@@ -87,7 +93,7 @@ describe "Stripe checkout" do
     fill_in "Expiration", :with => "12 / "
     fill_in "Card Code", :with => "123"
     click_button "Save and Continue"
-    page.should have_content("Your card's expiration year is invalid.")
-    page.should have_css('.has-error #card_expiry.error')
+    expect(page).to have_content("Your card's expiration year is invalid.")
+    expect(page).to have_css('#card_expiry.error')
   end
 end
