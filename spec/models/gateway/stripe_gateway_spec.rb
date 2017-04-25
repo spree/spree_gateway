@@ -17,21 +17,21 @@ describe Spree::Gateway::StripeGateway do
 
   let(:provider) do
     double('provider').tap do |p|
-      p.stub(:purchase)
-      p.stub(:authorize)
-      p.stub(:capture)
+      allow(p).to receive(:purchase)
+      allow(p).to receive(:authorize)
+      allow(p).to receive(:capture)
     end
   end
 
   before do
     subject.preferences = { secret_key: secret_key }
-    subject.stub(:options_for_purchase_or_auth).and_return(['money','cc','opts'])
-    subject.stub(:provider).and_return provider
+    allow(subject).to receive(:options_for_purchase_or_auth).and_return(['money','cc','opts'])
+    allow(subject).to receive(:provider).and_return provider
   end
 
   describe '#create_profile' do
     before do
-      payment.source.stub(:update_attributes!)
+      allow(payment.source).to receive(:update_attributes!)
     end
 
     context 'with an order that has a bill address' do
@@ -47,7 +47,7 @@ describe Spree::Gateway::StripeGateway do
       }
 
       it 'stores the bill address with the provider' do
-        subject.provider.should_receive(:store).with(payment.source, {
+        expect(subject.provider).to receive(:store).with(payment.source, {
           email: email,
           login: secret_key,
 
@@ -69,7 +69,7 @@ describe Spree::Gateway::StripeGateway do
       let(:bill_address) { nil }
 
       it 'does not store a bill address with the provider' do
-        subject.provider.should_receive(:store).with(payment.source, {
+        expect(subject.provider).to receive(:store).with(payment.source, {
           email: email,
           login: secret_key,
         }).and_return double.as_null_object
@@ -81,7 +81,7 @@ describe Spree::Gateway::StripeGateway do
       context "correcting the card type" do
         before do
           # We don't care about this method for these tests
-          subject.provider.stub(:store).and_return(double.as_null_object)
+          allow(subject.provider).to receive(:store).and_return(double.as_null_object)
         end
 
         it "converts 'American Express' to 'american_express'" do
@@ -109,7 +109,7 @@ describe Spree::Gateway::StripeGateway do
       let(:bill_address) { nil }
 
       it 'stores the profile_id as a card' do
-        subject.provider.should_receive(:store).with(source.gateway_payment_profile_id, anything).and_return double.as_null_object
+        expect(subject.provider).to receive(:store).with(source.gateway_payment_profile_id, anything).and_return double.as_null_object
 
         subject.create_profile payment
       end
@@ -122,7 +122,7 @@ describe Spree::Gateway::StripeGateway do
     end
 
     it 'send the payment to the provider' do
-      provider.should_receive(:purchase).with('money','cc','opts')
+      expect(provider).to receive(:purchase).with('money','cc','opts')
     end
   end
 
@@ -132,7 +132,7 @@ describe Spree::Gateway::StripeGateway do
     end
 
     it 'send the authorization to the provider' do
-      provider.should_receive(:authorize).with('money','cc','opts')
+      expect(provider).to receive(:authorize).with('money','cc','opts')
     end
   end
 
@@ -143,11 +143,11 @@ describe Spree::Gateway::StripeGateway do
     end
 
     it 'convert the amount to cents' do
-      provider.should_receive(:capture).with(1234,anything,anything)
+      expect(provider).to receive(:capture).with(1234,anything,anything)
     end
 
     it 'use the response code as the authorization' do
-      provider.should_receive(:capture).with(anything,'response_code',anything)
+      expect(provider).to receive(:capture).with(anything,'response_code',anything)
     end
   end
 
@@ -155,9 +155,9 @@ describe Spree::Gateway::StripeGateway do
     let(:gateway) do
       gateway = described_class.new(active: true)
       gateway.set_preference :secret_key, secret_key
-      gateway.stub(:options_for_purchase_or_auth).and_return(['money','cc','opts'])
-      gateway.stub(:provider).and_return provider
-      gateway.stub :source_required => true
+      allow(gateway).to receive(:options_for_purchase_or_auth).and_return(['money','cc','opts'])
+      allow(gateway).to receive(:provider).and_return provider
+      allow(gateway).to receive_messages :source_required => true
       gateway
     end
 
@@ -192,7 +192,7 @@ describe Spree::Gateway::StripeGateway do
     end
 
     it 'gets correct amount' do
-      provider.should_receive(:capture).with(9855,'12345',anything).and_return(success_response)
+      expect(provider).to receive(:capture).with(9855,'12345',anything).and_return(success_response)
     end
   end
 end
