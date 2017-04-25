@@ -48,7 +48,7 @@ describe Spree::Gateway::PinGateway do
   end
 
   it 'always uses purchase' do
-    @payment.should_receive(:purchase!)
+    expect(@payment).to receive(:purchase!)
     @payment.process!
   end
 end

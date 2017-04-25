@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'poltergeist', '~> 1.6.0'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rspec-activemodel-mocks'
-  s.add_development_dependency 'rspec-rails', '~> 2.99'
+  s.add_development_dependency 'rspec-rails', '~> 3'
   s.add_development_dependency 'sass-rails', '~> 5.0.0'
   s.add_development_dependency 'selenium-webdriver'
   s.add_development_dependency 'simplecov'
