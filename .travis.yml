@@ -7,5 +7,5 @@ env:
   - DB=postgres
 language: ruby
 rvm:
-  - 2.2.5
+  - 2.2.7
 sudo: false
