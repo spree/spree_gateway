@@ -6,6 +6,13 @@ module Spree
     CARD_TYPE_MAPPING = {
       'American Express' => 'american_express',
       'Diners Club' => 'diners_club',
+      'Discover' => 'discover',
+      'JCB' => 'jcb',
+      'Laser' => 'laser',
+      'Maestro' => 'maestro',
+      'MasterCard' => 'master',
+      'Solo' => 'solo',
+      'Switch' => 'switch',
       'Visa' => 'visa'
     }
 
