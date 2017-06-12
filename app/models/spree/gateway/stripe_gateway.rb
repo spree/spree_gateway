@@ -6,6 +6,13 @@ module Spree
     CARD_TYPE_MAPPING = {
       'American Express' => 'american_express',
       'Diners Club' => 'diners_club',
+      'Discover' => 'discover',
+      'JCB' => 'jcb',
+      'Laser' => 'laser',
+      'Maestro' => 'maestro',
+      'MasterCard' => 'master',
+      'Solo' => 'solo',
+      'Switch' => 'switch',
       'Visa' => 'visa'
     }
 
@@ -61,8 +68,12 @@ module Spree
 
       response = provider.store(creditcard, options)
       if response.success?
+        cc_type=payment.source.cc_type
+        response_cc_type = response.params['sources']['data'].first['brand']
+        cc_type = CARD_TYPE_MAPPING[response_cc_type] if CARD_TYPE_MAPPING.include?(response_cc_type)
+
         payment.source.update_attributes!({
-          cc_type: payment.source.cc_type, # side-effect of update_source!
+          cc_type: cc_type, # side-effect of update_source!
           gateway_customer_profile_id: response.params['id'],
           gateway_payment_profile_id: response.params['default_source'] || response.params['default_card']
         })
