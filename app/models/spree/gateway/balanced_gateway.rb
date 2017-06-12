@@ -32,10 +32,9 @@ module Spree
       payment.send(:gateway_error, ex.message)
     end
 
-    def options_with_test_preference
-      options_without_test_preference.merge(:test => self.preferred_test_mode)
+    def options
+      super().merge(:test => self.preferred_test_mode)
     end
-    alias_method_chain :options, :test_preference
 
     def payment_profiles_supported?
       true

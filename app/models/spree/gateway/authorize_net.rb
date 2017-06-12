@@ -8,11 +8,11 @@ module Spree
       ActiveMerchant::Billing::AuthorizeNetGateway
     end
 
-    def options_with_test_preference
+    def options
       if !['live','test'].include?(self.preferred_server)
         raise "You must set the 'server' preference in your payment method (Gateway::AuthorizeNet) to either 'live' or 'test'"
       end
-      options_without_test_preference.merge(test: (self.preferred_server != "live") )
+      super().merge(test: (self.preferred_server != "live"))
     end
 
     def cancel(response_code)
@@ -25,7 +25,6 @@ module Spree
 
       response
     end
-    alias_method_chain :options, :test_preference
 
     def credit(amount, response_code, refund, gateway_options = {})
       gateway_options[:card_number] = refund[:originator].payment.source.last_digits
