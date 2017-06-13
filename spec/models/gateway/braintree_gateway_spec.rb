@@ -69,8 +69,23 @@ describe Spree::Gateway::BraintreeGateway do
 
   describe 'payment profile failure' do
     before do
-      order = create(:order_with_totals, bill_address: address, ship_address: address)
-      order.update_with_updater!
+      country = Spree::Country.default
+      state   = country.states.first
+      address = create(:address,
+        firstname: 'John',
+        lastname:  'Doe',
+        address1:  '1234 My Street',
+        address2:  'Apt 1',
+        city:      'Washington DC',
+        zipcode:   '20123',
+        phone:     '(555)555-5555',
+        state:     state,
+        country:   country
+      )
+      @address = address
+
+      @order = create(:order_with_totals, bill_address: address, ship_address: address)
+      @order.update_with_updater!
 
       @credit_card = create(:credit_card,
         verification_value: '123',
@@ -82,7 +97,7 @@ describe Spree::Gateway::BraintreeGateway do
     end
 
     it 'should fail creation' do
-      expect{ create(:payment, source: @credit_card, order: order, payment_method: @gateway, amount: 10.00) }.to raise_error
+      expect{ create(:payment, source: @credit_card, order: @order, payment_method: @gateway, amount: 10.00) }.to raise_error Spree::Core::GatewayError
     end
 
   end
