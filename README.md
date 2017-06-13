@@ -1,7 +1,7 @@
 # Spree Gateway
 
-[![Build Status](https://api.travis-ci.org/spree/spree_gateway.png?branch=master)](https://travis-ci.org/spree/spree_gateway)
-[![Code Climate](https://codeclimate.com/github/spree/spree_gateway.png)](https://codeclimate.com/github/spree/spree_gateway)
+[![Build Status](https://api.travis-ci.org/spree/spree_gateway.svg?branch=master)](https://travis-ci.org/spree/spree_gateway)
+[![Code Climate](https://codeclimate.com/github/spree/spree_gateway.svg)](https://codeclimate.com/github/spree/spree_gateway)
 
 Community supported Spree Payment Method Gateways. It works as a wrapper for
 active_merchant gateway. Note that for some gateways you might still need to
@@ -9,32 +9,34 @@ add another gem to your Gemfile to make it work. For example active_merchant
 require `braintree` but it doesn't include that gem on its gemspec. So you
 need to manually add it to your rails app Gemfile.
 
-These can be used with Spree >= 1.0.x (but see note below for necessary changes)
-
-http://guides.spreecommerce.com/developer/payments.html
-
 ## Installation
 
-In your Gemfile:
+1. Add this extension to your Gemfile with this line:
 
-**Spree edge**
+  #### Spree >= 3.1
 
-```ruby
-gem 'spree'
-gem 'spree_gateway', github: 'spree/spree_gateway', branch: 'master'
-```
+  ```ruby
+  gem 'spree_gateway', github: 'spree/spree_gateway'
+  ```
 
-**Spree 1.3**
+  #### Spree 3.0 and Spree 2.x
 
-```ruby
-gem 'spree', '~> 1.3'
-gem 'spree_gateway', github: 'spree/spree_gateway', branch: '1-3-stable'
-```
+  ```ruby
+  gem 'spree_gateway', github: 'spree/spree_gateway', branch: 'X-X-stable'
+  ```
 
-Then run from the command line:
+  The `branch` option is important: it must match the version of Spree you're using.
+  For example, use `3-0-stable` if you're using Spree `3-0-stable` or any `3.0.x` version.
 
-    $ bundle install
-    $ rails g spree_gateway:install
+2. Install the gem using Bundler:
+  ```ruby
+  bundle install
+  ```
+
+3. Copy & run migrations
+  ```ruby
+  bundle exec rails g spree_gateway:install
+  ```
 
 Finally, make sure to **restart your app**. Navigate to *Configuration > Payment Methods > New Payment Method* in the admin panel and you should see that a bunch of additional gateways have been added to the list.
 
