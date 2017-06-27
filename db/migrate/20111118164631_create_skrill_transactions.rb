@@ -1,4 +1,4 @@
-class CreateSkrillTransactions < ActiveRecord::Migration
+class CreateSkrillTransactions < SpreeExtension::Migration[4.2]
   def change
     create_table :spree_skrill_transactions do |t|
       t.string :email
