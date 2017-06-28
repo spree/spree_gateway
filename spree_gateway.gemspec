@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_gateway'
-  s.version     = '3.2.0'
+  s.version     = '3.3.0.beta'
   s.summary     = 'Additional Payment Gateways for Spree Commerce'
   s.description = s.summary
 
@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
 
   spree_version = '>= 3.1.0', '< 4.0'
   s.add_dependency 'spree_core', spree_version
+  s.add_dependency 'spree_extension'
 
   s.add_development_dependency 'braintree'
   s.add_development_dependency 'capybara'
