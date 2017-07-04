@@ -1,6 +1,6 @@
 module Spree
   CheckoutController.class_eval do
-    before_filter :confirm_skrill, :only => [:update]
+    before_action :confirm_skrill, :only => [:update]
 
     def skrill_return
 
