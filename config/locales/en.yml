@@ -2,13 +2,6 @@
 en:
   spree:
     payment_has_been_cancelled: The payment has been cancelled.
-    complete_skrill_checkout: Please complete Skrill checkout before continuing
-    skrill: Skrill
-    skrill_transaction: Transaction
-    skrill_customer_id: Customer ID
-    skrill_transaction_id: Transaction ID
-    skrill_payment_type: Payment Type
-    skrill_payment_currency: Payment Currency
     log_entry:
       braintree:
         message: Message
