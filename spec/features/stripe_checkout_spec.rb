@@ -61,13 +61,15 @@ describe "Stripe checkout" do
   end
 
   it "shows an error with an invalid credit card number", :js => true do
+    fill_in "Card Number", :with => "4242 4242 4242 4249"
     click_button "Save and Continue"
-    page.should have_content("This card number looks invalid")
+    page.should have_content("Your card number is incorrect")
   end
 
   it "shows an error with invalid security fields", :js => true do
     fill_in "Card Number", :with => "4242 4242 4242 4242"
     fill_in "Expiration", :with => "01 / #{Time.now.year + 1}"
+    fill_in "Card Code", :with => "99"
     click_button "Save and Continue"
     page.should have_content("Your card's security code is invalid.")
   end

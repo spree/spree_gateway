@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_gateway'
-  s.version     = '2.4.0'
+  s.version     = '2.4.1'
   s.summary     = 'Additional Payment Gateways for Spree Commerce'
   s.description = s.summary
   s.required_ruby_version = '>= 1.9.3'
@@ -20,16 +20,20 @@ Gem::Specification.new do |s|
   s.add_dependency 'spree_core', '~> 2.4.0'
 
   s.add_development_dependency 'braintree'
+  s.add_development_dependency 'premailer', '1.8.0'
   s.add_development_dependency 'capybara'
+  s.add_development_dependency 'rake', '< 11.0'
+  s.add_development_dependency 'rails', '4.1.11'
   s.add_development_dependency 'coffee-rails', '~> 4.0.0'
   s.add_development_dependency 'database_cleaner', '1.2.0'
   s.add_development_dependency 'factory_girl', '~> 4.4'
   s.add_development_dependency 'ffaker'
-  s.add_development_dependency 'guard-rspec'
+  s.add_development_dependency 'listen', '2.7.5'
+  s.add_development_dependency 'guard-rspec', '~> 2.6'
   s.add_development_dependency 'launchy'
   s.add_development_dependency 'mysql2'
   s.add_development_dependency 'pg'
-  s.add_development_dependency 'poltergeist', '~> 1.5.0'
+  s.add_development_dependency 'poltergeist', '~> 1.15.0'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rspec-activemodel-mocks'
   s.add_development_dependency 'rspec-rails', '~> 2.99'
