@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'listen', '2.7.5'
   s.add_development_dependency 'guard-rspec', '~> 2.6'
   s.add_development_dependency 'launchy'
-  s.add_development_dependency 'mysql2'
+  s.add_development_dependency 'mysql2', '~> 0.3.17'
   s.add_development_dependency 'pg', '~> 0.17.1'
   s.add_development_dependency 'poltergeist', '~> 1.15.0'
   s.add_development_dependency 'pry'
