@@ -16,7 +16,7 @@ need to manually add it to your rails app Gemfile.
   #### Spree >= 3.1
 
   ```ruby
-  gem 'spree_gateway', github: 'spree/spree_gateway'
+  gem 'spree_gateway', '~> 3.3'
   ```
 
   #### Spree 3.0 and Spree 2.x
