@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
 
   s.author       = 'Spree Commerce'
   s.email        = 'gems@spreecommerce.com'
-  s.homepage     = 'http://www.spreecommerce.com'
+  s.homepage     = 'https://spreecommerce.org'
   s.license      = 'BSD-3-Clause'
 
   s.files        = `git ls-files`.split("\n")
