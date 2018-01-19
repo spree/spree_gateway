@@ -60,7 +60,7 @@ module Spree
       }.merge! address_for(payment)
 
       source = update_source!(payment.source)
-      if source.number.blank? && source.gateway_payment_profile_id.present?
+      if source.gateway_payment_profile_id.present?
         creditcard = source.gateway_payment_profile_id
       else
         creditcard = source
