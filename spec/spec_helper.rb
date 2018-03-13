@@ -9,8 +9,8 @@ require 'rspec/rails'
 require 'rspec/active_model/mocks'
 require 'capybara/rspec'
 require 'capybara/rails'
-require 'capybara/poltergeist'
 require 'capybara-screenshot/rspec'
+require "selenium-webdriver"
 require 'database_cleaner'
 require 'ffaker'
 require 'rspec/active_model/mocks'
@@ -52,5 +52,11 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
-  Capybara.javascript_driver = :poltergeist
+  Capybara.register_driver :chrome do |app|
+    Capybara::Selenium::Driver.new app,
+      browser: :chrome,
+      options: Selenium::WebDriver::Chrome::Options.new(args: %w[disable-popup-blocking headless disable-gpu window-size=1920,1080])
+  end
+
+  Capybara.javascript_driver = :chrome
 end
