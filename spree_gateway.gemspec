@@ -34,7 +34,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'launchy'
   s.add_development_dependency 'mysql2'
   s.add_development_dependency 'pg', '~> 0.18'
-  s.add_development_dependency 'poltergeist'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rspec-activemodel-mocks'
   s.add_development_dependency 'rspec-rails'
