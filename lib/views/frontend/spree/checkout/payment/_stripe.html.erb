@@ -1,170 +1,81 @@
 <%= render "spree/checkout/payment/gateway", payment_method: payment_method %>
-<% param_prefix = "payment_source[#{payment_method.id}]" %>
 
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
-
-<script>
-var isV2 = document.getElementById('card-element') === null;
-Spree.stripePaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
-if(isV2 == true)
-  {
-    var mapCC, stripeResponseHandler;
-
-    Stripe.setPublishableKey("<%= payment_method.preferred_publishable_key %>");
-
-    mapCC = function(ccType) {
-      if (ccType === 'MasterCard') {
-        return 'mastercard';
-      } else if (ccType === 'Visa') {
-        return 'visa';
-      } else if (ccType === 'American Express') {
-        return 'amex';
-      } else if (ccType === 'Discover') {
-        return 'discover';
-      } else if (ccType === 'Diners Club') {
-        return 'dinersclub';
-      } else if (ccType === 'JCB') {
-        return 'jcb';
-      }
-    };
-    stripeResponseHandler = function(status, response) {
-      var paymentMethodId, token;
-      if (response.error) {
-        $('#stripeError').html(response.error.message);
-        var param_map = {
-          number:    '#card_number',
-          exp_month: '#card_expiry',
-          exp_year:  '#card_expiry',
-          cvc:       '#card_code'
-        }
-        if (response.error.param) {
-          errorField = Spree.stripePaymentMethod.find(param_map[response.error.param])
-          errorField.addClass('error');
-          errorField.parent().addClass('has-error');
-        }
-
-        return $('#stripeError').show();
-      } else {
-        Spree.stripePaymentMethod.find('#card_number, #card_expiry, #card_code').prop("disabled", true);
-        Spree.stripePaymentMethod.find(".ccType").prop("disabled", false);
-        Spree.stripePaymentMethod.find(".ccType").val(mapCC(response.card.brand));
-        token = response['id'];
-        paymentMethodId = Spree.stripePaymentMethod.prop('id').split("_")[2];
-        Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId + "][gateway_payment_profile_id]' value='" + token + "'/>");
-        Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId + "][last_digits]' value='" + response.card.last4 + "'/>");
-        Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId + "][month]' value='" + response.card.exp_month + "'/>");
-        Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId + "][year]' value='" + response.card.exp_year + "'/>");
-        return Spree.stripePaymentMethod.parents("form").trigger('submit');
-      }
-    };
-
-    $(document).ready(function() {
-      Spree.stripePaymentMethod.prepend("<div id='stripeError' class='errorExplanation alert alert-danger' style='display:none'></div>");
-      return $('#checkout_form_payment [data-hook=buttons]').click(function() {
-        var expiration, params;
-        $('#stripeError').hide();
-        Spree.stripePaymentMethod.find('#card_number, #card_expiry, #card_code').removeClass('error');
-        if (Spree.stripePaymentMethod.is(':visible')) {
-          expiration = $('.cardExpiry:visible').payment('cardExpiryVal');
-          params = $.extend({
-            number: $('.cardNumber:visible').val(),
-            cvc: $('.cardCode:visible').val(),
-            exp_month: expiration.month || 0,
-            exp_year: expiration.year || 0
-          }, Spree.stripeAdditionalInfo);
-          Stripe.card.createToken(params, stripeResponseHandler);
-          return false;
-        }
-      });
-    });
-  }
-  else
-    {
-      var stripe = Stripe("<%= payment_method.preferred_publishable_key %>");
-      var elements = stripe.elements();
-
-      var card = elements.create('card', {
-        iconStyle: 'solid',
-        hidePostalCode: true,
-        style: {
-          base: {
-            iconColor: '#555555',
-            lineHeight: '24px',
-            fontWeight: 300,
-            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-            fontSize: '14px',
-
-            '::placeholder': {
-              color: '#555555',
-            },
-          },
-          invalid: {
-            iconColor: '#e85746',
-            color: '#e85746',
-          }
-        },
-        classes: {
-          focus: 'is-focused',
-          empty: 'is-empty',
-        },
-      });
-      card.mount('#card-element');
-
-      function addFieldToForm(form, name, value) {
-        var hiddenInput = document.createElement('input');
-
-        hiddenInput.setAttribute('type', 'hidden');
-        hiddenInput.setAttribute('name', name);
-        hiddenInput.setAttribute('value', value);
-        form.appendChild(hiddenInput);
-      }
-
-      function stripeTokenHandler(token) {
-        var form = document.getElementById('checkout_form_payment');
-        addFieldToForm(form, '<%= param_prefix %>[gateway_payment_profile_id]', token.id)
-        addFieldToForm(form, '<%= param_prefix %>[number]', token.card.last4)
-        addFieldToForm(form, '<%= param_prefix %>[month]', token.card.exp_month)
-        addFieldToForm(form, '<%= param_prefix %>[year]', token.card.exp_year)
-        form.submit();
-      }
-
-      function createToken() {
-        stripe.createToken(card, Spree.stripeAdditionalInfo).then(function(result) {
-          if (result.error) {
-            // Inform the user if there was an error
-            var errorElement = document.getElementById('card-errors');
-
-            $('#stripeError').html(result.error.message);
-            $('#stripeError').show()
-          } else {
-            stripeTokenHandler(result.token);
-          }
-        });
-      };
-
-      $(document).ready(function() {
-        Spree.stripePaymentMethod.prepend("<div id='stripeError' class='errorExplanation alert alert-danger' style='display:none'></div>");
-        var form = document.getElementById('checkout_form_payment');
-        form.addEventListener('submit', function(e) {
-          $('#stripeError').hide();
-          e.preventDefault();
-          createToken();
-        });
-      });
-    }
+<script type="text/javascript">
+  Stripe.setPublishableKey("<%= payment_method.preferred_publishable_key %>");
 </script>
 
-<%- if @order.has_checkout_step?('address') -%>
-  <script>
-    Spree.stripeAdditionalInfo = {
-      name: "<%= @order.bill_address.full_name %>",
-      address_line1: "<%= @order.bill_address.address1 %>",
-      address_line2: "<%= @order.bill_address.address2 %>",
-      address_city: "<%= @order.bill_address.city %>",
-      address_state: "<%= @order.bill_address.state_text %>",
-      address_zip: "<%= @order.bill_address.zipcode %>",
-      address_country: "<%= @order.bill_address.country %>"
+<script>
+  Spree.stripePaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
+
+  var mapCC, stripeResponseHandler;
+
+  mapCC = function(ccType) {
+    if (ccType === 'MasterCard') {
+      return 'mastercard';
+    } else if (ccType === 'Visa') {
+      return 'visa';
+    } else if (ccType === 'American Express') {
+      return 'amex';
+    } else if (ccType === 'Discover') {
+      return 'discover';
+    } else if (ccType === 'Diners Club') {
+      return 'dinersclub';
+    } else if (ccType === 'JCB') {
+      return 'jcb';
     }
-  </script>
-<%- end -%>
+  };
+
+  stripeResponseHandler = function(status, response) {
+    var paymentMethodId, token;
+    if (response.error) {
+      $('#stripeError').html(response.error.message);
+      var param_map = {
+        number:    '#card_number',
+        exp_month: '#card_expiry',
+        exp_year:  '#card_expiry',
+        cvc:       '#card_code'
+      }
+      if (response.error.param) {
+        errorField = Spree.stripePaymentMethod.find(param_map[response.error.param])
+        errorField.addClass('error');
+        errorField.parent().addClass('has-error');
+      }
+
+      return $('#stripeError').show();
+    } else {
+      Spree.stripePaymentMethod.find('#card_number, #card_expiry, #card_code').prop("disabled", true);
+      Spree.stripePaymentMethod.find(".ccType").prop("disabled", false);
+      Spree.stripePaymentMethod.find(".ccType").val(mapCC(response.card.brand));
+      token = response['id'];
+      paymentMethodId = Spree.stripePaymentMethod.prop('id').split("_")[2];
+      Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId + "][gateway_payment_profile_id]' value='" + token + "'/>");
+      Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId + "][last_digits]' value='" + response.card.last4 + "'/>");
+      Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId + "][month]' value='" + response.card.exp_month + "'/>");
+      Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId + "][year]' value='" + response.card.exp_year + "'/>");
+      return Spree.stripePaymentMethod.parents("form").trigger('submit');
+    }
+  };
+
+  Spree.ready(function() {
+    Spree.stripePaymentMethod.prepend("<div id='stripeError' class='errorExplanation alert alert-danger' style='display:none'></div>");
+    return $('#checkout_form_payment [data-hook=buttons]').click(function() {
+      var expiration, params;
+      $('#stripeError').hide();
+      Spree.stripePaymentMethod.find('#card_number, #card_expiry, #card_code').removeClass('error');
+      if (Spree.stripePaymentMethod.is(':visible')) {
+        expiration = $('.cardExpiry:visible').payment('cardExpiryVal');
+        params = $.extend({
+          number: $('.cardNumber:visible').val(),
+          cvc: $('.cardCode:visible').val(),
+          exp_month: expiration.month || 0,
+          exp_year: expiration.year || 0
+        }, Spree.stripeAdditionalInfo);
+        Stripe.card.createToken(params, stripeResponseHandler);
+        return false;
+      }
+    });
+  });
+</script>
+
+<%= render 'spree/checkout/payment/stripe_additional_info' %>
