@@ -1,0 +1,92 @@
+<% param_prefix = "payment_source[#{payment_method.id}]" %>
+
+<div id="payment-request-button">
+  <!-- A Stripe Element will be inserted here. -->
+</div>
+
+<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+
+<script>
+  Spree.stripeApplePayPaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
+  var stripeApplePay = Stripe("<%= payment_method.preferred_publishable_key %>");
+  var elements = stripeApplePay.elements();
+
+  var paymentRequest = stripeApplePay.paymentRequest({
+    country: '<%= payment_method.preferred_country_code.try(:upcase) %>',
+    currency: '<%= @order.currency.downcase %>',
+    displayItems: [
+      <% @order.line_items.each do |line_item| %>
+      {
+        label: '<%= line_item.name %> x <%= line_item.quantity %>',
+        amount: <%= line_item.total.to_d * 100 %>
+      },
+      <% end %>
+      <% if @order.tax_total != 0 %>
+      {
+        label: '<%= Spree.t(:tax) %>',
+        amount: <%= @order.tax_total.to_d * 100 %>
+      },
+      <% end %>
+      <% if @order.shipment_total != 0 %>
+      {
+        label: '<%= Spree.t(:shipment) %>',
+        amount: <%= @order.shipment_total.to_d * 100 %>
+      }
+      <% end %>
+    ],
+    total: {
+      label: '<%= Spree.t(:total) %>',
+      amount: <%= @order.total.to_d * 100 %>, // FIXME: support yen and other currerncies
+    },
+    requestPayerName: true,
+    requestPayerEmail: true,
+    requestPayerPhone: true
+  });
+
+  var prButton = elements.create('paymentRequestButton', {
+    paymentRequest: paymentRequest,
+  });
+
+  // Check the availability of the Payment Request API first.
+  paymentRequest.canMakePayment().then(function(result) {
+    if (result) {
+      prButton.mount('#payment-request-button');
+    } else {
+      document.getElementById('payment-request-button').style.display = 'none';
+    }
+  });
+
+  function addCreditCardFieldToForm(form, name, value) {
+    var hiddenInput = document.createElement('input');
+
+    hiddenInput.setAttribute('type', 'hidden');
+    hiddenInput.setAttribute('name', name);
+    hiddenInput.setAttribute('value', value);
+    form.appendChild(hiddenInput);
+  };
+
+  paymentRequest.on('token', function(ev) {
+    var form = document.getElementById('checkout_form_payment');
+    var token = ev.token;
+    addCreditCardFieldToForm(form, '<%= param_prefix %>[gateway_payment_profile_id]', token.id);
+    addCreditCardFieldToForm(form, '<%= param_prefix %>[number]', token.card.last4);
+    addCreditCardFieldToForm(form, '<%= param_prefix %>[month]', token.card.exp_month);
+    addCreditCardFieldToForm(form, '<%= param_prefix %>[year]', token.card.exp_year);
+    addCreditCardFieldToForm(form, '<%= param_prefix %>[name]', ev.payerName);
+    ev.complete('success');
+    form.submit();
+  });
+
+  Spree.ready(function() {
+    Spree.stripeApplePayPaymentMethod.prepend("<div id='stripeApplePayError' class='errorExplanation alert alert-danger' style='display:none'></div>");
+    var form = document.getElementById('checkout_form_payment');
+    form.addEventListener('submit', function(e) {
+      if (Spree.stripeApplePayPaymentMethod.is(':visible')) {
+        $('#stripeApplePayError').hide();
+        e.preventDefault();
+      }
+    });
+  });
+</script>
+
+<%= render 'spree/checkout/payment/stripe_additional_info' %>

@@ -25,8 +25,8 @@
 
 <script>
   Spree.stripeElementsPaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
-  var stripe = Stripe("<%= payment_method.preferred_publishable_key %>");
-  var elements = stripe.elements();
+  var stripeElements = Stripe("<%= payment_method.preferred_publishable_key %>");
+  var elements = stripeElements.elements();
 
   var card = elements.create('card', {
     iconStyle: 'solid',
@@ -55,26 +55,26 @@
   });
   card.mount('#card-element');
 
-  function addFieldToForm(form, name, value) {
+  function addCreditCardFieldToForm(form, name, value) {
     var hiddenInput = document.createElement('input');
 
     hiddenInput.setAttribute('type', 'hidden');
     hiddenInput.setAttribute('name', name);
     hiddenInput.setAttribute('value', value);
     form.appendChild(hiddenInput);
-  }
+  };
 
-  function stripeTokenHandler(token) {
+  function stripeElementsTokenHandler(token) {
     var form = document.getElementById('checkout_form_payment');
-    addFieldToForm(form, '<%= param_prefix %>[gateway_payment_profile_id]', token.id)
-    addFieldToForm(form, '<%= param_prefix %>[number]', token.card.last4)
-    addFieldToForm(form, '<%= param_prefix %>[month]', token.card.exp_month)
-    addFieldToForm(form, '<%= param_prefix %>[year]', token.card.exp_year)
+    addCreditCardFieldToForm(form, '<%= param_prefix %>[gateway_payment_profile_id]', token.id)
+    addCreditCardFieldToForm(form, '<%= param_prefix %>[number]', token.card.last4)
+    addCreditCardFieldToForm(form, '<%= param_prefix %>[month]', token.card.exp_month)
+    addCreditCardFieldToForm(form, '<%= param_prefix %>[year]', token.card.exp_year)
     form.submit();
-  }
+  };
 
-  function createStripeToken() {
-    stripe.createToken(card, Spree.stripeAdditionalInfo).then(function(result) {
+  function createStripeElementsToken() {
+    stripeElements.createToken(card, Spree.stripeAdditionalInfo).then(function (result) {
       if (result.error) {
         // Inform the user if there was an error
         var errorElement = document.getElementById('card-errors');
@@ -83,7 +83,7 @@
         $('#stripeElementsError').show()
         Spree.enableSave();
       } else {
-        stripeTokenHandler(result.token);
+        stripeElementsTokenHandler(result.token);
       }
     });
   };
@@ -95,7 +95,7 @@
       if (Spree.stripeElementsPaymentMethod.is(':visible')) {
         $('#stripeElementsError').hide();
         e.preventDefault();
-        createStripeToken();
+        createStripeElementsToken();
       }
     });
   });
