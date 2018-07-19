@@ -24,6 +24,9 @@ require 'spree/testing_support/capybara_ext'
 
 FactoryBot.find_definitions
 
+require 'spree/order_decorator.rb'
+require 'spree/payment_decorator.rb'
+
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
   config.mock_with :rspec do |mock|

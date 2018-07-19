@@ -1,13 +1,13 @@
 <%- if @order.has_checkout_step?('address') -%>
   <script>
     Spree.stripeAdditionalInfo = {
-      name: "<%= @order.bill_address.full_name %>",
-      address_line1: "<%= @order.bill_address.address1 %>",
-      address_line2: "<%= @order.bill_address.address2 %>",
-      address_city: "<%= @order.bill_address.city %>",
-      address_state: "<%= @order.bill_address.state_text %>",
-      address_zip: "<%= @order.bill_address.zipcode %>",
-      address_country: "<%= @order.bill_address.country %>"
+      name: "<%= bill_address.full_name %>",
+      address_line1: "<%= bill_address.address1 %>",
+      address_line2: "<%= bill_address.address2 %>",
+      address_city: "<%= bill_address.city %>",
+      address_state: "<%= bill_address.state_text %>",
+      address_zip: "<%= bill_address.zipcode %>",
+      address_country: "<%= bill_address.country %>"
     }
   </script>
 <%- end -%>

@@ -18,25 +18,25 @@
       <% @order.line_items.each do |line_item| %>
       {
         label: '<%= line_item.name %> x <%= line_item.quantity %>',
-        amount: <%= line_item.total.to_d * 100 %>
+        amount: <%= Spree::Money.new(line_item.total, currency: line_item.currency).amount_in_cents %>
       },
       <% end %>
       <% if @order.tax_total != 0 %>
       {
         label: '<%= Spree.t(:tax) %>',
-        amount: <%= @order.tax_total.to_d * 100 %>
+        amount: <%= Spree::Money.new(@order.tax_total, currency: @order.currency).amount_in_cents %>
       },
       <% end %>
       <% if @order.shipment_total != 0 %>
       {
         label: '<%= Spree.t(:shipment) %>',
-        amount: <%= @order.shipment_total.to_d * 100 %>
+        amount: <%= Spree::Money.new(@order.shipment_total, currency: @order.currency).amount_in_cents %>
       }
       <% end %>
     ],
     total: {
       label: '<%= Spree.t(:total) %>',
-      amount: <%= @order.total.to_d * 100 %>, // FIXME: support yen and other currerncies
+      amount: <%= Spree::Money.new(@order.total, currency: @order.currency).amount_in_cents %>
     },
     requestPayerName: true,
     requestPayerEmail: true,

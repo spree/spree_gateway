@@ -78,4 +78,4 @@
   });
 </script>
 
-<%= render 'spree/checkout/payment/stripe_additional_info' %>
+<%= render 'spree/checkout/payment/stripe_additional_info', bill_address: @order.bill_address %>

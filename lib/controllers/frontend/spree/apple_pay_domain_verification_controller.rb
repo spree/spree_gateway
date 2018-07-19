@@ -4,7 +4,7 @@ module Spree
     include Spree::Core::ControllerHelpers
 
     def show
-      gateway = Gateway.active.find_by!(type: 'Spree::Gateway::StripeApplePayGateway')
+      gateway = Spree::Gateway::StripeApplePayGateway.active.first
 
       render plain: gateway.preferred_domain_verification_certificate
     end
