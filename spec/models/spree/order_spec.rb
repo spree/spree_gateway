@@ -18,6 +18,9 @@ describe Spree::Order do
   end
 
   before do
+    Spree::Config[:always_include_confirm_step] = true
+    allow_any_instance_of(Spree::PaymentMethod).to receive(:source_required?).and_return(false)
+
     order_one.payments.create(payment_method_id: stripe_apple_pay_payment_method.id,
                               amount: 29.99,
                               state: 'completed')
