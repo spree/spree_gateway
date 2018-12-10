@@ -38,9 +38,9 @@
       label: '<%= Spree.t(:total) %>',
       amount: <%= Spree::Money.new(@order.total, currency: @order.currency).amount_in_cents %>
     },
-    requestPayerName: true,
-    requestPayerEmail: true,
-    requestPayerPhone: true
+    requestPayerName: false,
+    requestPayerEmail: false,
+    requestPayerPhone: false
   });
 
   var prButton = elements.create('paymentRequestButton', {
@@ -68,11 +68,16 @@
   paymentRequest.on('token', function(ev) {
     var form = document.getElementById('checkout_form_payment');
     var token = ev.token;
+    if (ev.payerName) {
+      var payerName = ev.payerName
+    } else if (Spree.stripeAdditionalInfo) {
+      var payerName = Spree.stripeAdditionalInfo.name
+    }
     addCreditCardFieldToForm(form, '<%= param_prefix %>[gateway_payment_profile_id]', token.id);
     addCreditCardFieldToForm(form, '<%= param_prefix %>[number]', token.card.last4);
     addCreditCardFieldToForm(form, '<%= param_prefix %>[month]', token.card.exp_month);
     addCreditCardFieldToForm(form, '<%= param_prefix %>[year]', token.card.exp_year);
-    addCreditCardFieldToForm(form, '<%= param_prefix %>[name]', ev.payerName);
+    addCreditCardFieldToForm(form, '<%= param_prefix %>[name]', payerName);
     ev.complete('success');
     form.submit();
   });
