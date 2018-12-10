@@ -7,7 +7,7 @@ module SpreeGateway
     end
 
     def paid_with_apple_pay?
-      payments.any?(&:apple_pay?)
+      payments.valid.any?(&:apple_pay?)
     end
   end
 end
