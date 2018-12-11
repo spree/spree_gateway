@@ -4,10 +4,33 @@
 [![Code Climate](https://codeclimate.com/github/spree/spree_gateway.svg)](https://codeclimate.com/github/spree/spree_gateway)
 
 Community supported Spree Payment Method Gateways. It works as a wrapper for
-active_merchant gateway. Note that for some gateways you might still need to
-add another gem to your Gemfile to make it work. For example active_merchant
-require `braintree` but it doesn't include that gem on its gemspec. So you
-need to manually add it to your rails app Gemfile.
+[active_merchant](https://github.com/activemerchant/active_merchant) gateway. 
+
+Supported payment gateways:
+* Authorize.net (with CIM support)
+* Apple Pay (via Stripe)
+* BanWire
+* Bambora (previously Beanstream)
+* Braintree
+* CyberSource
+* ePay
+* eWay
+* maxipago
+* MasterCard Payment Gateway Service (formerly MiGS)
+* Moneris
+* PayJunction
+* Payflow
+* Paymill
+* Pin Payments
+* QuickPay
+* sage Pay
+* SecurePay
+* Spreadly
+* Stripe (with Stripe Elements)
+* USAePay
+* Worldpay (previously Cardsave)
+
+For`PayPal` support head over to [braintree_vzero](https://github.com/spree-contrib/spree_braintree_vzero) extension.
 
 ## Installation
 
@@ -70,7 +93,21 @@ Starting point:
 * Submit your pull request
 
 
-Copyright (c) 2014 [Spree Commerce][4] and other [contributors][5], released under the [New BSD License][3]
+License
+----------------------
+
+Spree is released under the [New BSD License][3].
+
+About Spark Solutions
+----------------------
+[![Spark Solutions](http://sparksolutions.co/wp-content/uploads/2015/01/logo-ss-tr-221x100.png)][spark]
+
+Spree Gateway is maintained by [Spark Solutions Sp. z o.o.][spark].
+
+We are passionate about open source software.
+We are [available for hire][spark].
+
+[spark]:http://sparksolutions.co?utm_source=github
 
 [1]: http://www.fsf.org/licensing/essays/free-sw.html
 [2]: https://github.com/spree/spree_gateway/issues
