@@ -1,0 +1,104 @@
+<% param_prefix = "payment_source[#{payment_method.id}]" %>
+<div class="well clearfix">
+  <p class="field">
+    <%= label_tag "name_on_card_#{payment_method.id}" do %>
+      <%= Spree.t(:name_on_card) %><abbr class="required" title="required">*</abbr>
+    <% end %>
+    <%= text_field_tag "#{param_prefix}[name]", "#{@order.bill_address_firstname} #{@order.bill_address_lastname}", { id: "name_on_card_#{payment_method.id}", class: 'form-control required'} %>
+    </p>
+    <div class="form-row">
+      <%= label_tag "card_number" do %>
+        <%= Spree.t(:card_number) %><abbr class="required" title="required">*</abbr>
+      <% end %>
+      <div class="form-control required cardNumber">
+        <div id="card-element">
+          <!-- a Stripe Element will be inserted here. -->
+        </div>
+      </div>
+      <!-- Used to display form errors -->
+      <div id="card-errors" role="alert"></div>
+    </div>
+  </p>
+</div>
+
+<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+
+<script>
+  Spree.stripeElementsPaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
+  var stripeElements = Stripe("<%= payment_method.preferred_publishable_key %>");
+  var elements = stripeElements.elements();
+
+  var card = elements.create('card', {
+    iconStyle: 'solid',
+    hidePostalCode: true,
+    style: {
+      base: {
+        iconColor: '#555555',
+        lineHeight: '24px',
+        fontWeight: 300,
+        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        fontSize: '14px',
+
+        '::placeholder': {
+          color: '#555555',
+        },
+      },
+      invalid: {
+        iconColor: '#e85746',
+        color: '#e85746',
+      }
+    },
+    classes: {
+      focus: 'is-focused',
+      empty: 'is-empty',
+    },
+  });
+  card.mount('#card-element');
+
+  function addCreditCardFieldToForm(form, name, value) {
+    var hiddenInput = document.createElement('input');
+
+    hiddenInput.setAttribute('type', 'hidden');
+    hiddenInput.setAttribute('name', name);
+    hiddenInput.setAttribute('value', value);
+    form.appendChild(hiddenInput);
+  };
+
+  function stripeElementsTokenHandler(token) {
+    var form = document.getElementById('checkout_form_payment');
+    addCreditCardFieldToForm(form, '<%= param_prefix %>[gateway_payment_profile_id]', token.id)
+    addCreditCardFieldToForm(form, '<%= param_prefix %>[number]', token.card.last4)
+    addCreditCardFieldToForm(form, '<%= param_prefix %>[month]', token.card.exp_month)
+    addCreditCardFieldToForm(form, '<%= param_prefix %>[year]', token.card.exp_year)
+    form.submit();
+  };
+
+  function createStripeElementsToken() {
+    stripeElements.createToken(card, Spree.stripeAdditionalInfo).then(function (result) {
+      if (result.error) {
+        // Inform the user if there was an error
+        var errorElement = document.getElementById('card-errors');
+
+        $('#stripeElementsError').html(result.error.message);
+        $('#stripeElementsError').show()
+        Spree.enableSave();
+      } else {
+        stripeElementsTokenHandler(result.token);
+      }
+    });
+  };
+
+  Spree.ready(function() {
+    Spree.stripeElementsPaymentMethod.prepend("<div id='stripeElementsError' class='errorExplanation alert alert-danger' style='display:none'></div>");
+    var form = document.getElementById('checkout_form_payment');
+    form.addEventListener('submit', function(e) {
+      if (Spree.stripeElementsPaymentMethod.is(':visible')) {
+        $('#stripeElementsError').hide();
+        e.preventDefault();
+        createStripeElementsToken();
+      }
+    });
+  });
+</script>
+
+<%= render 'spree/checkout/payment/stripe_additional_info' %>

@@ -30,6 +30,8 @@ module SpreeGateway
       app.config.spree.payment_methods << Spree::Gateway::SecurePayAU
       app.config.spree.payment_methods << Spree::Gateway::SpreedlyCoreGateway
       app.config.spree.payment_methods << Spree::Gateway::StripeGateway
+      app.config.spree.payment_methods << Spree::Gateway::StripeElementsGateway
+      app.config.spree.payment_methods << Spree::Gateway::StripeApplePayGateway
       app.config.spree.payment_methods << Spree::Gateway::UsaEpayTransaction
       app.config.spree.payment_methods << Spree::Gateway::Worldpay
     end
@@ -40,9 +42,9 @@ module SpreeGateway
           'lib/assets/javascripts/spree/frontend/spree_gateway.js',
           'lib/assets/stylesheets/spree/frontend/spree_gateway.css',
         ]
-        Dir.glob(File.join(File.dirname(__FILE__), "../../controllers/frontend/*/*_decorator*.rb")) do |c|
-          Rails.configuration.cache_classes ? require(c) : load(c)
-        end
+      end
+      Dir.glob(File.join(File.dirname(__FILE__), '../../app/**/spree/*_decorator*.rb')) do |c|
+        Rails.application.config.cache_classes ? require(c) : load(c)
       end
     end
 
@@ -58,8 +60,9 @@ module SpreeGateway
       paths["app/views"] << "lib/views/backend"
     end
 
+    paths['app/controllers'] << 'lib/controllers'
+
     if self.frontend_available?
-      paths["app/controllers"] << "lib/controllers/frontend"
       paths["app/views"] << "lib/views/frontend"
     end
 

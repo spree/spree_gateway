@@ -14,6 +14,7 @@ require "selenium-webdriver"
 require 'database_cleaner'
 require 'ffaker'
 require 'rspec/active_model/mocks'
+require 'pry'
 
 Dir[File.join(File.dirname(__FILE__), "support", "**", "*.rb")].each { |f| require f }
 
