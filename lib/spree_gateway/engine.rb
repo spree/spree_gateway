@@ -37,12 +37,6 @@ module SpreeGateway
     end
 
     def self.activate
-      if SpreeGateway::Engine.frontend_available?
-        Rails.application.config.assets.precompile += [
-          'lib/assets/javascripts/spree/frontend/spree_gateway.js',
-          'lib/assets/stylesheets/spree/frontend/spree_gateway.css',
-        ]
-      end
       Dir.glob(File.join(File.dirname(__FILE__), '../../app/**/spree/*_decorator*.rb')) do |c|
         Rails.application.config.cache_classes ? require(c) : load(c)
       end
