@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_gateway'
-  s.version     = '3.4.0'
+  s.version     = '3.4.1'
   s.summary     = 'Additional Payment Gateways for Spree Commerce'
   s.description = s.summary
 
@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'puma'
   s.add_development_dependency 'rspec-activemodel-mocks'
   s.add_development_dependency 'rspec-rails'
-  s.add_development_dependency 'sass-rails', '>= 3.2'
+  s.add_development_dependency 'sass-rails'
   s.add_development_dependency 'selenium-webdriver'
   s.add_development_dependency 'simplecov'
   s.add_development_dependency 'sqlite3'
