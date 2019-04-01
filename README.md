@@ -25,7 +25,7 @@ Supported payment gateways:
 * QuickPay
 * sage Pay
 * SecurePay
-* Spreadly
+* Spreedly
 * Stripe (with Stripe Elements)
 * USAePay
 * Worldpay (previously Cardsave)
