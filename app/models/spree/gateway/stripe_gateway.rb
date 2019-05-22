@@ -141,7 +141,7 @@ module Spree
 
     def add_stripe_attributes
       spree_version = "Spree/#{Spree.version}"
-      gateway_version = "SpreeGateway/#{Spree::Gateway.version}"
+      gateway_version = "SpreeGateway/#{SpreeGateway.version}"
       url = "https://sparksolutions.co/?utm_source=github"
       spree_version + '' + gateway_version + '' + url
     end

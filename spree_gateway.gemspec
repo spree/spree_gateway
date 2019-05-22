@@ -1,8 +1,11 @@
 # coding: utf-8
+
+require_relative 'lib/spree_gateway/version.rb'
+
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_gateway'
-  s.version     = '3.3.3'
+  s.version     = SpreeGateway.version
   s.summary     = 'Additional Payment Gateways for Spree Commerce'
   s.description = s.summary
 
