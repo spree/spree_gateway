@@ -29,27 +29,32 @@ module Spree
     end
 
     def purchase(money, creditcard, gateway_options)
+      gateway_options[:attributes] = add_stripe_attributes
       provider.purchase(*options_for_purchase_or_auth(money, creditcard, gateway_options))
     end
 
     def authorize(money, creditcard, gateway_options)
+      gateway_options[:attributes] = add_stripe_attributes
       provider.authorize(*options_for_purchase_or_auth(money, creditcard, gateway_options))
     end
 
     def capture(money, response_code, gateway_options)
+      gateway_options[:attributes] = add_stripe_attributes
       provider.capture(money, response_code, gateway_options)
     end
 
     def credit(money, creditcard, response_code, gateway_options)
-      provider.refund(money, response_code, {})
+      gateway_options[:attributes] = add_stripe_attributes
+      provider.refund(money, response_code, {}, gateway_options)
     end
 
     def void(response_code, creditcard, gateway_options)
-      provider.void(response_code, {})
+      gateway_options[:attributes] = add_stripe_attributes
+      provider.void(response_code, {}, gateway_options)
     end
 
     def cancel(response_code)
-      provider.void(response_code, {})
+      provider.void(response_code, {}, gateway_options)
     end
 
     def create_profile(payment)
@@ -132,6 +137,13 @@ module Spree
     def update_source!(source)
       source.cc_type = CARD_TYPE_MAPPING[source.cc_type] if CARD_TYPE_MAPPING.include?(source.cc_type)
       source
+    end
+
+    def add_stripe_attributes
+      spree_version = "Spree/#{Spree.version}"
+      gateway_version = "SpreeGateway/#{Spree::Gateway.version}"
+      url = "https://sparksolutions.co/?utm_source=github"
+      spree_version + '' + gateway_version + '' + url
     end
   end
 end
