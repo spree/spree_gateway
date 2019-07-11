@@ -29,27 +29,22 @@ module Spree
     end
 
     def purchase(money, creditcard, gateway_options)
-      gateway_options[:attributes] = add_stripe_attributes
       provider.purchase(*options_for_purchase_or_auth(money, creditcard, gateway_options))
     end
 
     def authorize(money, creditcard, gateway_options)
-      gateway_options[:attributes] = add_stripe_attributes
       provider.authorize(*options_for_purchase_or_auth(money, creditcard, gateway_options))
     end
 
     def capture(money, response_code, gateway_options)
-      gateway_options[:attributes] = add_stripe_attributes
       provider.capture(money, response_code, gateway_options)
     end
 
-    def credit(money, creditcard, response_code, gateway_options)
-      gateway_options[:attributes] = add_stripe_attributes
+    def credit(money, creditcard, response_code, gateway_options)tes
       provider.refund(money, response_code, {}, gateway_options)
     end
 
     def void(response_code, creditcard, gateway_options)
-      gateway_options[:attributes] = add_stripe_attributes
       provider.void(response_code, {}, gateway_options)
     end
 
@@ -92,14 +87,17 @@ module Spree
 
     # In this gateway, what we call 'secret_key' is the 'login'
     def options
-      options = super
-      options.merge(:login => preferred_secret_key)
+      super.merge(
+        login: preferred_secret_key,
+        application: app_info
+      )
     end
 
     def options_for_purchase_or_auth(money, creditcard, gateway_options)
       options = {}
       options[:description] = "Spree Order ID: #{gateway_options[:order_id]}"
       options[:currency] = gateway_options[:currency]
+      options[:application] = app_info
 
       if customer = creditcard.gateway_customer_profile_id
         options[:customer] = customer
@@ -139,11 +137,10 @@ module Spree
       source
     end
 
-    def add_stripe_attributes
-      spree_version = "Spree/#{Spree.version}"
-      gateway_version = "SpreeGateway/#{SpreeGateway.version}"
-      url = "https://sparksolutions.co/?utm_source=github"
-      spree_version + '' + gateway_version + '' + url
+    def app_info
+      name_with_version = "SpreeGateway/#{SpreeGateway.version}"
+      url = 'https://spreecommerce.org'
+      "#{name_with_version} #{url}"
     end
   end
 end
