@@ -40,6 +40,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'bootstrap-sass', '>= 3.3.5.1'
   s.add_development_dependency 'sass-rails', '>= 3.2'
   s.add_development_dependency 'selenium-webdriver'
+  s.add_development_dependency 'webdrivers'
   s.add_development_dependency 'simplecov'
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'appraisal'
