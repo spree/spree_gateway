@@ -10,6 +10,7 @@ end
 
 appraise 'spree-3-7' do
   gem 'spree', '~> 3.7.0'
+  gem 'sass-rails'
   gem 'rails-controller-testing'
 end
 
