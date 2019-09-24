@@ -11,6 +11,7 @@ require 'capybara/rspec'
 require 'capybara/rails'
 require 'capybara-screenshot/rspec'
 require "selenium-webdriver"
+require 'webdrivers'
 require 'database_cleaner'
 require 'ffaker'
 require 'rspec/active_model/mocks'
@@ -56,8 +57,10 @@ RSpec.configure do |config|
   Capybara.register_driver :chrome do |app|
     Capybara::Selenium::Driver.new app,
       browser: :chrome,
-      options: Selenium::WebDriver::Chrome::Options.new(args: %w[disable-popup-blocking headless disable-gpu window-size=1920,1080])
+      options: Selenium::WebDriver::Chrome::Options.new(
+        args: %w[no-sandbox disable-dev-shm-usage disable-popup-blocking headless disable-gpu window-size=1920,1080 --enable-features=NetworkService,NetworkServiceInProcess --disable-features=VizDisplayCompositor],
+        log_level: :error
+      )
   end
-
   Capybara.javascript_driver = :chrome
 end

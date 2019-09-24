@@ -15,6 +15,7 @@ gemfile:
   # - gemfiles/spree_3_2.gemfile
   - gemfiles/spree_3_5.gemfile
   - gemfiles/spree_3_7.gemfile
+  - gemfiles/spree_4_0.gemfile
   - gemfiles/spree_master.gemfile
 
 script:
@@ -34,10 +35,16 @@ matrix:
         gemfile: gemfiles/spree_master.gemfile
       - rvm: 2.4.4
         gemfile: gemfiles/spree_master.gemfile
+      - rvm: 2.3.7
+        gemfile: gemfiles/spree_4_0.gemfile
+      - rvm: 2.4.4
+        gemfile: gemfiles/spree_4_0.gemfile
       - rvm: 2.5.1
         gemfile: gemfiles/spree_3_2.gemfile
       - rvm: 2.4.4
         gemfile: gemfiles/spree_3_2.gemfile
+      - rvm: 2.5.1
+        gemfile: gemfiles/spree_3_5.gemfile
 
 before_install:
   - mysql -u root -e "GRANT ALL ON *.* TO 'travis'@'%';"
