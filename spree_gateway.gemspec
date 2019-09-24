@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'spree_extension'
 
   s.add_development_dependency 'appraisal'
-  s.add_development_dependency 'bootstrap-sass', '>= 3.3.5.1'
+  s.add_development_dependency 'bootstrap-sass'
   s.add_development_dependency 'braintree'
   s.add_development_dependency 'capybara'
   s.add_development_dependency 'capybara-screenshot'
@@ -34,8 +34,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'ffaker'
   s.add_development_dependency 'guard-rspec'
   s.add_development_dependency 'launchy'
-  s.add_development_dependency 'mysql2', '~> 0.5.1'
-  s.add_development_dependency 'pg', '~> 0.18'
+  s.add_development_dependency 'mysql2'
+  s.add_development_dependency 'pg'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'puma'
   s.add_development_dependency 'rspec-activemodel-mocks'
@@ -44,5 +44,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'selenium-webdriver'
   s.add_development_dependency 'webdrivers'
   s.add_development_dependency 'simplecov'
-  s.add_development_dependency 'sqlite3', '~> 1.4.1'
+  s.add_development_dependency 'sqlite3'
 end
