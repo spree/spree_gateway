@@ -44,6 +44,9 @@ module SpreeGateway
           Rails.configuration.cache_classes ? require(c) : load(c)
         end
       end
+      Dir.glob(File.join(File.dirname(__FILE__), '../../lib/active_merchant/**/*_decorator*.rb')) do |c|
+        Rails.application.config.cache_classes ? require(c) : load(c)
+      end
     end
 
     def self.backend_available?

@@ -9,8 +9,9 @@ require 'rspec/rails'
 require 'rspec/active_model/mocks'
 require 'capybara/rspec'
 require 'capybara/rails'
-require 'capybara/poltergeist'
 require 'capybara-screenshot/rspec'
+require "selenium-webdriver"
+require 'webdrivers'
 require 'database_cleaner'
 require 'ffaker'
 require 'rspec/active_model/mocks'
@@ -22,7 +23,7 @@ require 'spree/testing_support/order_walkthrough'
 require 'spree/testing_support/preferences'
 require 'spree/testing_support/capybara_ext'
 
-FactoryBot.find_definitions
+FactoryGirl.find_definitions
 
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
@@ -34,7 +35,7 @@ RSpec.configure do |config|
   #config.filter_run focus: true
   #config.filter_run_excluding slow: true
 
-  config.include FactoryBot::Syntax::Methods
+  config.include FactoryGirl::Syntax::Methods
   config.include Spree::TestingSupport::Preferences
 
   config.before :suite do
@@ -52,5 +53,13 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
-  Capybara.javascript_driver = :poltergeist
+  Capybara.register_driver :chrome do |app|
+    Capybara::Selenium::Driver.new app,
+      browser: :chrome,
+      options: Selenium::WebDriver::Chrome::Options.new(
+        args: %w[no-sandbox disable-dev-shm-usage disable-popup-blocking headless disable-gpu window-size=1920,1080 --enable-features=NetworkService,NetworkServiceInProcess --disable-features=VizDisplayCompositor],
+        log_level: :error
+      )
+  end
+  Capybara.javascript_driver = :chrome
 end

@@ -40,16 +40,16 @@ module Spree
       provider.capture(money, response_code, gateway_options)
     end
 
-    def credit(money, creditcard, response_code, gateway_options)
-      provider.refund(money, response_code, {})
+    def credit(money, creditcard, response_code, gateway_options)tes
+      provider.refund(money, response_code, {}, gateway_options)
     end
 
     def void(response_code, creditcard, gateway_options)
-      provider.void(response_code, {})
+      provider.void(response_code, {}, gateway_options)
     end
 
     def cancel(response_code)
-      provider.void(response_code, {})
+      provider.void(response_code, {}, gateway_options)
     end
 
     def create_profile(payment)
@@ -87,14 +87,17 @@ module Spree
 
     # In this gateway, what we call 'secret_key' is the 'login'
     def options
-      options = super
-      options.merge(:login => preferred_secret_key)
+      super.merge(
+        login: preferred_secret_key,
+        application: app_info
+      )
     end
 
     def options_for_purchase_or_auth(money, creditcard, gateway_options)
       options = {}
       options[:description] = "Spree Order ID: #{gateway_options[:order_id]}"
       options[:currency] = gateway_options[:currency]
+      options[:application] = app_info
 
       if customer = creditcard.gateway_customer_profile_id
         options[:customer] = customer
@@ -132,6 +135,12 @@ module Spree
     def update_source!(source)
       source.cc_type = CARD_TYPE_MAPPING[source.cc_type] if CARD_TYPE_MAPPING.include?(source.cc_type)
       source
+    end
+
+    def app_info
+      name_with_version = "SpreeGateway/#{SpreeGateway.version}"
+      url = 'https://spreecommerce.org'
+      "#{name_with_version} #{url}"
     end
   end
 end
