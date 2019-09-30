@@ -20,7 +20,7 @@ module Spree
         verify_creditcard_name!(creditcard)
         result = provider.store(creditcard, options)
         if result.success?
-          creditcard.update_attributes(:gateway_customer_profile_id => result.params['customerCode'], :gateway_payment_profile_id => result.params['customer_vault_id'])
+          creditcard.update(:gateway_customer_profile_id => result.params['customerCode'], :gateway_payment_profile_id => result.params['customer_vault_id'])
         else
           payment.send(:gateway_error, result)
         end

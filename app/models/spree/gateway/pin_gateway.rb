@@ -16,10 +16,10 @@ module Spree
         response = provider.store(payment.source, options_for_payment(payment))
         
         if response.success?
-          payment.source.update_attributes!(:gateway_customer_profile_id => response.authorization)
+          payment.source.update!(:gateway_customer_profile_id => response.authorization)
 
           cc = response.params['response']['card']
-          payment.source.update_attributes!(:gateway_payment_profile_id => cc['token']) if cc
+          payment.source.update!(:gateway_payment_profile_id => cc['token']) if cc
         else
           payment.send(:gateway_error, response.message)
         end

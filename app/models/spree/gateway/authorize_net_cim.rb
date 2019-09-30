@@ -70,7 +70,7 @@ module Spree
     def create_profile(payment)
       if payment.source.gateway_customer_profile_id.nil?
         profile_hash = create_customer_profile(payment)
-        payment.source.update_attributes(gateway_customer_profile_id: profile_hash[:customer_profile_id], gateway_payment_profile_id: profile_hash[:customer_payment_profile_id])
+        payment.source.update(gateway_customer_profile_id: profile_hash[:customer_profile_id], gateway_payment_profile_id: profile_hash[:customer_payment_profile_id])
       end
     end
 

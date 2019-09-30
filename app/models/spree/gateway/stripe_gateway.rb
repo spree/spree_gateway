@@ -72,7 +72,7 @@ module Spree
         response_cc_type = response.params['sources']['data'].first['brand']
         cc_type = CARD_TYPE_MAPPING[response_cc_type] if CARD_TYPE_MAPPING.include?(response_cc_type)
 
-        payment.source.update_attributes!({
+        payment.source.update!({
           cc_type: cc_type, # side-effect of update_source!
           gateway_customer_profile_id: response.params['id'],
           gateway_payment_profile_id: response.params['default_source'] || response.params['default_card']
