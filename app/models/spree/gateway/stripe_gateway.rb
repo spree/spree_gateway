@@ -40,7 +40,7 @@ module Spree
       provider.capture(money, response_code, gateway_options)
     end
 
-    def credit(money, creditcard, response_code, gateway_options)tes
+    def credit(money, creditcard, response_code, gateway_options)
       provider.refund(money, response_code, {}, gateway_options)
     end
 
