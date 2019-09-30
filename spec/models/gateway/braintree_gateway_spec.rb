@@ -153,7 +153,7 @@ describe Spree::Gateway::BraintreeGateway do
   describe 'authorize' do
     context "the credit card has a token" do
       before(:each) do
-        @credit_card.update_attributes(gateway_payment_profile_id: 'test')
+        @credit_card.update(gateway_payment_profile_id: 'test')
       end
 
       it 'calls provider#authorize using the gateway_payment_profile_id' do
@@ -165,7 +165,7 @@ describe Spree::Gateway::BraintreeGateway do
     context "the given credit card does not have a token" do
       context "the credit card has a customer profile id" do
         before(:each) do
-          @credit_card.update_attributes(gateway_customer_profile_id: '12345')
+          @credit_card.update(gateway_customer_profile_id: '12345')
         end
 
         it 'calls provider#authorize using the gateway_customer_profile_id' do

@@ -31,7 +31,7 @@ describe Spree::Gateway::StripeGateway do
 
   describe '#create_profile' do
     before do
-      payment.source.stub(:update_attributes!)
+      payment.source.stub(:update!)
     end
 
     context 'with an order that has a bill address' do

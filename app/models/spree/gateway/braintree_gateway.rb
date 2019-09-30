@@ -57,7 +57,7 @@ module Spree
         response = provider.store(payment.source, options_for_payment(payment))
 
         if response.success?
-          payment.source.update_attributes!(:gateway_customer_profile_id => response.params['customer_vault_id'])
+          payment.source.update!(:gateway_customer_profile_id => response.params['customer_vault_id'])
           cc = response.params['braintree_customer'].fetch('credit_cards',[]).first
           update_card_number(payment.source, cc) if cc
         else
