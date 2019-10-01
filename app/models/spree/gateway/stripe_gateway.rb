@@ -41,15 +41,15 @@ module Spree
     end
 
     def credit(money, creditcard, response_code, gateway_options)
-      provider.refund(money, response_code, {}, gateway_options)
+      provider.refund(money, response_code, {})
     end
 
     def void(response_code, creditcard, gateway_options)
-      provider.void(response_code, {}, gateway_options)
+      provider.void(response_code, {})
     end
 
     def cancel(response_code)
-      provider.void(response_code, {}, gateway_options)
+      provider.void(response_code, {})
     end
 
     def create_profile(payment)
