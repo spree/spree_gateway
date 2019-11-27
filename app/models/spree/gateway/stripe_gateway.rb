@@ -138,9 +138,11 @@ module Spree
     end
 
     def app_info
-      name_with_version = "SpreeGateway/#{SpreeGateway.version}"
+      name = 'SpreeGateway'
+      version = "#{SpreeGateway.version}"
+      partner_id = 'pp_partner_FC3KpLMMQgUgcQ'
       url = 'https://spreecommerce.org'
-      "#{name_with_version} #{url}"
+      "#{name} #{partner_id} #{url} #{version}"
     end
   end
 end
