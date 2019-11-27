@@ -16,7 +16,7 @@ module ActiveMerchant
 
           def add_customer_data(post, options)
             original_add_customer_data(post, options)
-            post[:payment_user_agent] = "SpreeGateway/#{SpreeGateway.version}"
+            post[:payment_user_agent] = "SpreeGateway/#{SpreeGateway.version}/pp_partner_FC3KpLMMQgUgcQ"
           end
         end
       end
