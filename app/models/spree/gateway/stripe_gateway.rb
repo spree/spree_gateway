@@ -142,7 +142,7 @@ module Spree
       version = "#{SpreeGateway.version}"
       partner_id = 'pp_partner_FC3KpLMMQgUgcQ'
       url = 'https://spreecommerce.org'
-      "#{name} #{partner_id} #{url} #{version}"
+      "#{name}/#{version}/#{partner_id} #{url} "
     end
   end
 end
