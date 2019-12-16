@@ -24,7 +24,6 @@
 <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 
 <script>
-  Spree.stripeElementsPaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
   var stripeElements = Stripe("<%= payment_method.preferred_publishable_key %>");
   var elements = stripeElements.elements();
 
@@ -54,6 +53,22 @@
     },
   });
   card.mount('#card-element');
+
+  window.addEventListener('DOMContentLoaded', function() {
+    Spree.stripeElementsPaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
+
+    Spree.ready(function() {
+      Spree.stripeElementsPaymentMethod.prepend("<div id='stripeElementsError' class='errorExplanation alert alert-danger' style='display:none'></div>");
+      var form = document.getElementById('checkout_form_payment');
+      form.addEventListener('submit', function(e) {
+        if (Spree.stripeElementsPaymentMethod.is(':visible')) {
+          $('#stripeElementsError').hide();
+          e.preventDefault();
+          createStripeElementsToken();
+        }
+      });
+    });
+  });
 
   function addCreditCardFieldToForm(form, name, value) {
     var hiddenInput = document.createElement('input');
@@ -87,18 +102,7 @@
       }
     });
   };
-
-  Spree.ready(function() {
-    Spree.stripeElementsPaymentMethod.prepend("<div id='stripeElementsError' class='errorExplanation alert alert-danger' style='display:none'></div>");
-    var form = document.getElementById('checkout_form_payment');
-    form.addEventListener('submit', function(e) {
-      if (Spree.stripeElementsPaymentMethod.is(':visible')) {
-        $('#stripeElementsError').hide();
-        e.preventDefault();
-        createStripeElementsToken();
-      }
-    });
-  });
+  
 </script>
 
 <%= render 'spree/checkout/payment/stripe_additional_info' %>
