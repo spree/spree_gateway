@@ -7,7 +7,6 @@
 <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 
 <script>
-  Spree.stripeApplePayPaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
   var stripeApplePay = Stripe("<%= payment_method.preferred_publishable_key %>");
   var elements = stripeApplePay.elements();
 
@@ -82,14 +81,18 @@
     form.submit();
   });
 
-  Spree.ready(function() {
-    Spree.stripeApplePayPaymentMethod.prepend("<div id='stripeApplePayError' class='errorExplanation alert alert-danger' style='display:none'></div>");
-    var form = document.getElementById('checkout_form_payment');
-    form.addEventListener('submit', function(e) {
-      if (Spree.stripeApplePayPaymentMethod.is(':visible')) {
-        $('#stripeApplePayError').hide();
-        e.preventDefault();
-      }
+  window.addEventListener('DOMContentLoaded', function() {
+    Spree.stripeApplePayPaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
+
+    Spree.ready(function() {
+      Spree.stripeApplePayPaymentMethod.prepend("<div id='stripeApplePayError' class='errorExplanation alert alert-danger' style='display:none'></div>");
+      var form = document.getElementById('checkout_form_payment');
+      form.addEventListener('submit', function(e) {
+        if (Spree.stripeApplePayPaymentMethod.is(':visible')) {
+          $('#stripeApplePayError').hide();
+          e.preventDefault();
+        }
+      });
     });
   });
 </script>
