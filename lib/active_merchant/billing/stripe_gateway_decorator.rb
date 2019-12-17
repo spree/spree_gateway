@@ -6,7 +6,6 @@ module ActiveMerchant
       def headers(options = {})
         headers = super
         headers['X-Stripe-Client-User-Agent'] = x_stripe_client_user_agent_data
-        # binding.pry
         headers['User-Agent'] = headers['X-Stripe-Client-User-Agent']
         headers
       end
