@@ -6,6 +6,7 @@ module ActiveMerchant
       def headers(options = {})
         headers = super
         headers['X-Stripe-Client-User-Agent'] = x_stripe_client_user_agent_data
+        # binding.pry
         headers['User-Agent'] = headers['X-Stripe-Client-User-Agent']
         headers
       end
@@ -16,16 +17,21 @@ module ActiveMerchant
       end
 
       def x_stripe_client_user_agent_data
-        "{
-          'lang': 'ruby',
-          'publisher': 'SpreeGateway',
-          'application': {
-            'name': 'SpreeGateway'
-            'version': SpreeGateway.version,
-            'partner_id': 'pp_partner_FC3KpLMMQgUgcQ',
-            'url': 'spreecommerce.org',
+        JSON.dump(
+          {
+            lang: 'ruby',
+            lang_version: "#{RUBY_VERSION} p#{RUBY_PATCHLEVEL} (#{RUBY_RELEASE_DATE})",
+            bindings_version: ActiveMerchant::VERSION,
+            platform: RUBY_PLATFORM,
+            publisher: 'SpreeGateway',
+            application: {
+              name: 'SpreeGateway',
+              version: "#{SpreeGateway.version}",
+              partner_id: 'pp_partner_FC3KpLMMQgUgcQ',
+              url: 'spreecommerce.org'
+            }
           }
-        }"
+        )
       end
     end
   end
