@@ -71,7 +71,7 @@ describe "Stripe checkout", type: :feature do
     fill_in "Card Number", :with => "4242 4242 4242 4249"
     click_button "Save and Continue"
     wait_for_stripe if Spree.version.to_f <= 4.0
-    check_error_messages_and_css("Your card number is incorrect", "m", "y", "v")
+    check_error_messages("Your card number is incorrect")
   end
 
   it "shows an error with invalid security fields", :js => true do
@@ -79,7 +79,7 @@ describe "Stripe checkout", type: :feature do
     fill_in_card_code_and_expiry("99", "01 / #{Time.now.year + 1}")
     click_button "Save and Continue"
     wait_for_stripe if Spree.version.to_f <= 4.0
-    check_error_messages_and_css("Your card's security code is invalid.")
+    check_error_messages("Your card's security code is invalid.")
   end
 
   it "shows an error with invalid expiry month field", :js => true do
@@ -87,7 +87,7 @@ describe "Stripe checkout", type: :feature do
     fill_in_card_code_and_expiry("123", "00 / #{Time.now.year + 1}")
     click_button "Save and Continue"
     wait_for_stripe if Spree.version.to_f <= 4.0
-    check_error_messages_and_css("Your card's expiration month is invalid.")
+    check_error_messages("Your card's expiration month is invalid.")
   end
 
   it "shows an error with invalid expiry year field", :js => true do
@@ -95,7 +95,7 @@ describe "Stripe checkout", type: :feature do
     fill_in_card_code_and_expiry("123", "12 / ")
     click_button "Save and Continue"
     wait_for_stripe  if Spree.version.to_f <= 4.0
-    check_error_messages_and_css("Your card's expiration year is invalid.", "m", "y")
+    check_error_messages("Your card's expiration year is invalid.")
   end
 
   def fill_in_card_code_and_expiry(card_code, card_expiry)
@@ -116,18 +116,11 @@ describe "Stripe checkout", type: :feature do
     end
   end
 
-  def check_error_messages_and_css(message, month = nil, year = nil, value = nil)
+  def check_error_messages(message)
     if Spree.version.to_f <= 4.0
       expect(page).to have_content(message)
-      expect(page).to have_css('.has-error #card_number.error')
-    elsif month || year || value
-      expect(page).to have_content("Payments credit card Month is not a number") if month
-      expect(page).to have_content("Payments credit card Year is not a number") if year
-      expect(page).to have_content("Payments credit card Verification Value can't be blank") if value
-      expect(page).to have_css('#errorExplanation.alert-danger')
     else
       expect(page).to have_content(message)
-      expect(page).to have_css('#errorExplanation.alert-danger')
     end
   end
 end
