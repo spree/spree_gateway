@@ -43,12 +43,11 @@ describe "Stripe checkout", type: :feature do
   # This will pass the CC data to the server and the StripeGateway class handles it
   it "can process a valid payment (without JS)" do
     fill_in "Card Number", :with => "4242 4242 4242 4242"
-    fill_in "Card Code", :with => "123"
-    fill_in "Expiration", :with => "01 / #{Time.now.year + 1}"
+    fill_in_card_code_and_expiry("123", "01 / #{Time.now.year + 1}")
     click_button "Save and Continue"
     expect(page.current_url).to include("/checkout/confirm")
     click_button "Place Order"
-    expect(page).to have_content("Your order has been processed successfully")
+    check_message_or_current_path
   end
 
   # This will fetch a token from Stripe.com and then pass that to the webserver.
@@ -57,52 +56,78 @@ describe "Stripe checkout", type: :feature do
     fill_in "Card Number", :with => "4242 4242 4242 4242"
     # Otherwise ccType field does not get updated correctly
     page.execute_script("$('.cardNumber').trigger('change')")
-    fill_in "Card Code", :with => "123"
-    fill_in "Expiration", :with => "01 / #{Time.now.year + 1}"
+    fill_in_card_code_and_expiry("123", "01 / #{Time.now.year + 1}")
     click_button "Save and Continue"
-    wait_for_stripe # Wait for Stripe API to return + form to submit
+    # Wait for Stripe API to return + form to submit
+    wait_for_stripe if Spree.version.to_f <= 4.0
     expect(page).to have_css('#checkout_form_confirm')
     expect(page.current_url).to include("/checkout/confirm")
     click_button "Place Order"
-    expect(page).to have_content("Your order has been processed successfully")
+    check_message_or_current_path
   end
 
   it "shows an error with an invalid credit card number", :js => true do
     # Card number is NOT valid. Fails Luhn checksum
     fill_in "Card Number", :with => "4242 4242 4242 4249"
     click_button "Save and Continue"
-    wait_for_stripe
-    expect(page).to have_content("Your card number is incorrect")
-    expect(page).to have_css('.has-error #card_number.error')
+    wait_for_stripe if Spree.version.to_f <= 4.0
+    check_error_messages_and_css("Your card number is incorrect", "m", "y", "v")
   end
 
   it "shows an error with invalid security fields", :js => true do
     fill_in "Card Number", :with => "4242 4242 4242 4242"
-    fill_in "Expiration", :with => "01 / #{Time.now.year + 1}"
-    fill_in "Card Code", :with => "99"
+    fill_in_card_code_and_expiry("99", "01 / #{Time.now.year + 1}")
     click_button "Save and Continue"
-    wait_for_stripe
-    expect(page).to have_content("Your card's security code is invalid.")
-    expect(page).to have_css('.has-error #card_code.error')
+    wait_for_stripe if Spree.version.to_f <= 4.0
+    check_error_messages_and_css("Your card's security code is invalid.")
   end
 
   it "shows an error with invalid expiry month field", :js => true do
     fill_in "Card Number", :with => "4242 4242 4242 4242"
-    fill_in "Expiration", :with => "00 / #{Time.now.year + 1}"
-    fill_in "Card Code", :with => "123"
+    fill_in_card_code_and_expiry("123", "00 / #{Time.now.year + 1}")
     click_button "Save and Continue"
-    wait_for_stripe
-    expect(page).to have_content("Your card's expiration month is invalid.")
-    expect(page).to have_css('.has-error #card_expiry.error')
+    wait_for_stripe if Spree.version.to_f <= 4.0
+    check_error_messages_and_css("Your card's expiration month is invalid.")
   end
 
   it "shows an error with invalid expiry year field", :js => true do
     fill_in "Card Number", :with => "4242 4242 4242 4242"
-    fill_in "Expiration", :with => "12 / "
-    fill_in "Card Code", :with => "123"
+    fill_in_card_code_and_expiry("123", "12 / ")
     click_button "Save and Continue"
-    wait_for_stripe
-    expect(page).to have_content("Your card's expiration year is invalid.")
-    expect(page).to have_css('.has-error #card_expiry.error')
+    wait_for_stripe  if Spree.version.to_f <= 4.0
+    check_error_messages_and_css("Your card's expiration year is invalid.", "m", "y")
+  end
+
+  def fill_in_card_code_and_expiry(card_code, card_expiry)
+    if Spree.version.to_f <= 4.0
+      fill_in "Card Code", :with => card_code
+      fill_in "Expiration", :with => card_expiry
+    else
+      fill_in "card_code", :with => card_code
+      fill_in "card_expiry", :with => card_expiry
+    end
+  end
+
+  def check_message_or_current_path
+    if Spree.version.to_f <= 4.0
+      expect(page).to have_content("Your order has been processed successfully")
+    else
+      expect(page).to have_current_path(spree.root_path)
+    end
+  end
+
+  def check_error_messages_and_css(message, month = nil, year = nil, value = nil)
+    if Spree.version.to_f <= 4.0
+      expect(page).to have_content(message)
+      expect(page).to have_css('.has-error #card_number.error')
+    elsif month || year || value
+      expect(page).to have_content("Payments credit card Month is not a number") if month
+      expect(page).to have_content("Payments credit card Year is not a number") if year
+      expect(page).to have_content("Payments credit card Verification Value can't be blank") if value
+      expect(page).to have_css('#errorExplanation.alert-danger')
+    else
+      expect(page).to have_content(message)
+      expect(page).to have_css('#errorExplanation.alert-danger')
+    end
   end
 end
