@@ -138,21 +138,14 @@ module Spree
     end
 
     def app_info
-      JSON.dump(
-        {
-          lang: 'ruby',
-          lang_version: "#{RUBY_VERSION} p#{RUBY_PATCHLEVEL} (#{RUBY_RELEASE_DATE})",
-          bindings_version: ActiveMerchant::VERSION,
-          platform: RUBY_PLATFORM,
-          publisher: 'SpreeGateway',
-          application: {
-            name: 'SpreeGateway',
-            version: "#{SpreeGateway.version}",
-            partner_id: 'pp_partner_FC3KpLMMQgUgcQ',
-            url: 'spreecommerce.org'
-          }
+      JSON.dump({
+        application: {
+          name: 'SpreeGateway',
+          version: "#{SpreeGateway.version}",
+          partner_id: 'pp_partner_FC3KpLMMQgUgcQ',
+          url: 'spreecommerce.org'
         }
-      )
+      })
     end
   end
 end
