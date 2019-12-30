@@ -6,8 +6,8 @@
 </script>
 
 <script>
-  Spree.stripePaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
   var mapCC, stripeResponseHandler;
+
   mapCC = function(ccType) {
     if (ccType === 'MasterCard') {
       return 'mastercard';
@@ -53,23 +53,27 @@
     }
   };
 
-  Spree.ready(function() {
-    Spree.stripePaymentMethod.prepend("<div id='stripeError' class='errorExplanation alert alert-danger' style='display:none'></div>");
-    return $('#new_payment [data-hook=buttons]').click(function() {
-      var expiration, params;
-      $('#stripeError').hide();
-      Spree.stripePaymentMethod.find('#card_number, #card_expiry, #card_code').removeClass('error');
-      if (Spree.stripePaymentMethod.is(':visible')) {
-        expiration = $('.cardExpiry:visible').payment('cardExpiryVal');
-        params = $.extend({
-          number: $('.cardNumber:visible').val(),
-          cvc: $('.cardCode:visible').val(),
-          exp_month: expiration.month || 0,
-          exp_year: expiration.year || 0
-        }, Spree.stripeAdditionalInfo);
-        Stripe.card.createToken(params, stripeResponseHandler);
-        return false;
-      }
+  window.addEventListener('DOMContentLoaded', function() {
+    Spree.stripePaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
+
+    Spree.ready(function() {
+      Spree.stripePaymentMethod.prepend("<div id='stripeError' class='errorExplanation alert alert-danger' style='display:none'></div>");
+      return $('#new_payment [data-hook=buttons]').click(function() {
+        var expiration, params;
+        $('#stripeError').hide();
+        Spree.stripePaymentMethod.find('#card_number, #card_expiry, #card_code').removeClass('error');
+        if (Spree.stripePaymentMethod.is(':visible')) {
+          expiration = $('.cardExpiry:visible').payment('cardExpiryVal');
+          params = $.extend({
+            number: $('.cardNumber:visible').val(),
+            cvc: $('.cardCode:visible').val(),
+            exp_month: expiration.month || 0,
+            exp_year: expiration.year || 0
+          }, Spree.stripeAdditionalInfo);
+          Stripe.card.createToken(params, stripeResponseHandler);
+          return false;
+        }
+      });
     });
   });
 </script>
