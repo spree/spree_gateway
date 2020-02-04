@@ -84,7 +84,7 @@
   window.addEventListener('DOMContentLoaded', function() {
     Spree.stripeApplePayPaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
 
-    Spree.ready(function() {
+    prButton.on('ready', function () {
       Spree.stripeApplePayPaymentMethod.prepend("<div id='stripeApplePayError' class='errorExplanation alert alert-danger' style='display:none'></div>");
       var form = document.getElementById('checkout_form_payment');
       form.addEventListener('submit', function(e) {
