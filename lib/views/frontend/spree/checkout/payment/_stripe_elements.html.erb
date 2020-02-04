@@ -52,14 +52,15 @@
       empty: 'is-empty',
     },
   });
-  card.mount('#card-element');
 
-  window.addEventListener('DOMContentLoaded', function() {
-    Spree.stripeElementsPaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
-
-    Spree.ready(function() {
+  window.addEventListener('DOMContentLoaded', function () {
+    card.mount('#card-element');
+  
+    card.on('ready', function () {
+      Spree.stripeElementsPaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
       Spree.stripeElementsPaymentMethod.prepend("<div id='stripeElementsError' class='errorExplanation alert alert-danger' style='display:none'></div>");
       var form = document.getElementById('checkout_form_payment');
+
       form.addEventListener('submit', function(e) {
         if (Spree.stripeElementsPaymentMethod.is(':visible')) {
           $('#stripeElementsError').hide();
