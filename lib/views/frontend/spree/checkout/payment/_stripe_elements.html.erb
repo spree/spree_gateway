@@ -55,7 +55,7 @@
 
   window.addEventListener('DOMContentLoaded', function () {
     card.mount('#card-element');
-  
+
     card.on('ready', function () {
       Spree.stripeElementsPaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
       Spree.stripeElementsPaymentMethod.prepend("<div id='stripeElementsError' class='errorExplanation alert alert-danger' style='display:none'></div>");
@@ -66,6 +66,11 @@
           $('#stripeElementsError').hide();
           e.preventDefault();
           createStripeElementsToken();
+        }
+      });
+      card.addEventListener('change', function(event) {
+        if (!event.error) {
+          $(form).find('input[type="submit"]').prop('disabled', false)
         }
       });
     });
