@@ -1,5 +1,5 @@
 module Spree
-  class ApplePayDomainVerificationController < Spree::BaseController
+  class ApplePayDomainVerificationController < ::ActionController::Base
     def show
       gateway = Spree::Gateway::StripeApplePayGateway.active.last
 
