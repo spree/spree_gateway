@@ -36,20 +36,9 @@ For`PayPal` support head over to [braintree_vzero](https://github.com/spree-cont
 
 1. Add this extension to your Gemfile with this line:
 
-  #### Spree >= 3.1
-
   ```ruby
-  gem 'spree_gateway', '~> 3.3'
+  gem 'spree_gateway', '~> 3.7'
   ```
-
-  #### Spree 3.0 and Spree 2.x
-
-  ```ruby
-  gem 'spree_gateway', github: 'spree/spree_gateway', branch: 'X-X-stable'
-  ```
-
-  The `branch` option is important: it must match the version of Spree you're using.
-  For example, use `3-0-stable` if you're using Spree `3-0-stable` or any `3.0.x` version.
 
 2. Install the gem using Bundler:
   ```ruby
