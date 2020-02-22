@@ -36,19 +36,19 @@ For`PayPal` support head over to [braintree_vzero](https://github.com/spree-cont
 
 1. Add this extension to your Gemfile with this line:
 
-  ```ruby
-  gem 'spree_gateway', '~> 3.7'
-  ```
+    ```ruby
+    gem 'spree_gateway', '~> 3.7'
+    ```
 
 2. Install the gem using Bundler:
-  ```ruby
-  bundle install
-  ```
+    ```ruby
+    bundle install
+    ```
 
 3. Copy & run migrations
-  ```ruby
-  bundle exec rails g spree_gateway:install
-  ```
+    ```ruby
+    bundle exec rails g spree_gateway:install
+    ```
 
 Finally, make sure to **restart your app**. Navigate to *Configuration > Payment Methods > New Payment Method* in the admin panel and you should see that a bunch of additional gateways have been added to the list.
 
