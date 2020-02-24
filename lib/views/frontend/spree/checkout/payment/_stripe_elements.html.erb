@@ -1,24 +1,15 @@
 <% param_prefix = "payment_source[#{payment_method.id}]" %>
 <div class="well clearfix">
   <p class="field">
-    <%= label_tag "name_on_card_#{payment_method.id}" do %>
-      <%= Spree.t(:name_on_card) %><abbr class="required" title="required">*</abbr>
-    <% end %>
-    <%= text_field_tag "#{param_prefix}[name]", "#{@order.bill_address_firstname} #{@order.bill_address_lastname}", { id: "name_on_card_#{payment_method.id}", class: 'form-control required'} %>
-    </p>
-    <div class="form-row">
-      <%= label_tag "card_number" do %>
-        <%= Spree.t(:card_number) %><abbr class="required" title="required">*</abbr>
-      <% end %>
-      <div class="form-control required cardNumber">
-        <div id="card-element">
-          <!-- a Stripe Element will be inserted here. -->
-        </div>
-      </div>
-      <!-- Used to display form errors -->
-      <div id="card-errors" role="alert"></div>
-    </div>
+    <%= text_field_tag "#{param_prefix}[name]", "#{@order.bill_address_firstname} #{@order.bill_address_lastname}", { id: "name_on_card_#{payment_method.id}", class: 'spree-flat-input', placeholder: Spree.t(:name_on_card)} %>
   </p>
+  <div class="form-control required cardNumber spree-flat-input">
+    <div id="card-element">
+      <!-- a Stripe Element will be inserted here. -->
+    </div>
+  </div>
+  <!-- Used to display form errors -->
+  <div id="card-errors" role="alert"></div>
 </div>
 
 <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
@@ -26,20 +17,24 @@
 <script>
   var stripeElements = Stripe("<%= payment_method.preferred_publishable_key %>");
   var elements = stripeElements.elements();
+  var spreeFlatInputStyle = getComputedStyle(document.querySelector('input.spree-flat-input'));
 
   var card = elements.create('card', {
     iconStyle: 'solid',
     hidePostalCode: true,
     style: {
       base: {
-        iconColor: '#555555',
-        lineHeight: '24px',
-        fontWeight: 300,
-        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-        fontSize: '14px',
+        color: spreeFlatInputStyle['color'],
+        iconColor: spreeFlatInputStyle['color'],
+        lineHeight: spreeFlatInputStyle['line-height'],
+        fontWeight: spreeFlatInputStyle['font-weight'],
+        fontFamily: spreeFlatInputStyle['font-family'],
+        fontSize: spreeFlatInputStyle['font-size'],
 
         '::placeholder': {
-          color: '#555555',
+          color: '#757575',
+          fontWeight: 300,
+          textTransform: 'uppercase'
         },
       },
       invalid: {
