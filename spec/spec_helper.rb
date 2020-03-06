@@ -23,6 +23,7 @@ require 'spree/testing_support/factories'
 require 'spree/testing_support/order_walkthrough'
 require 'spree/testing_support/preferences'
 require 'spree/testing_support/capybara_ext'
+require 'spree/testing_support/authorization_helpers'
 
 FactoryBot.find_definitions
 
