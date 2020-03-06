@@ -64,6 +64,15 @@
     form.appendChild(hiddenInput);
   };
 
+  function hideApplePayRadioButtonForNonAppleDevices() {
+    var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+    var isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    if (!isSafari && !isiOS) {
+      $('#payment-method-fields li.radio:contains(Apple Pay)').hide()
+    }
+  }
+
   paymentRequest.on('token', function(ev) {
     var form = document.getElementById('checkout_form_payment');
     var token = ev.token;
@@ -83,6 +92,7 @@
 
   window.addEventListener('DOMContentLoaded', function() {
     Spree.stripeApplePayPaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
+    hideApplePayRadioButtonForNonAppleDevices();
 
     prButton.on('ready', function () {
       Spree.stripeApplePayPaymentMethod.prepend("<div id='stripeApplePayError' class='errorExplanation alert alert-danger' style='display:none'></div>");
