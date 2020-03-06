@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Stripe elements payment', type: :feature, :js => true do
+describe 'Admin Panel Stripe elements payment', type: :feature, :js => true do
   stub_authorization!
 
   let!(:country)         { create(:country, :states_required => true) }
