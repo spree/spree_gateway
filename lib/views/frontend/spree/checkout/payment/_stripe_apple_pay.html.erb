@@ -9,7 +9,6 @@
 <script>
   var stripeApplePay = Stripe("<%= payment_method.preferred_publishable_key %>");
   var elements = stripeApplePay.elements();
-
   var paymentRequest = stripeApplePay.paymentRequest({
     country: '<%= payment_method.preferred_country_code.try(:upcase) %>',
     currency: '<%= @order.currency.downcase %>',
@@ -64,6 +63,15 @@
     form.appendChild(hiddenInput);
   };
 
+  function hideApplePayRadioButtonForNonAppleDevices() {
+    var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+    var isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    if (!isSafari && !isiOS) {
+      $('input[name$="order[payments_attributes][][payment_method_id]"][value="<%= payment_method.id %>"]').closest('li').hide()
+    }
+  }
+
   paymentRequest.on('token', function(ev) {
     var form = document.getElementById('checkout_form_payment');
     var token = ev.token;
@@ -83,6 +91,7 @@
 
   window.addEventListener('DOMContentLoaded', function() {
     Spree.stripeApplePayPaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
+    hideApplePayRadioButtonForNonAppleDevices();
 
     prButton.on('ready', function () {
       Spree.stripeApplePayPaymentMethod.prepend("<div id='stripeApplePayError' class='errorExplanation alert alert-danger' style='display:none'></div>");
