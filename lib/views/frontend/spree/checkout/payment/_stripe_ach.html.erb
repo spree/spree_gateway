@@ -5,11 +5,11 @@
       <%= text_field_tag "#{param_prefix}[account_holder_name]", "#{@order.bill_address_firstname} #{@order.bill_address_lastname}", { id: "account_holder_name", class: 'spree-flat-input', placeholder: Spree.t(:account_holder_name)} %>
     </div>
     <div class="mb-4 payment-gateway-field checkout-content-inner-field">
-      <%= select_tag "#{param_prefix}[account_holder_type]", options_for_select(['Individual',1], ['Company',2],1), { id: "account_holder_type", class: 'spree-flat-input', placeholder: Spree.t(:account_holder_type)} %>
+      <%= select_tag "#{param_prefix}[account_holder_type]", options_for_select(%w(Individual Company)), {id: "account_holder_type", class: 'spree-flat-input', placeholder: Spree.t(:account_holder_type)} %>
     </div>
 
     <div class="mb-4 payment-gateway-field checkout-content-inner-field" data-hook="account_number">
-      <%= text_field_tag "#{param_prefix}[routing_number]", '', {id: 'routing_number', class: 'spree-flat-input', autocomplete: "off", placeholder: Spree.t(:routing_number)} %>
+      <%= text_field_tag "#{param_prefix}[routing_number]", '', {id: 'routing_number', class: 'spree-flat-input', autocomplete: "off", placeholder: Spree.t(:routing_number), maxlength: 9} %>
     </div>
     <div class="mb-4 payment-gateway-field checkout-content-inner-field" data-hook="account_number">
       <%= text_field_tag "#{param_prefix}[account_number]", '', {id: 'account_number', class: 'spree-flat-input', autocomplete: "off", placeholder: Spree.t(:account_number)} %>
@@ -17,16 +17,17 @@
   </div>
 </div>
 
-<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 <script type="text/javascript">
-    Stripe.setPublishableKey("<%= payment_method.preferred_publishable_key %>");
+    var stripe = Stripe("<%= payment_method.preferred_publishable_key %>");
 </script>
 
 <script>
-    stripeResponseHandler = function(status, response) {
+    stripeResponseHandler = function(response) {
+        var paymentMethodId, token;
         if (response.error) {
             $('#stripeError').html(response.error.message);
-            const param_map = {
+            var param_map = {
                 account_holder_name: '#account_holder_name',
                 account_holder_type: '#account_holder_type',
                 account_number: '#account_number',
@@ -40,8 +41,8 @@
             return $('#stripeError').show();
         } else {
             Spree.stripePaymentMethod.find('#account_holder_name, #account_holder_type, #account_number, #routing_number').prop("disabled", true);
-            const token = response['id'];
-            const paymentMethodId = Spree.stripePaymentMethod.prop('id').split("_")[2];
+            token = response.token['id'];
+            paymentMethodId = Spree.stripePaymentMethod.prop('id').split("_")[2];
             Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId + "][gateway_payment_profile_id]' value='" + token + "'/>");
             return Spree.stripePaymentMethod.parents("form").trigger('submit');
         }
@@ -52,19 +53,22 @@
         Spree.stripePaymentMethod.prepend("<div id='stripeError' class='errorExplanation alert alert-danger' style='display:none'></div>");
 
         $('#checkout_form_payment [data-hook=buttons]').click(function (e) {
+            var params;
             $('#stripeError').hide();
             Spree.stripePaymentMethod.find('#account_holder_name, #account_holder_type, #account_number, #routing_number').removeClass('error');
             if (Spree.stripePaymentMethod.is(':visible')) {
                 e.preventDefault();
 
-                const params = $.extend({
-                    account_holder_name: $('.account_holder_name:visible').val(),
-                    account_holder_type: $('.account_holder_type:visible').val(),
-                    routing_number: $('.routing_number:visible').val(),
-                    account_number: $('.account_number:visible').val()
+                params = $.extend({
+                    country: 'US',
+                    currency: 'usd',
+                    account_holder_name: $('#account_holder_name:visible').val(),
+                    account_holder_type: $('#account_holder_type:visible').val(),
+                    routing_number: $('#routing_number:visible').val(),
+                    account_number: $('#account_number:visible').val()
                 }, Spree.stripeAdditionalInfo);
 
-                Stripe.card.createToken(params, stripeResponseHandler);
+                stripe.createToken('bank_account', params).then(stripeResponseHandler);
 
                 return false;
             }
