@@ -32,5 +32,11 @@ module Spree
         payment.send(:gateway_error, response.message)
       end
     end
+    def available_for_order?(order)
+      # Stripe ACH payments are supported only for US customers
+      # Therefore we need to check order's address
+      usa_id = ::Spree::Country.find_by(iso: 'US').id
+      order.ship_address.country_id == usa_id
+    end
   end
 end
