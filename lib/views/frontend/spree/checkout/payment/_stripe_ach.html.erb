@@ -2,7 +2,7 @@
   <% param_prefix = "payment_source[#{payment_method.id}]" %>
   <div class="payment-gateway-half-fields">
     <div class="mb-4 payment-gateway-field checkout-content-inner-field">
-      <%= text_field_tag "#{param_prefix}[payment_nickname]", "", { id: "payment_name", class: 'spree-flat-input', placeholder: Spree.t(:payment_nickname)} %>
+      <%= text_field_tag "#{param_prefix}[nickname]", "", { id: "nickname", class: 'spree-flat-input', placeholder: Spree.t(:payment_nickname)} %>
     </div>
     <div class="mb-4 payment-gateway-field checkout-content-inner-field">
       <%= text_field_tag "#{param_prefix}[account_holder_name]", "#{@order.bill_address_firstname} #{@order.bill_address_lastname}", { id: "account_holder_name", class: 'spree-flat-input', placeholder: Spree.t(:account_holder_name)} %>
@@ -30,7 +30,7 @@
 
 <script>
     stripeResponseHandler = function(response) {
-        var paymentMethodId, token;
+        var paymentMethodId, token, bank_acc_status;
         if (response.error) {
             $('#stripeError').html(response.error.message);
             var param_map = {
@@ -46,10 +46,11 @@
             }
             return $('#stripeError').show();
         } else {
-            Spree.stripePaymentMethod.find('#account_holder_name, #account_holder_type, #account_number, #routing_number').prop("disabled", true);
             token = response.token['id'];
+            bank_acc_status = response.token.bank_account['status'];
             paymentMethodId = Spree.stripePaymentMethod.prop('id').split("_")[2];
             Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId + "][gateway_payment_profile_id]' value='" + token + "'/>");
+            Spree.stripePaymentMethod.append("<input type='hidden' class='stripeStatus' name='payment_source[" + paymentMethodId + "][status]' value='" + bank_acc_status + "'/>")
             return Spree.stripePaymentMethod.parents("form").trigger('submit');
         }
     };
