@@ -2,6 +2,9 @@
   <% param_prefix = "payment_source[#{payment_method.id}]" %>
   <div class="payment-gateway-half-fields">
     <div class="mb-4 payment-gateway-field checkout-content-inner-field">
+      <%= text_field_tag "#{param_prefix}[payment_nickname]", "", { id: "payment_name", class: 'spree-flat-input', placeholder: Spree.t(:payment_nickname)} %>
+    </div>
+    <div class="mb-4 payment-gateway-field checkout-content-inner-field">
       <%= text_field_tag "#{param_prefix}[account_holder_name]", "#{@order.bill_address_firstname} #{@order.bill_address_lastname}", { id: "account_holder_name", class: 'spree-flat-input', placeholder: Spree.t(:account_holder_name)} %>
     </div>
     <div class="mb-4 payment-gateway-field checkout-content-inner-field">
@@ -13,6 +16,9 @@
     </div>
     <div class="mb-4 payment-gateway-field checkout-content-inner-field" data-hook="account_number">
       <%= text_field_tag "#{param_prefix}[account_number]", '', {id: 'account_number', class: 'spree-flat-input', autocomplete: "off", placeholder: Spree.t(:account_number)} %>
+    </div>
+    <div class="mb-4 payment-gateway-field checkout-content-inner-field" data-hook="account_number">
+      <%= text_field_tag "#{param_prefix}[verify_account_number]", '', {id: 'verify_account_number', class: 'spree-flat-input', autocomplete: "off", placeholder: Spree.t(:verify_account_number)} %>
     </div>
   </div>
 </div>

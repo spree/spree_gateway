@@ -5,6 +5,10 @@ module Spree
       'stripe_ach'
     end
 
+    def payment_source_class
+      Check
+    end
+
     def create_profile(payment)
       return unless payment.source&.gateway_customer_profile_id.nil?
 
@@ -32,11 +36,16 @@ module Spree
         payment.send(:gateway_error, response.message)
       end
     end
+
+    def supports?(_source)
+      true
+    end
+
     def available_for_order?(order)
       # Stripe ACH payments are supported only for US customers
-      # Therefore we need to check order's address
+      # Therefore we need to check order's addresses
       usa_id = ::Spree::Country.find_by(iso: 'US').id
-      order.ship_address.country_id == usa_id
+      order.ship_address.country_id == usa_id && order.bill_address.country_id == usa_id
     end
   end
 end
