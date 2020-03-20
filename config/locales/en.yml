@@ -21,9 +21,12 @@ en:
         cvv_result: CVV Result
         cvc_check: CVC Check
         address_zip_check: Address ZIP check
-    payment_nickname: Payment Nickname
-    account_holder_name: Account Holder Name
-    account_holder_type: Account Holder Type
-    routing_number: Routing Number
-    account_number: Account Number
-    verify_account_number: Verify Account Number
+    stripe:
+      ach:
+        payment_nickname: Payment Nickname
+        account_holder_name: Account Holder Name
+        account_holder_type: Account Holder Type
+        routing_number: Routing Number
+        account_number: Account Number
+        verify_account_number: Verify Account Number
+        verify_bank_account: Verify Bank Account

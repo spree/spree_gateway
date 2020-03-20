@@ -2,23 +2,23 @@
   <% param_prefix = "payment_source[#{payment_method.id}]" %>
   <div class="payment-gateway-half-fields">
     <div class="mb-4 payment-gateway-field checkout-content-inner-field">
-      <%= text_field_tag "#{param_prefix}[nickname]", "", { id: "nickname", class: 'spree-flat-input', placeholder: Spree.t(:payment_nickname)} %>
+      <%= text_field_tag "#{param_prefix}[nickname]", "", { id: "nickname", class: 'spree-flat-input', placeholder: Spree.t('stripe.ach.payment_nickname')} %>
     </div>
     <div class="mb-4 payment-gateway-field checkout-content-inner-field">
-      <%= text_field_tag "#{param_prefix}[account_holder_name]", "#{@order.bill_address_firstname} #{@order.bill_address_lastname}", { id: "account_holder_name", class: 'spree-flat-input', placeholder: Spree.t(:account_holder_name)} %>
+      <%= text_field_tag "#{param_prefix}[account_holder_name]", "#{@order.bill_address_firstname} #{@order.bill_address_lastname}", { id: "account_holder_name", class: 'spree-flat-input', placeholder: Spree.t('stripe.ach.account_holder_name')} %>
     </div>
     <div class="mb-4 payment-gateway-field checkout-content-inner-field">
-      <%= select_tag "#{param_prefix}[account_holder_type]", options_for_select(%w(Individual Company)), {id: "account_holder_type", class: 'spree-flat-input', placeholder: Spree.t(:account_holder_type)} %>
+      <%= select_tag "#{param_prefix}[account_holder_type]", options_for_select(%w(Individual Company)), {id: "account_holder_type", class: 'spree-flat-input', placeholder: Spree.t('stripe.ach.account_holder_type')} %>
     </div>
 
     <div class="mb-4 payment-gateway-field checkout-content-inner-field" data-hook="account_number">
-      <%= text_field_tag "#{param_prefix}[routing_number]", '', {id: 'routing_number', class: 'spree-flat-input', autocomplete: "off", placeholder: Spree.t(:routing_number), maxlength: 9} %>
+      <%= text_field_tag "#{param_prefix}[routing_number]", '', {id: 'routing_number', class: 'spree-flat-input', autocomplete: "off", placeholder: Spree.t('stripe.ach.routing_number'), maxlength: 9} %>
     </div>
     <div class="mb-4 payment-gateway-field checkout-content-inner-field" data-hook="account_number">
-      <%= text_field_tag "#{param_prefix}[account_number]", '', {id: 'account_number', class: 'spree-flat-input', autocomplete: "off", placeholder: Spree.t(:account_number)} %>
+      <%= text_field_tag "#{param_prefix}[account_number]", '', {id: 'account_number', class: 'spree-flat-input', autocomplete: "off", placeholder: Spree.t('stripe.ach.account_number')} %>
     </div>
     <div class="mb-4 payment-gateway-field checkout-content-inner-field" data-hook="account_number">
-      <%= text_field_tag "#{param_prefix}[verify_account_number]", '', {id: 'verify_account_number', class: 'spree-flat-input', autocomplete: "off", placeholder: Spree.t(:verify_account_number)} %>
+      <%= text_field_tag "#{param_prefix}[verify_account_number]", '', {id: 'verify_account_number', class: 'spree-flat-input', autocomplete: "off", placeholder: Spree.t('stripe.ach.verify_account_number')} %>
     </div>
   </div>
 </div>
