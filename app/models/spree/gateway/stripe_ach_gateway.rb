@@ -9,6 +9,10 @@ module Spree
       Check
     end
 
+    def verify(source, **gateway_options)
+      provider.verify(source, gateway_options)
+    end
+
     def create_profile(payment)
       return unless payment.source&.gateway_customer_profile_id.nil?
 
