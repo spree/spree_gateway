@@ -30,3 +30,6 @@ en:
         account_number: Account Number
         verify_account_number: Verify Account Number
         verify_bank_account: Verify Bank Account
+        first_deposit: First Deposit
+        second_deposit: Second Deposit
+    bank_transfer: bank_transfer

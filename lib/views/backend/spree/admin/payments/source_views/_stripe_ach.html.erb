@@ -2,24 +2,24 @@
   <legend><%= Spree.t(:bank_transfer) %></legend>
   <table class="table table-condensed table-bordered">
     <tr>
-      <th width="20%"><%= Spree.t(:payment_nickname) %>:</th>
-      <td></td>
+      <th width="20%"><%= Spree.t('stripe.ach.payment_nickname') %>:</th>
+      <td><%= payment.source.nickname %></td>
     </tr>
     <tr>
-      <th width="20%"><%= Spree.t(:account_holder_name) %>:</th>
-      <td></td>
+      <th width="20%"><%= Spree.t('stripe.ach.account_holder_name') %>:</th>
+      <td><%= payment.source.account_holder_name %></td>
     </tr>
     <tr>
-      <th><%= Spree.t(:account_holder_type) %>:</th>
-      <td></td>
+      <th><%= Spree.t('stripe.ach.account_holder_type') %>:</th>
+      <td><%= payment.source.account_holder_type %></td>
     </tr>
     <tr>
-      <th><%= Spree.t(:routing_number) %>:</th>
-      <td></td>
+      <th><%= Spree.t('stripe.ach.routing_number') %>:</th>
+      <td><%= payment.source.routing_number %></td>
     </tr>
     <tr>
-      <th><%= Spree.t(:account_number) %>:</th>
-      <td></td>
+      <th><%= Spree.t('stripe.ach.account_number') %>:</th>
+      <td><%= payment.source.account_number %></td>
     </tr>
   </table>
 </fieldset>
