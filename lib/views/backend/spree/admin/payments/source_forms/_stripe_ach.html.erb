@@ -3,30 +3,30 @@
     <% param_prefix = "payment_source[#{payment_method.id}]" %>
 
     <div data-hook="payment_nickname" class="form-group">
-      <%= label_tag "payment_nickname#{payment_method.id}", raw(Spree.t(:payment_nickname) + required_span_tag) %>
+      <%= label_tag "payment_nickname#{payment_method.id}", raw(Spree.t('stripe.ach.payment_nickname') + required_span_tag) %>
       <%= text_field_tag "#{param_prefix}[payment_nickname]", '', class: 'required form-control', id: "payment_nickname#{payment_method.id}" %>
     </div>
 
     <div data-hook="account_holder_name" class="form-group">
-      <%= label_tag "account_holder_name#{payment_method.id}", raw(Spree.t(:account_holder_name) + required_span_tag) %>
+      <%= label_tag "account_holder_name#{payment_method.id}", raw(Spree.t('stripe.ach.account_holder_name') + required_span_tag) %>
       <%= text_field_tag "#{param_prefix}[account_holder_name]", '', class: 'required form-control', id: "account_holder_name#{payment_method.id}" %>
     </div>
 
     <div data-hook="account_holder_type">
-      <%= label_tag "account_holder_type#{payment_method.id}", raw(Spree.t(:account_holder_type) + required_span_tag) %>
+      <%= label_tag "account_holder_type#{payment_method.id}", raw(Spree.t('stripe.ach.account_holder_type') + required_span_tag) %>
       <%= select_tag "#{param_prefix}[account_holder_type]", options_for_select(%w(Individual Company)), {id: "account_holder_type#{payment_method.id}", class: 'required form-control'} %>
     </div>
 
     <div data-hook="routing_number">
-      <%= label_tag "routing_number#{payment_method.id}", raw(Spree.t(:routing_number) + required_span_tag)%>
+      <%= label_tag "routing_number#{payment_method.id}", raw(Spree.t('stripe.ach.routing_number') + required_span_tag)%>
       <%= text_field_tag "#{param_prefix}[routing_number]", '', class: 'required form-control', id: "routing_number#{payment_method.id}", maxlength: 9 %>
     </div>
     <div data-hook="account_number">
-      <%= label_tag "account_number#{payment_method.id}", raw(Spree.t(:account_number) + required_span_tag) %>
+      <%= label_tag "account_number#{payment_method.id}", raw(Spree.t('stripe.ach.account_number') + required_span_tag) %>
       <%= text_field_tag "#{param_prefix}[account_number]", '', class: 'required form-control', id: "account_number#{payment_method.id}" %>
     </div>
     <div data-hook="account_number">
-      <%= label_tag "verify_account_number#{payment_method.id}", raw(Spree.t(:verify_account_number) + required_span_tag) %>
+      <%= label_tag "verify_account_number#{payment_method.id}", raw(Spree.t('stripe.ach.verify_account_number') + required_span_tag) %>
       <%= text_field_tag "#{param_prefix}[verify_account_number]", '', class: 'required form-control', id: "verify_account_number#{payment_method.id}" %>
     </div>
   </div>
