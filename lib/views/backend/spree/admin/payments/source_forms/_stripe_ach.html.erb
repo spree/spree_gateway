@@ -2,11 +2,6 @@
   <div id="bank_transfer_form<%= payment_method.id %>" class="margint" data-hook>
     <% param_prefix = "payment_source[#{payment_method.id}]" %>
 
-    <div data-hook="payment_nickname" class="form-group">
-      <%= label_tag "payment_nickname#{payment_method.id}", raw(Spree.t('stripe.ach.payment_nickname') + required_span_tag) %>
-      <%= text_field_tag "#{param_prefix}[payment_nickname]", '', class: 'required form-control', id: "payment_nickname#{payment_method.id}" %>
-    </div>
-
     <div data-hook="account_holder_name" class="form-group">
       <%= label_tag "account_holder_name#{payment_method.id}", raw(Spree.t('stripe.ach.account_holder_name') + required_span_tag) %>
       <%= text_field_tag "#{param_prefix}[account_holder_name]", '', class: 'required form-control', id: "account_holder_name#{payment_method.id}" %>

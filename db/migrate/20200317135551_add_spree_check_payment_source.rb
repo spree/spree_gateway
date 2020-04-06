@@ -3,7 +3,6 @@ class AddSpreeCheckPaymentSource < ActiveRecord::Migration[6.0]
     create_table :spree_checks do |t|
       t.references :payment_method
       t.references :user
-      t.string "nickname"
       t.string "account_holder_name"
       t.string "account_holder_type"
       t.string "routing_number"

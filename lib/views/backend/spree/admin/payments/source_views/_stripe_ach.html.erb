@@ -2,10 +2,6 @@
   <legend><%= Spree.t(:bank_transfer) %></legend>
   <table class="table table-condensed table-bordered">
     <tr>
-      <th width="20%"><%= Spree.t('stripe.ach.payment_nickname') %>:</th>
-      <td><%= payment.source.nickname %></td>
-    </tr>
-    <tr>
       <th width="20%"><%= Spree.t('stripe.ach.account_holder_name') %>:</th>
       <td><%= payment.source.account_holder_name %></td>
     </tr>

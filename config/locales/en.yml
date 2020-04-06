@@ -3,7 +3,6 @@ en:
   activerecord:
     attributes:
       spree/check:
-        nickname: Nickname
         account_holder_name: Account Holder Name
         account_holder_type: Account Holder Type
         account_number: Account Number
@@ -32,7 +31,6 @@ en:
         address_zip_check: Address ZIP check
     stripe:
       ach:
-        payment_nickname: Payment Nickname
         account_holder_name: Account Holder Name
         account_holder_type: Account Holder Type
         routing_number: Routing Number

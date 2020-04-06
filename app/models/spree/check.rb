@@ -10,7 +10,6 @@ module Spree
 
     scope :with_payment_profile, -> { where.not(gateway_customer_profile_id: nil) }
 
-    validates :nickname, presence: true
     validates :account_holder_name, presence: true
     validates :account_holder_type, presence: true, inclusion: { in: %w[Individual Company] }
     validates :account_number, presence: true, numericality: { only_integer: true }
