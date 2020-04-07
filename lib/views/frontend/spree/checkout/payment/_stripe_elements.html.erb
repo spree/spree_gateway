@@ -89,7 +89,7 @@
     form.submit();
   };
 
-  function createStripeElementsToken() {
+function createStripeElementsToken() {
     stripeElements.createToken(card, Spree.stripeAdditionalInfo).then(function (result) {
       if (result.error) {
         // Inform the user if there was an error
@@ -103,7 +103,8 @@
       }
     });
   };
-  
+
 </script>
 
 <%= render 'spree/checkout/payment/stripe_additional_info' %>
+

@@ -7,7 +7,7 @@ module Spree
     end
 
     def gateway_class
-      if intents?
+      if get_preference(:intents)
         ActiveMerchant::Billing::StripePaymentIntentsGateway
       else
         ActiveMerchant::Billing::StripeGateway
@@ -23,7 +23,7 @@ module Spree
 
       source = update_source!(payment.source)
       if source.gateway_payment_profile_id.present?
-        if intents?
+        if get_preference(:intents)
           creditcard = ActiveMerchant::Billing::StripeGateway::StripePaymentToken.new('id' => source.gateway_payment_profile_id)
         else
           creditcard = source.gateway_payment_profile_id
@@ -38,7 +38,7 @@ module Spree
         response_cc_type = response.params['sources']['data'].first['brand']
         cc_type = CARD_TYPE_MAPPING[response_cc_type] if CARD_TYPE_MAPPING.include?(response_cc_type)
 
-        if intents?
+        if get_preference(:intents)
           payment.source.update!(
             cc_type: payment.source.cc_type,
             gateway_customer_profile_id: response.params['customer'],
