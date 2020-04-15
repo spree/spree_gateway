@@ -2,6 +2,8 @@ module Spree
   class Gateway::StripeElementsGateway < Gateway::StripeGateway
     preference :intents, :boolean
 
+    delegate :create_intent, :update_intent, :confirm_intent, to: :gateway
+
     def method_type
       'stripe_elements'
     end
@@ -31,7 +33,6 @@ module Spree
       else
         creditcard = source
       end
-
       response = provider.store(creditcard, options)
       if response.success?
         cc_type=payment.source.cc_type
