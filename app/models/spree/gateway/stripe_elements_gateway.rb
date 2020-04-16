@@ -2,13 +2,13 @@ module Spree
   class Gateway::StripeElementsGateway < Gateway::StripeGateway
     preference :intents, :boolean
 
-    delegate :create_intent, :update_intent, :confirm_intent, to: :gateway
+    delegate :create_intent, :update_intent, :confirm_intent, to: :provider
 
     def method_type
       'stripe_elements'
     end
 
-    def gateway_class
+    def provider_class
       if get_preference(:intents)
         ActiveMerchant::Billing::StripePaymentIntentsGateway
       else
@@ -25,11 +25,7 @@ module Spree
 
       source = update_source!(payment.source)
       if source.gateway_payment_profile_id.present?
-        if get_preference(:intents)
-          creditcard = ActiveMerchant::Billing::StripeGateway::StripePaymentToken.new('id' => source.gateway_payment_profile_id)
-        else
-          creditcard = source.gateway_payment_profile_id
-        end
+        creditcard = source.gateway_payment_profile_id
       else
         creditcard = source
       end
@@ -42,8 +38,8 @@ module Spree
         if get_preference(:intents)
           payment.source.update!(
             cc_type: payment.source.cc_type,
-            gateway_customer_profile_id: response.params['customer'],
-            gateway_payment_profile_id: response.params['id']
+            gateway_customer_profile_id: response.params['id'],
+            gateway_payment_profile_id: response.params['sources']['data'].first['id']
           )
         else
           payment.source.update!({
