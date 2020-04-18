@@ -17,7 +17,6 @@ language: ruby
 rvm:
   - 2.5
   - 2.6
-  - 2.7
 
 env:
   - DB=mysql
@@ -35,10 +34,6 @@ jobs:
   exclude:
     - rvm: 2.6
       gemfile: gemfiles/spree_3_7.gemfile
-    - rvm: 2.7
-      gemfile: gemfiles/spree_3_7.gemfile
-    - rvm: 2.7
-      gemfile: gemfiles/spree_4_0.gemfile
 
 before_install:
   - mysql -u root -e "GRANT ALL ON *.* TO 'travis'@'%';"
