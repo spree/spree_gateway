@@ -1,4 +1,5 @@
 <div class='order-show container d-flex flex-column align-items-center flex-lg-wrap flex-lg-row justify-content-center' id="order_summary" data-hook>
+  <div id="card-errors" role="alert"></div>
   <% if order_just_completed?(@order) %>
     <%= icon(name: 'check-mark-circle',
              classes: 'd-block d-lg-none mx-auto order-show-check-mark',
@@ -96,12 +97,21 @@
   }
 end.last %>
 
-<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+<% if intent_secrets.any? %>
+  <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 
-<script>
-  var stripeElements = Stripe("<%= intent_secrets[:pk_key] %>");
-  stripeElements.confirmCardPayment("<%=intent_secrets[:intent_key]%>").then(function(result) {
-    console.log(result)
-  });
-</script>
+  <script>
 
+    function confirmCardPaymentResponseHandler(response) {
+      if (response.error) {
+      } else {
+        console.log(response)
+      }
+    };
+
+    var stripeElements = Stripe("<%= intent_secrets[:pk_key] %>");
+    stripeElements.confirmCardPayment("<%=intent_secrets[:intent_key]%>").then(function(result) {
+      confirmCardPaymentResponseHandler(result)
+    });
+  </script>
+<% end %>
