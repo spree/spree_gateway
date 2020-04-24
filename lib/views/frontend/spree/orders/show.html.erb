@@ -103,10 +103,7 @@ end.last %>
   <script>
 
     function confirmCardPaymentResponseHandler(response) {
-      if (response.error) {
-      } else {
-        console.log(response)
-      }
+      $.post("/intents/handle", {response: response, order: "<%= @order.number %>"})
     };
 
     var stripeElements = Stripe("<%= intent_secrets[:pk_key] %>");
