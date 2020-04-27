@@ -1,8 +1,6 @@
 module Spree
   module Stripe
     class IntentsController < ::ActionController::Base
-      skip_before_action :verify_authenticity_token
-
       def handle_response
         @order = Spree::Order.find_by!(number: params['order'])
         if params['response']['error']
