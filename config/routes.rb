@@ -3,5 +3,5 @@
 # via https://example.com/.well-known/apple-developer-merchantid-domain-association
 Rails.application.routes.draw do
   get '/.well-known/apple-developer-merchantid-domain-association' => 'spree/apple_pay_domain_verification#show'
-  post 'intents/handle' => 'spree/intents#handle_response', as: 'handle_intent_response'
+  post 'stripe/intents/handle' => 'spree/stripe/intents#handle_response', as: 'handle_intent_response'
 end

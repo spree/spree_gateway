@@ -1,6 +1,6 @@
 module Spree
   class Gateway::StripeElementsGateway < Gateway::StripeGateway
-    preference :intents, :boolean
+    preference :intents, :boolean, default: true
 
     delegate :create_intent, :update_intent, :confirm_intent, to: :provider
 
