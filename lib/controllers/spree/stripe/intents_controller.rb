@@ -5,7 +5,7 @@ module Spree
         @order = Spree::Order.find_by!(number: params['order'])
         if params['response']['error']
           invalidate_payment
-          flash[:error] = 'cannot verify payment'
+          flash[:error] = params['response']['error']['message']
           redirect_to order_path(@order)
         end
       end
