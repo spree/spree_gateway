@@ -182,6 +182,7 @@ describe Spree::Gateway::StripeGateway do
 
     let!(:success_response) do
       double('success_response', :success? => true,
+                               :params => {},
                                :authorization => '123',
                                :avs_result => { 'code' => 'avs-code' },
                                :cvv_result => { 'code' => 'cvv-code', 'message' => "CVV Result"})

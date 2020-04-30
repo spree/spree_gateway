@@ -9,7 +9,6 @@ end.last %>
 
 <% if intent_secrets %>
   <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
-
   <script>
 
     function confirmCardPaymentResponseHandler(response) {
