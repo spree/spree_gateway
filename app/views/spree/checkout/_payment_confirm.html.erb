@@ -1,4 +1,3 @@
-<% @order.process_payments! %>
 <% intent_secrets = @order.payments.valid.map do |payment|
   next unless payment.intent_client_key
   {

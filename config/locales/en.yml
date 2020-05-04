@@ -3,7 +3,7 @@ en:
   spree:
     payment_has_been_cancelled: The payment has been cancelled.
     order_state:
-      confirm_payment: Payment confirmation
+      payment_confirm: Payment confirmation
     log_entry:
       braintree:
         message: Message
