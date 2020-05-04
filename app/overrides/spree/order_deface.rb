@@ -1,5 +1,5 @@
 script = '
-<% intent_secrets = @order.payments.map do |payment|
+<% intent_secrets = @order.payments.valid.map do |payment|
   next unless payment.intent_client_key
   {
     intent_key: payment.intent_client_key,
@@ -7,7 +7,7 @@ script = '
   }
 end.last %>
 
-<% if intent_secrets %>
+<% if intent_secrets && order_just_completed?(@order) %>
   <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
   <script>
 
