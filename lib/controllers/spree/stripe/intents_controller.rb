@@ -14,7 +14,7 @@ module Spree
       private
 
       def invalidate_payment
-        payment = Spree::Payment.find_by!(response_code: params['response']['error']['payment_intent']['id'])
+        payment = @order.payments.find_by!(response_code: params['response']['error']['payment_intent']['id'])
         payment.update(state: 'failed', intent_client_key: nil)
       end
     end
