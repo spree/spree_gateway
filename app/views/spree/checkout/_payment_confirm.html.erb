@@ -1,3 +1,5 @@
+<div id='errorBox' class='errorExplanation alert alert-danger' style='display:none'></div>
+<% @order.process_payments! %>
 <% intent_secrets = @order.payments.valid.map do |payment|
   next unless payment.intent_client_key
   {
@@ -9,9 +11,15 @@ end.last %>
 <% if intent_secrets %>
   <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
   <script>
+    var form = document.getElementById('checkout_form_payment_confirm');
 
     function confirmCardPaymentResponseHandler(response) {
-      $.post("/stripe/intents/handle", { response: response, order: "<%= @order.number %>", authenticity_token: "<%= form_authenticity_token %>" })
+      $.post("/stripe/intents/handle", { response: response, order: "<%= @order.number %>", authenticity_token: "<%= form_authenticity_token %>" }).done(function (result) {
+        form.submit();
+      }).fail(function(result) {
+        $('#errorBox').html(result.responseJSON.errors)
+        $('#errorBox').show()
+      });
     };
 
     var stripeElements = Stripe("<%= intent_secrets[:pk_key] %>");

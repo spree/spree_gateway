@@ -1,21 +1,13 @@
 module Spree
   module Stripe
-    class IntentsController < ::ActionController::Base
+    class IntentsController < ::ActionController::API
       def handle_response
         @order = Spree::Order.find_by!(number: params['order'])
         if params['response']['error']
           invalidate_payment
-          flash[:error] = params['response']['error']['message']
-          redirect_to checkout_path
+          render json: { errors: params['response']['error']['message'] }, status: 422
         else
-          @order.next!
-          if @order.completed?
-            @current_order = nil
-            flash['order_completed'] = true
-            redirect_to(order_path(@order))
-          else
-            redirect_to(checkout_path)
-          end
+          render json: { result: 'ok' }
         end
       end
 
