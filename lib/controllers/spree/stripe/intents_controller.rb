@@ -2,7 +2,7 @@ module Spree
   module Stripe
     class IntentsController < ::ActionController::API
       def handle_response
-        @order = Spree::Order.find_by!(token: params['token'])
+        @order = Spree::Order.incomplete.find_by!(token: params['token'])
         if params['response']['error']
           invalidate_payment
           render json: { errors: params['response']['error']['message'] }, status: 422

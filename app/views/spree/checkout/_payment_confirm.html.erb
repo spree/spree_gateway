@@ -14,7 +14,7 @@ end.last %>
     var form = document.getElementById('checkout_form_payment_confirm');
 
     function confirmCardPaymentResponseHandler(response) {
-      $.post("/stripe/intents/handle", { response: response, token: "<%= @order.token %>", authenticity_token: "<%= form_authenticity_token %>" }).done(function (result) {
+      $.post("/stripe/intents/handle", { response: response, token: "<%= @order.token %>" }).done(function (result) {
         form.submit();
       }).fail(function(result) {
         $('#errorBox').html(result.responseJSON.errors)
