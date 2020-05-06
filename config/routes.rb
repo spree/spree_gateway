@@ -3,5 +3,16 @@
 # via https://example.com/.well-known/apple-developer-merchantid-domain-association
 Rails.application.routes.draw do
   get '/.well-known/apple-developer-merchantid-domain-association' => 'spree/apple_pay_domain_verification#show'
-  post 'stripe/intents/handle' => 'spree/stripe/intents#handle_response', as: 'handle_stripe_intent_response'
+end
+
+Spree::Core::Engine.add_routes do
+  namespace :api, defaults: { format: 'json' } do
+    namespace :v1 do
+      namespace :stripe do
+        namespace :intents do
+          post :handle_response
+        end
+      end
+    end
+  end
 end
