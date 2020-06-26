@@ -1,0 +1,81 @@
+<div class="payment-gateway">
+  <% param_prefix = "payment_source[#{payment_method.id}]" %>
+  <div class="payment-gateway-half-fields">
+    <div class="mb-4 payment-gateway-field checkout-content-inner-field">
+      <%= text_field_tag "#{param_prefix}[account_holder_name]", "#{@order.bill_address_firstname} #{@order.bill_address_lastname}", { id: "account_holder_name", class: 'spree-flat-input', placeholder: Spree.t('stripe.ach.account_holder_name')} %>
+    </div>
+    <div class="mb-4 payment-gateway-field checkout-content-inner-field">
+      <%= select_tag "#{param_prefix}[account_holder_type]", options_for_select(%w(Individual Company)), {id: "account_holder_type", class: 'spree-flat-input', placeholder: Spree.t('stripe.ach.account_holder_type')} %>
+    </div>
+
+    <div class="mb-4 payment-gateway-field checkout-content-inner-field" data-hook="account_number">
+      <%= text_field_tag "#{param_prefix}[routing_number]", '', {id: 'routing_number', class: 'spree-flat-input', autocomplete: "off", placeholder: Spree.t('stripe.ach.routing_number'), maxlength: 9} %>
+    </div>
+    <div class="mb-4 payment-gateway-field checkout-content-inner-field" data-hook="account_number">
+      <%= text_field_tag "#{param_prefix}[account_number]", '', {id: 'account_number', class: 'spree-flat-input', autocomplete: "off", placeholder: Spree.t('stripe.ach.account_number')} %>
+    </div>
+    <div class="mb-4 payment-gateway-field checkout-content-inner-field" data-hook="account_number">
+      <%= text_field_tag "#{param_prefix}[verify_account_number]", '', {id: 'verify_account_number', class: 'spree-flat-input', autocomplete: "off", placeholder: Spree.t('stripe.ach.verify_account_number')} %>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+<script type="text/javascript">
+    var stripe = Stripe("<%= payment_method.preferred_publishable_key %>");
+</script>
+
+<script>
+    stripeResponseHandler = function(response) {
+        var paymentMethodId, token, bank_acc_status;
+        if (response.error) {
+            $('#stripeError').html(response.error.message);
+            var param_map = {
+                account_holder_name: '#account_holder_name',
+                account_holder_type: '#account_holder_type',
+                account_number: '#account_number',
+                routing_number: '#routing_number'
+            }
+            if (response.error.param){
+                errorField = Spree.stripePaymentMethod.find(param_map[response.error.param])
+                errorField.addClass('error');
+                errorField.parent().addClass('has-error');
+            }
+            return $('#stripeError').show();
+        } else {
+            token = response.token['id'];
+            bank_acc_status = response.token.bank_account['status'];
+            paymentMethodId = Spree.stripePaymentMethod.prop('id').split("_")[2];
+            Spree.stripePaymentMethod.append("<input type='hidden' class='stripeToken' name='payment_source[" + paymentMethodId + "][gateway_payment_profile_id]' value='" + token + "'/>");
+            Spree.stripePaymentMethod.append("<input type='hidden' class='stripeStatus' name='payment_source[" + paymentMethodId + "][status]' value='" + bank_acc_status + "'/>")
+            return Spree.stripePaymentMethod.parents("form").trigger('submit');
+        }
+    };
+
+    window.addEventListener('DOMContentLoaded', function () {
+        Spree.stripePaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
+        Spree.stripePaymentMethod.prepend("<div id='stripeError' class='errorExplanation alert alert-danger' style='display:none'></div>");
+
+        $('#checkout_form_payment [data-hook=buttons]').click(function (e) {
+            var params;
+            $('#stripeError').hide();
+            Spree.stripePaymentMethod.find('#account_holder_name, #account_holder_type, #account_number, #routing_number').removeClass('error');
+            if (Spree.stripePaymentMethod.is(':visible')) {
+                e.preventDefault();
+
+                params = $.extend({
+                    country: 'US',
+                    currency: 'usd',
+                    account_holder_name: $('#account_holder_name:visible').val(),
+                    account_holder_type: $('#account_holder_type:visible').val(),
+                    routing_number: $('#routing_number:visible').val(),
+                    account_number: $('#account_number:visible').val()
+                }, Spree.stripeAdditionalInfo);
+
+                stripe.createToken('bank_account', params).then(stripeResponseHandler);
+
+                return false;
+            }
+        });
+    });
+</script>

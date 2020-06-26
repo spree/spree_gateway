@@ -1,6 +1,14 @@
 ---
 en:
+  activerecord:
+    attributes:
+      spree/check:
+        account_holder_name: Account Holder Name
+        account_holder_type: Account Holder Type
+        account_number: Account Number
+        routing_number: Routing Number
   spree:
+    check: Check
     payment_has_been_cancelled: The payment has been cancelled.
     log_entry:
       braintree:
@@ -21,3 +29,14 @@ en:
         cvv_result: CVV Result
         cvc_check: CVC Check
         address_zip_check: Address ZIP check
+    stripe:
+      ach:
+        account_holder_name: Account Holder Name
+        account_holder_type: Account Holder Type
+        routing_number: Routing Number
+        account_number: Account Number
+        verify_account_number: Verify Account Number
+        verify_bank_account: Verify Bank Account
+        first_deposit: First Deposit
+        second_deposit: Second Deposit
+    bank_transfer: bank_transfer
