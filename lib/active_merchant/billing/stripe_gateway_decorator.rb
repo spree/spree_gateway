@@ -1,6 +1,19 @@
 module ActiveMerchant
   module Billing
     module StripeGatewayDecorator
+      def verify(source, **options)
+        customer = source.gateway_customer_profile_id
+        bank_account_token = source.gateway_payment_profile_id
+
+        commit(:post, "customers/#{CGI.escape(customer)}/sources/#{bank_account_token}/verify", amounts: options[:amounts])
+      end
+
+      def retrieve(source, **options)
+        customer = source.gateway_customer_profile_id
+        bank_account_token = source.gateway_payment_profile_id
+        commit(:get, "customers/#{CGI.escape(customer)}/bank_accounts/#{bank_account_token}")
+      end
+
       private
 
       def headers(options = {})

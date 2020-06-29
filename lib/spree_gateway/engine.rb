@@ -32,6 +32,7 @@ module SpreeGateway
       app.config.spree.payment_methods << Spree::Gateway::StripeGateway
       app.config.spree.payment_methods << Spree::Gateway::StripeElementsGateway
       app.config.spree.payment_methods << Spree::Gateway::StripeApplePayGateway
+      app.config.spree.payment_methods << Spree::Gateway::StripeAchGateway
       app.config.spree.payment_methods << Spree::Gateway::UsaEpayTransaction
       app.config.spree.payment_methods << Spree::Gateway::Worldpay
     end

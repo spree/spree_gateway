@@ -1,0 +1,16 @@
+<p class="payment-type checkout-content-header">
+  <%= Spree.t('stripe.ach.verify_bank_account').upcase %>
+</p>
+
+<div class="payment-gateway">
+  <div class="payment-gateway-half-fields">
+    <input type="hidden" name="order[payment_id]" value= <%= payment.id %> />
+    <input type='hidden' name='verifyAch' value=true />
+    <div class="mb-4 payment-gateway-field checkout-content-inner-field">
+      <%= number_field_tag "amounts[]", nil, { id: "deposit1", class: 'spree-flat-input', placeholder: Spree.t('stripe.ach.first_deposit') } %>
+    </div>
+    <div class="mb-4 payment-gateway-field checkout-content-inner-field">
+      <%= number_field_tag "amounts[]", nil, { id: "deposit2", class: 'spree-flat-input', placeholder: Spree.t('stripe.ach.second_deposit') } %>
+    </div>
+  </div>
+</div>
