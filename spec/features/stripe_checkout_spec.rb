@@ -91,7 +91,10 @@ describe "Stripe checkout", type: :feature do
     expect(page).to have_css('.has-error #card_code.error')
   end
 
+  # this scenario will not occur on Spree 4.2 due to swapping jquery.payment to cleave
+  # see https://github.com/spree/spree/pull/10363
   it "shows an error with invalid expiry month field", :js => true do
+    skip if Spree.version.to_f >= 4.2 
     fill_in 'card_number', with: '4242 4242 4242 4242'
     fill_in 'card_expiry', :with => "00 / #{Time.now.year + 1}"
     fill_in 'card_code', with: '123'

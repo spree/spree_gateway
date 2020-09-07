@@ -75,10 +75,10 @@ describe 'Admin Panel Stripe elements payment', type: :feature, :js => true do
   def fill_in_stripe_payment(invalid_name = false, invalid_number = false, invalid_code = false, invalid_expiration = false)
     fill_in 'Name *', with: invalid_name ? '' : 'Stripe Elements Gateway Payment'
     fill_in_card_number(invalid_number)
-    fill_in 'Card Code *', with: invalid_code ? '1' : '123'
+    fill_in_cvc(invalid_code)
     fill_in_card_expiration(invalid_expiration)
 
-    click_button "Update"
+    click_button 'Update'
   end
 
   def fill_in_card_number(invalid_number)
@@ -87,8 +87,18 @@ describe 'Admin Panel Stripe elements payment', type: :feature, :js => true do
   end
 
   def fill_in_card_expiration(invalid_expiration)
-    card_expiry = invalid_expiration ? '01 / ' : "01 / #{Time.current.year + 1}"
+    valid_expiry = Spree.version.to_f >= 4.2 ? "01/#{Time.current.year + 1}" : "01 / #{Time.current.year + 1}"
+    invalid_expiry = Spree.version.to_f >= 4.2 ? '01/' : '01 / '
+
+    card_expiry = invalid_expiration ? invalid_expiry : valid_expiry
     fill_in_field('Expiration *', '#card_expiry1', card_expiry)
+  end
+
+  def fill_in_cvc(invalid_code)
+    value = invalid_code ? '1' : '123'
+    label = Spree.version.to_f >= 4.2 ? 'Card Varification Code (CVC) *' : 'Card Code *'
+
+    fill_in label, with: value
   end
 
   def fill_in_field(field_name, field_id, number)
