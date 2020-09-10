@@ -9,7 +9,7 @@ module Spree
               invalidate_payment
               render json: { errors: params['response']['error']['message'] }, status: 422
             else
-              render json: { result: 'ok' }
+              render json: {}, status: :ok
             end
           end
 
