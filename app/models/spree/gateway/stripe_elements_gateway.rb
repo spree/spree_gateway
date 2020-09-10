@@ -1,6 +1,7 @@
 module Spree
   class Gateway::StripeElementsGateway < Gateway::StripeGateway
     preference :intents, :boolean, default: true
+    preference :execute_threed, :boolean, default: true
 
     delegate :create_intent, :update_intent, :confirm_intent, to: :provider
 
@@ -51,6 +52,14 @@ module Spree
       else
         payment.send(:gateway_error, response.message)
       end
+    end
+
+    private
+
+    def options_for_purchase_or_auth(money, creditcard, gateway_options)
+      money, creditcard, options = super
+      options[:execute_threed] = get_preference(:execute_threed)
+      return money, creditcard, options
     end
   end
 end
