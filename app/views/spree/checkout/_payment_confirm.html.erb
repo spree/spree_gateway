@@ -1,14 +1,6 @@
 <div id='errorBox' class='errorExplanation alert alert-danger' style='display:none'></div>
-<% @order.process_payments! %>
-<% intent_secrets = @order.payments.valid.map do |payment|
-  next unless payment.intent_client_key
-  {
-    intent_key: payment.intent_client_key,
-    pk_key: payment.payment_method.preferred_publishable_key
-  }
-end.last %>
 
-<% if intent_secrets %>
+<% if @client_secret.present? && @pk_key.present? %>
   <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
   <script>
     var form = document.getElementById('checkout_form_payment_confirm');
@@ -20,10 +12,10 @@ end.last %>
         $('#errorBox').html(result.responseJSON.errors)
         $('#errorBox').show()
       });
-    };
+    }
 
-    var stripeElements = Stripe("<%= intent_secrets[:pk_key] %>");
-    stripeElements.confirmCardPayment("<%=intent_secrets[:intent_key]%>").then(function(result) {
+    var stripeElements = Stripe("<%= @pk_key %>");
+    stripeElements.confirmCardPayment("<%= @client_secret %>").then(function(result) {
       confirmCardPaymentResponseHandler(result)
     });
   </script>
