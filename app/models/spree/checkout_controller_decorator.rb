@@ -5,23 +5,19 @@ module Spree
     end
 
     def set_keys
-      @order.process_payments!
+      @payment = @order.payments.valid.last
+      create_payment_intent
+      @client_secret = @payment_intent.params['client_secret']
+      @pk_key = @payment.payment_method.preferred_publishable_key
+    end
 
-      # Temporary workaround.
-      # Without it order cannot be finished due to the wrong payment state updated after
-      # executing `@order.process_payments!`, which is used to retrieve `intent_client_key`.
-      @order.payments.update_all(state: 'checkout')
-
-      intent_secrets = @order.payments.valid.map do |payment|
-        next unless payment.intent_client_key
-
-        {
-          intent_key: payment.intent_client_key,
-          pk_key: payment.payment_method.preferred_publishable_key
-        }
-      end.last
-      @client_secret = intent_secrets[:intent_key]
-      @pk_key = intent_secrets[:pk_key]
+    def create_payment_intent
+      response = @payment.payment_method.create_intent(@order.total.to_money.cents, @payment.source)
+      if response.success?
+        @payment_intent = response.params['client_secret']
+      else
+        @payment.send(:gateway_error, response.message)
+      end
     end
   end
 end

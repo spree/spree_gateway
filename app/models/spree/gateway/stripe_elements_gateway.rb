@@ -3,8 +3,6 @@ module Spree
     preference :intents, :boolean, default: true
     preference :execute_threed, :boolean, default: true
 
-    delegate :create_intent, :update_intent, :confirm_intent, to: :provider
-
     def method_type
       'stripe_elements'
     end
@@ -19,6 +17,7 @@ module Spree
 
     def create_profile(payment)
       return unless payment.source.gateway_customer_profile_id.nil?
+
       options = {
         email: payment.order.email,
         login: preferred_secret_key,
@@ -52,6 +51,10 @@ module Spree
       else
         payment.send(:gateway_error, response.message)
       end
+    end
+
+    def create_intent(money, creditcard)
+      provider.create_intent(*options_for_purchase_or_auth(money, creditcard, options))
     end
 
     private
