@@ -14,7 +14,7 @@ module Spree
     def create_payment_intent
       response = @payment.payment_method.create_intent(@order.total.to_money.cents, @payment.source)
       if response.success?
-        @payment_intent = response.params['client_secret']
+        @payment_intent = response
       else
         @payment.send(:gateway_error, response.message)
       end
