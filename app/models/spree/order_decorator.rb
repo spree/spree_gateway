@@ -5,7 +5,7 @@ module Spree
 
       base.insert_checkout_step(
         :payment_confirm,
-        before: :confirm,
+        after: :payment,
         if: ->(order) do
           order.payments.valid.map { |p| p.payment_method&.has_preference?(:intents) && p.payment_method&.get_preference(:intents) }.any?
         end
