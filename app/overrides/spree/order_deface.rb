@@ -15,7 +15,7 @@ end.last %>
   <script>
 
     function confirmCardPaymentResponseHandler(response) {
-      $.post("/api/v1/stripe/intents/handle_response", { response: response, order_id: "<%= @order.id %>" })
+      $.post("/api/v2/storefront/intents/handle_response", { response: response, order_id: "<%= @order.id %>" })
         .done(function (result) {
           $("#successBox").html(result.message);
           $("#successBox").show();
@@ -25,9 +25,6 @@ end.last %>
         }
       );
     };
-
-    console.log("secret", "<%= intent_secrets[:intent_key] %>");
-    console.log("key", "<%= intent_secrets[:pk_key] %>");
 
     var stripeElements = Stripe("<%= intent_secrets[:pk_key] %>");
     stripeElements.confirmCardPayment("<%= intent_secrets[:intent_key] %>").then(function(result) {

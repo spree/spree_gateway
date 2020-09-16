@@ -7,8 +7,8 @@ end
 
 Spree::Core::Engine.add_routes do
   namespace :api, defaults: { format: 'json' } do
-    namespace :v1 do
-      namespace :stripe do
+    namespace :v2 do
+      namespace :storefront do
         namespace :intents do
           post :handle_response
         end

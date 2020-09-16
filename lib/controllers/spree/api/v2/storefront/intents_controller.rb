@@ -1,7 +1,7 @@
 module Spree
   module Api
-    module V1
-      module Stripe
+    module V2
+      module Storefront
         class IntentsController < ::ActionController::API
           def handle_response
             if params['response']['error']
