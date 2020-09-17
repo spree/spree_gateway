@@ -1,0 +1,35 @@
+<div id='errorBox' class='errorExplanation alert alert-danger' style='display:none'></div>
+<div id='successBox' class='alert alert-success' style='display:none'></div>
+<div id='infoBox' class='alert alert-info'><%= t('spree.please_wait_for_confirmation_popup') %></div>
+
+<% if @client_secret.present? && @pk_key.present? %>
+  <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+  <script>
+    var form = document.getElementById('checkout_form_payment_confirm');
+
+    function confirmCardPaymentResponseHandler(response) {
+      $.post("/api/v2/storefront/intents/handle_response", { response: response, order_token: "<%= @order.token %>" }).done(function (result) {
+        form.elements["commit"].disabled = false;
+        $('#infoBox').hide();
+        $('#successBox').html(result.message);
+        $('#successBox').show();
+        form.submit();
+      }).fail(function(result) {
+        form.elements["commit"].disabled = false;
+        $('#infoBox').hide();
+        $('#errorBox').html(result.responseJSON.error);
+        $('#errorBox').show();
+      });
+    }
+
+    var stripeElements = Stripe("<%= @pk_key %>");
+    stripeElements.confirmCardPayment("<%= @client_secret %>").then(function(result) {
+      confirmCardPaymentResponseHandler(result);
+    });
+
+    document.addEventListener('DOMContentLoaded', function(){
+      form.elements["commit"].value = "continue"
+      form.elements["commit"].disabled = true
+    });
+  </script>
+<% end %>

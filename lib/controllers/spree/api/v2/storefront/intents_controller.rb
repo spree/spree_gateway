@@ -2,21 +2,22 @@ module Spree
   module Api
     module V2
       module Storefront
-        class IntentsController < ::ActionController::API
+        class IntentsController < ::Spree::Api::V2::BaseController
+          include Spree::Api::V2::Storefront::OrderConcern
+
           def handle_response
             if params['response']['error']
               invalidate_payment
-              render json: { errors: params['response']['error']['message'] }, status: 422
+              render_error_payload(params['response']['error']['message'])
             else
-              render json: { message: 'The payment was successfully authorized.' }, status: :ok
+              render_serialized_payload { { message: t('spree.payment_successfully_authorized') } }
             end
           end
 
           private
 
           def invalidate_payment
-            @order = Spree::Order.complete.find(params['order_id'])
-            payment = @order.payments.find_by!(response_code: params['response']['error']['payment_intent']['id'])
+            payment = spree_current_order.payments.find_by!(response_code: params['response']['error']['payment_intent']['id'])
             payment.update(state: 'failed', intent_client_key: nil)
           end
         end

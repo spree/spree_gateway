@@ -10,6 +10,8 @@ en:
   spree:
     check: Check
     payment_has_been_cancelled: The payment has been cancelled.
+    please_wait_for_confirmation_popup: Please wait for payment confirmation popup to appear.
+    payment_successfully_authorized: The payment was successfully authorized.
     order_state:
       payment_confirm: Payment confirmation
     log_entry:
