@@ -10,7 +10,7 @@ module Spree
               invalidate_payment
               render_error_payload(params['response']['error']['message'])
             else
-              render_serialized_payload { { message: t('spree.payment_successfully_authorized') } }
+              render_serialized_payload { { message: I18n.t('spree.payment_successfully_authorized') } }
             end
           end
 

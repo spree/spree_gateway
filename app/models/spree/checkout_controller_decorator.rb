@@ -7,14 +7,10 @@ module Spree
     def process_payments_and_set_keys
       @order.process_payments!
 
-      intent_secrets = @order.reload.payments.valid.where.not(intent_client_key: nil).map do |payment|
-        {
-          intent_key: payment.intent_client_key,
-          pk_key: payment.payment_method.preferred_publishable_key
-        }
-      end.last
-      @client_secret = intent_secrets.try(:[], :intent_key)
-      @pk_key = intent_secrets.try(:[], :pk_key)
+      @order.reload.payments.valid.where.not(intent_client_key: nil).last.tap do |payment|
+        @client_secret = payment.intent_client_key
+        @pk_key = payment.payment_method.preferred_publishable_key
+      end
     end
   end
 end
