@@ -10,13 +10,11 @@
     function confirmCardPaymentResponseHandler(response) {
       $.post("/api/v2/storefront/intents/handle_response", { response: response, order_token: "<%= @order.token %>" }).done(function (result) {
         form.elements["commit"].disabled = false;
-        $('#infoBox').hide();
         $('#successBox').html(result.message);
         $('#successBox').show();
         form.submit();
       }).fail(function(result) {
         form.elements["commit"].disabled = false;
-        $('#infoBox').hide();
         $('#errorBox').html(result.responseJSON.error);
         $('#errorBox').show();
       });
@@ -24,6 +22,7 @@
 
     var stripeElements = Stripe("<%= @pk_key %>");
     stripeElements.confirmCardPayment("<%= @client_secret %>").then(function(result) {
+      $('#infoBox').hide();
       confirmCardPaymentResponseHandler(result);
     });
 
