@@ -16,6 +16,4 @@ module Spree
   end
 end
 
-if ::Spree::CheckoutController.included_modules.exclude?(Spree::CheckoutControllerDecorator)
-  ::Spree::CheckoutController.prepend Spree::CheckoutControllerDecorator
-end
+::Spree::CheckoutController.prepend Spree::CheckoutControllerDecorator
