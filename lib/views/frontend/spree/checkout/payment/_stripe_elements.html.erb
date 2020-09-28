@@ -4,7 +4,7 @@
     <%= text_field_tag "#{param_prefix}[name]", "#{@order.bill_address_firstname} #{@order.bill_address_lastname}", { id: "name_on_card_#{payment_method.id}", class: 'spree-flat-input', placeholder: Spree.t(:name_on_card)} %>
   </p>
   <div class="form-control required cardNumber spree-flat-input">
-    <div id="card-element">
+    <div id="card-element-<%= payment_method.id %>">
       <!-- a Stripe Element will be inserted here. -->
     </div>
   </div>
@@ -19,7 +19,7 @@
   var elements = stripeElements.elements();
   var spreeFlatInputStyle = getComputedStyle(document.querySelector('input.spree-flat-input'));
 
-  var card = elements.create('card', {
+  this['card_'+"<%= payment_method.id %>"] = elements.create('card', {
     iconStyle: 'solid',
     hidePostalCode: true,
     style: {
@@ -49,9 +49,9 @@
   });
 
   window.addEventListener('DOMContentLoaded', function () {
-    card.mount('#card-element');
+    eval('card_'+"<%= payment_method.id %>").mount("#card-element-<%= payment_method.id %>");
 
-    card.on('ready', function () {
+    eval('card_'+"<%= payment_method.id %>").on('ready', function () {
       Spree.stripeElementsPaymentMethod = $('#payment_method_' + <%= payment_method.id %>);
       Spree.stripeElementsPaymentMethod.prepend("<div id='stripeElementsError' class='errorExplanation alert alert-danger' style='display:none'></div>");
       var form = document.getElementById('checkout_form_payment');
@@ -63,7 +63,7 @@
           createStripeElementsToken();
         }
       });
-      card.addEventListener('change', function(event) {
+      eval('card_'+"<%= payment_method.id %>").addEventListener('change', function(event) {
         if (!event.error) {
           $(form).find('input[type="submit"]').prop('disabled', false)
         }
