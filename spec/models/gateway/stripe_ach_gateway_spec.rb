@@ -175,7 +175,8 @@ describe Spree::Gateway::StripeAchGateway do
              success?: true,
              authorization: '123',
              avs_result: { 'code' => 'avs-code' },
-             cvv_result: { 'code' => 'cvv-code', 'message' => 'CVV Result' })
+             cvv_result: { 'code' => 'cvv-code', 'message' => 'CVV Result' },
+             params: {})
     end
 
     it 'gets correct amount' do

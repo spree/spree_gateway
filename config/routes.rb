@@ -4,3 +4,15 @@
 Rails.application.routes.draw do
   get '/.well-known/apple-developer-merchantid-domain-association' => 'spree/apple_pay_domain_verification#show'
 end
+
+Spree::Core::Engine.add_routes do
+  namespace :api, defaults: { format: 'json' } do
+    namespace :v2 do
+      namespace :storefront do
+        namespace :intents do
+          post :handle_response
+        end
+      end
+    end
+  end
+end

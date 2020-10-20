@@ -1,5 +1,10 @@
 module Spree
   module PaymentDecorator
+    def handle_response(response, success_state, failure_state)
+      self.intent_client_key = response.params['client_secret'] if response.params['client_secret'] && response.success?
+      super
+    end
+
     def verify!(**options)
       process_verification(options)
     end
@@ -26,4 +31,4 @@ module Spree
   end
 end
 
-Spree::Payment.prepend Spree::PaymentDecorator
+Spree::Payment.prepend(Spree::PaymentDecorator)
