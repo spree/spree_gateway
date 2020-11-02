@@ -16,6 +16,13 @@ Gem::Specification.new do |s|
   s.homepage     = 'https://spreecommerce.org'
   s.license      = 'BSD-3-Clause'
 
+  s.metadata = {
+    "bug_tracker_uri"   => "https://github.com/spree/spree_gateway/issues",
+    "changelog_uri"     => "https://github.com/spree/spree_gateway/releases/tag/v#{s.version}",
+    "documentation_uri" => "https://guides.spreecommerce.org/",
+    "source_code_uri"   => "https://github.com/spree/spree_gateway/tree/v#{s.version}",
+  }
+
   s.files        = `git ls-files`.split("\n")
   s.test_files   = `git ls-files -- spec/*`.split("\n")
   s.require_path = 'lib'
