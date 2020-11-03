@@ -44,6 +44,10 @@ module SpreeGateway
       Dir.glob(File.join(File.dirname(__FILE__), '../../lib/active_merchant/**/*_decorator*.rb')) do |c|
         Rails.application.config.cache_classes ? require(c) : load(c)
       end
+
+      Dir.glob(File.join(File.dirname(__FILE__), '../../lib/spree_frontend/controllers/spree/*_decorator*.rb')) do |c|
+        Rails.application.config.cache_classes ? require(c) : load(c)
+      end
     end
 
     def self.backend_available?
@@ -61,6 +65,7 @@ module SpreeGateway
     paths['app/controllers'] << 'lib/controllers'
 
     if self.frontend_available?
+      paths["app/controllers"] << "lib/spree_frontend/controllers"
       paths["app/views"] << "lib/views/frontend"
     end
 
