@@ -65,6 +65,7 @@ describe 'Stripe Elements 3ds checkout', type: :feature, js: true do
       let(:card_number) { '4242424242424242' }
 
       it 'should successfully place order without 3ds authentication' do
+
         expect(page).to have_content('Order placed successfully')
         order = Spree::Order.complete.last
         expect(page.current_url).to include("/orders/#{order.number}")
