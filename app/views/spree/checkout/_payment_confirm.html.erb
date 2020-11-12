@@ -9,12 +9,17 @@
 
     function confirmCardPaymentResponseHandler(response) {
       $.post("/api/v2/storefront/intents/handle_response", { response: response, order_token: "<%= @order.token %>" }).done(function (result) {
-        form.elements["commit"].disabled = false;
+          // conditional needs for spree 3.7
+          if(form.elements["commit"]) {
+              form.elements["commit"].disabled = false;
+          }
         $('#successBox').html(result.message);
         $('#successBox').show();
         form.submit();
       }).fail(function(result) {
-        form.elements["commit"].disabled = false;
+          if(form.elements["commit"]) {
+              form.elements["commit"].disabled = false;
+          }
         $('#errorBox').html(result.responseJSON.error);
         $('#errorBox').show();
       });
@@ -26,7 +31,7 @@
       confirmCardPaymentResponseHandler(result);
     });
 
-    document.addEventListener('DOMContentLoaded', function(){
+    document.addEventListener('load', function(){
       form.elements["commit"].value = "continue"
       form.elements["commit"].disabled = true
     });
