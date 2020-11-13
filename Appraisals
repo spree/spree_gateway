@@ -9,6 +9,11 @@ appraise 'spree-4-0' do
   gem 'rails-controller-testing'
 end
 
+appraise 'spree-4-2' do
+  gem 'spree', '~> 4.2.0.beta'
+  gem 'rails-controller-testing'
+end
+
 appraise 'spree-4-1' do
   gem 'spree', '~> 4.1.0'
   gem 'rails-controller-testing'
