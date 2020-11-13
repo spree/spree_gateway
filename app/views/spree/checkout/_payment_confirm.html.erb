@@ -31,7 +31,7 @@
       confirmCardPaymentResponseHandler(result);
     });
 
-    document.addEventListener('load', function(){
+    document.addEventListener('DOMContentLoaded', function(){
       form.elements["commit"].value = "continue"
       form.elements["commit"].disabled = true
     });
