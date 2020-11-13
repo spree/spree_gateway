@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Stripe checkout", type: :feature do
+describe "Stripe checkout", type: :feature, js: true do
   let!(:country) { create(:country, :states_required => true) }
   let!(:state) { create(:state, :country => country) }
   let!(:shipping_method) { create(:shipping_method) }
@@ -42,7 +42,7 @@ describe "Stripe checkout", type: :feature do
   end
 
   # This will pass the CC data to the server and the StripeGateway class handles it
-  it "can process a valid payment (without JS)" do
+  it "can process a valid payment (without JS)", js: false do
     fill_in 'card_number', with: '4242 4242 4242 4242'
     fill_in 'card_code', with: '123'
     fill_in 'card_expiry', with: "01 / #{Time.current.year + 1}"
@@ -56,12 +56,10 @@ describe "Stripe checkout", type: :feature do
 
   # This will fetch a token from Stripe.com and then pass that to the webserver.
   # The server then processes the payment using that token.
-  it "can process a valid payment (with JS)", :js => true do
-    fill_in 'card_number', with: '4242 4242 4242 4242'
-    # Otherwise ccType field does not get updated correctly
-    page.execute_script("$('.cardNumber').trigger('change')")
+  it "can process a valid payment (with JS)" do
+    fill_in_with_force('card_number', with: "4242424242424242")
+    fill_in_with_force('card_expiry', with: "01 / #{Time.current.year + 1}")
     fill_in 'card_code', with: '123'
-    fill_in 'card_expiry', with: "01 / #{Time.current.year + 1}"
     click_button "Save and Continue"
     wait_for_stripe # Wait for Stripe API to return + form to submit
     expect(page).to have_css('#checkout_form_confirm')
@@ -72,18 +70,23 @@ describe "Stripe checkout", type: :feature do
     expect(page).to have_content(order.number)
   end
 
-  it "shows an error with an invalid credit card number", :js => true do
+  it "shows an error with an invalid credit card number" do
     # Card number is NOT valid. Fails Luhn checksum
     fill_in 'card_number', with: '4242 4242 4242 4249'
     click_button "Save and Continue"
     wait_for_stripe
-    expect(page).to have_content("Your card number is incorrect")
-    expect(page).to have_css('.has-error #card_number.error')
+    if Spree.version.to_f >= 3.7 and Spree.version.to_f <= 4.1
+      expect(page).to have_content("The card number is not a valid credit card number")
+    end
+    if Spree.version.to_f >= 4.2
+      expect(page).to have_content("Your card number is incorrect")
+      expect(page).to have_css('.has-error #card_number.error')
+    end
   end
 
-  it "shows an error with invalid security fields", :js => true do
-    fill_in 'card_number', with: '4242 4242 4242 4242'
-    fill_in 'card_expiry', with: "01 / #{Time.current.year + 1}"
+  it "shows an error with invalid security fields" do
+    fill_in_with_force('card_number', with: "4242424242424242")
+    fill_in_with_force('card_expiry', with: "01 / #{Time.current.year + 1}")
     fill_in 'card_code', with: '99'
     click_button "Save and Continue"
     wait_for_stripe
@@ -93,10 +96,10 @@ describe "Stripe checkout", type: :feature do
 
   # this scenario will not occur on Spree 4.2 due to swapping jquery.payment to cleave
   # see https://github.com/spree/spree/pull/10363
-  it "shows an error with invalid expiry month field", :js => true do
-    skip if Spree.version.to_f >= 4.2 
-    fill_in 'card_number', with: '4242 4242 4242 4242'
-    fill_in 'card_expiry', :with => "00 / #{Time.now.year + 1}"
+  it "shows an error with invalid expiry month field" do
+    skip if Spree.version.to_f >= 4.2
+    fill_in_with_force('card_number', with: "4242424242424242")
+    fill_in_with_force('card_expiry', with: "00 / #{Time.current.year + 1}")
     fill_in 'card_code', with: '123'
     click_button "Save and Continue"
     wait_for_stripe
@@ -104,13 +107,18 @@ describe "Stripe checkout", type: :feature do
     expect(page).to have_css('.has-error #card_expiry.error')
   end
 
-  it "shows an error with invalid expiry year field", :js => true do
-    fill_in 'card_number', with: '4242 4242 4242 4242'
-    fill_in 'card_expiry', with: '12 / '
+  it "shows an error with invalid expiry year field" do
+    fill_in_with_force('card_number', with: "4242424242424242")
+    fill_in_with_force('card_expiry', with: "12 / ")
     fill_in 'card_code', with: '123'
     click_button "Save and Continue"
     wait_for_stripe
     expect(page).to have_content("Your card's expiration year is invalid.")
     expect(page).to have_css('.has-error #card_expiry.error')
   end
+end
+
+def fill_in_with_force(locator, with:)
+  field_id = find_field(locator)[:id]
+  page.execute_script("document.getElementById('#{field_id}').value = '#{with}';")
 end
