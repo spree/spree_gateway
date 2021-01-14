@@ -9,7 +9,7 @@ module Spree
       Check
     end
 
-    def verify(source, **gateway_options)
+    def verify(source, gateway_options)
       provider.verify(source, gateway_options)
     end
 
