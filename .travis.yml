@@ -1,6 +1,8 @@
 os: linux
 dist: bionic
 
+cache: bundler
+
 addons:
   apt:
     sources:
