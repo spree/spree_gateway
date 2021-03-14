@@ -8,39 +8,39 @@ en:
         account_number: Account Number
         routing_number: Routing Number
   spree:
+    bank_transfer: bank_transfer
     check: Check
-    payment_has_been_cancelled: The payment has been cancelled.
-    please_wait_for_confirmation_popup: Please wait for payment confirmation popup to appear.
-    payment_successfully_authorized: The payment was successfully authorized.
-    order_state:
-      payment_confirm: Verify payment
     log_entry:
       braintree:
-        message: Message
-        status: Status
+        avs_result:
+          message: Message
+          postal_match: Postal Match
+          street_match: Street Match
+        avs_result_title: AVS result
         cc_token: Braintree Credit Card Token
         customer_id: Braintree Customer ID
         cvv_result: CVV Result
-        avs_result_title: AVS result
-        avs_result:
-          message: Message
-          street_match: Street Match
-          postal_match: Postal Match
-      stripe:
         message: Message
-        charge_id: Stripe Charge ID
-        card_id: Stripe Card ID
-        cvv_result: CVV Result
-        cvc_check: CVC Check
+        status: Status
+      stripe:
         address_zip_check: Address ZIP check
+        card_id: Stripe Card ID
+        charge_id: Stripe Charge ID
+        cvc_check: CVC Check
+        cvv_result: CVV Result
+        message: Message
+    order_state:
+      payment_confirm: Verify payment
+    payment_has_been_cancelled: The payment has been cancelled.
+    payment_successfully_authorized: The payment was successfully authorized.
+    please_wait_for_confirmation_popup: Please wait for payment confirmation popup to appear.
     stripe:
       ach:
         account_holder_name: Account Holder Name
         account_holder_type: Account Holder Type
-        routing_number: Routing Number
         account_number: Account Number
+        first_deposit: First Deposit
+        routing_number: Routing Number
+        second_deposit: Second Deposit
         verify_account_number: Verify Account Number
         verify_bank_account: Verify Bank Account
-        first_deposit: First Deposit
-        second_deposit: Second Deposit
-    bank_transfer: bank_transfer
