@@ -1,28 +1,28 @@
 <tr>
-  <td><%= Spree.t(:message, :scope => [:log_entry, :stripe]) %></td>
+  <td><%= I18n.t('spree.log_entry.stripe.message') %></td>
   <td><%= entry.parsed_details.message %></td>
 </tr>
 <tr>
-  <td><%= Spree.t(:charge_id, :scope => [:log_entry, :stripe]) %></td>
+  <td><%= I18n.t('spree.log_entry.stripe.charge_id') %></td>
   <td><%= entry.parsed_details.params['id'] %></td>
 </tr>
 <% if card = entry.parsed_details.params['card'] %>
   <tr>
-    <td><%= Spree.t(:card_id, :scope => [:log_entry, :stripe]) %></td>
+    <td><%= I18n.t('spree.log_entry.stripe.card_id') %></td>
     <td><%= card['id'] %></td>
   </tr>
 
   <tr>
-    <td><%= Spree.t(:cvc_check, :scope => [:log_entry, :stripe]) %></td>
+    <td><%= I18n.t('spree.log_entry.stripe.cvc_check') %></td>
     <td><%= card['cvc_check'] %></td>
   </tr>
 
   <tr>
-    <td><%= Spree.t(:address_zip_check, :scope => [:log_entry, :stripe]) %></td>
+    <td><%= I18n.t('spree.log_entry.stripe.address_zip_check') %></td>
     <td><%= card['address_zip_check'] %></td>
   </tr>
 <% end %>
 <tr>
-  <td><%= Spree.t(:cvv_result, :scope => [:log_entry, :stripe]) %></td>
+  <td><%= I18n.t('spree.log_entry.stripe.cvv_result') %></td>
   <td><%= entry.parsed_details.cvv_result['message'].to_s %></td>
 </tr>

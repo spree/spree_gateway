@@ -49,7 +49,7 @@ search:
 
 ## Consider these keys used:
 ignore_unused:
-  - 'spree.log_entry.*'
+  # - 'spree.log_entry.*'
 
   # The keys below this line have probably been moved to Spree Core.
   # I cant find evidence of them used in Spree Gateway.

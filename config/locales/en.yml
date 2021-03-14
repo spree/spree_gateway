@@ -29,11 +29,13 @@ en:
         cvc_check: CVC Check
         cvv_result: CVV Result
         message: Message
+    name_on_card: Name on card
     order_state:
       payment_confirm: Verify payment
     payment_has_been_cancelled: The payment has been cancelled.
     payment_successfully_authorized: The payment was successfully authorized.
     please_wait_for_confirmation_popup: Please wait for payment confirmation popup to appear.
+    shipment: Shipment
     stripe:
       ach:
         account_holder_name: Account Holder Name
@@ -44,3 +46,5 @@ en:
         second_deposit: Second Deposit
         verify_account_number: Verify Account Number
         verify_bank_account: Verify Bank Account
+    tax: Tax
+    total: Total
