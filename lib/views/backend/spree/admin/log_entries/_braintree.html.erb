@@ -1,31 +1,31 @@
 <% transaction = entry.parsed_details.params['braintree_transaction'] %>
 <tr>
-  <td><%= I18n.t('spree.log_entry.braintree.message') %></td>
+  <td><%= Spree.t('log_entry.braintree.message') %></td>
   <td><%= entry.parsed_details.message %></td>
 </tr>
 <% if transaction %>
   <tr>
-    <td><%= I18n.t('spree.log_entry.braintree.status') %></td>
+    <td><%= Spree.t('log_entry.braintree.status') %></td>
     <td><%= transaction['status'] %></td>
   </tr>
   <tr>
-    <td><%= I18n.t('spree.log_entry.braintree.cc_token') %></td>
+    <td><%= Spree.t('log_entry.braintree.cc_token') %></td>
     <td><%= transaction['credit_card_details']['token'] %></td>
   </tr>
   <tr>
-    <td><%= I18n.t('spree.log_entry.braintree.customer_id') %></td>
+    <td><%= Spree.t('log_entry.braintree.customer_id') %></td>
     <td><%= transaction['customer_details']['id'] %></td>
   </tr>
 <% end %>
 <tr>
-  <td><%= I18n.t('spree.log_entry.braintree.cvv_result') %></td>
+  <td><%= Spree.t('log_entry.braintree.cvv_result') %></td>
   <td><%= entry.parsed_details.cvv_result['message'].to_s %></td>
 </tr>
 <tr>
-  <td><%= I18n.t('spree.log_entry.braintree.avs_result_title') %></td>
+  <td><%= Spree.t('log_entry.braintree.avs_result_title') %></td>
   <td>
-    <%= I18n.t('spree.log_entry.braintree.avs_result.message') %>: <%= entry.parsed_details.avs_result['message'] %><br>
-    <%= I18n.t('spree.log_entry.braintree.avs_result.street_match') %>: <%= entry.parsed_details.avs_result['street_match'] %><br>
-    <%= I18n.t('spree.log_entry.braintree.avs_result.postal_match') %>: <%= entry.parsed_details.avs_result['postal_match'] %>
+    <%= Spree.t('log_entry.braintree.avs_result.message') %>: <%= entry.parsed_details.avs_result['message'] %><br>
+    <%= Spree.t('log_entry.braintree.avs_result.street_match') %>: <%= entry.parsed_details.avs_result['street_match'] %><br>
+    <%= Spree.t('log_entry.braintree.avs_result.postal_match') %>: <%= entry.parsed_details.avs_result['postal_match'] %>
   </td>
 </tr>
