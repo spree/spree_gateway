@@ -24,15 +24,13 @@ env:
 
 gemfile:
   - gemfiles/spree_3_7.gemfile
-  - gemfiles/spree_4_1.gemfile
+  - gemfiles/spree_4_2.gemfile
   - gemfiles/spree_master.gemfile
 
 jobs:
   allow_failures:
   - gemfile: gemfiles/spree_master.gemfile
   exclude:
-  - rvm: 3.0
-    gemfile: gemfiles/spree_4_1.gemfile
   - rvm: 3.0
     gemfile: gemfiles/spree_3_7.gemfile
 
