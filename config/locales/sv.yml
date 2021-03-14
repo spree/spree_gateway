@@ -1,0 +1,50 @@
+---
+sv:
+  activerecord:
+    attributes:
+      spree/check:
+        account_holder_name: Kontoinnehavarens namn
+        account_holder_type: Kontoinnehavartyp
+        account_number: Kontonummer
+        routing_number: Clearingnummer
+  spree:
+    bank_transfer: banköverföring
+    check: Kolla upp
+    log_entry:
+      braintree:
+        avs_result:
+          message: Meddelande
+          postal_match: Postal Match
+          street_match: Street Match
+        avs_result_title: AVS-resultat
+        cc_token: Braintree kreditkortsbeteckning
+        customer_id: Braintree kund-ID
+        cvv_result: CVV-resultat
+        message: Meddelande
+        status: Status
+      stripe:
+        address_zip_check: Adress ZIP-kontroll
+        card_id: Randkort-ID
+        charge_id: Stripe Charge ID
+        cvc_check: CVC-kontroll
+        cvv_result: CVV-resultat
+        message: Meddelande
+    name_on_card: namn på kort
+    order_state:
+      payment_confirm: Verifiera betalning
+    payment_has_been_cancelled: Betalningen har annullerats.
+    payment_successfully_authorized: Betalningen godkändes framgångsrikt.
+    please_wait_for_confirmation_popup: Vänta tills popup för betalningsbekräftelse visas.
+    shipment: Sändning
+    stripe:
+      ach:
+        account_holder_name: Kontoinnehavarens namn
+        account_holder_type: Kontoinnehavartyp
+        account_number: Kontonummer
+        first_deposit: Första insättningen
+        routing_number: Clearingnummer
+        second_deposit: Andra insättningen
+        verify_account_number: Verifiera kontonummer
+        verify_bank_account: Verifiera bankkonto
+    tax: Beskatta
+    total: Total

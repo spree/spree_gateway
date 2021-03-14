@@ -1,0 +1,50 @@
+---
+bg:
+  activerecord:
+    attributes:
+      spree/check:
+        account_holder_name: Име на титуляра на акаунта
+        account_holder_type: Тип на титуляра на акаунт
+        account_number: Номер на сметка
+        routing_number: Маршрутен номер
+  spree:
+    bank_transfer: банков трансфер
+    check: Проверете
+    log_entry:
+      braintree:
+        avs_result:
+          message: Съобщение
+          postal_match: Пощенски мач
+          street_match: Уличен мач
+        avs_result_title: Резултат от AVS
+        cc_token: Токен за кредитна карта Braintree
+        customer_id: Идентификационен номер на клиента на Braintree
+        cvv_result: Резултат от CVV
+        message: Съобщение
+        status: Състояние
+      stripe:
+        address_zip_check: Проверка на адресния ZIP
+        card_id: Идентификационен номер на карта с ивици
+        charge_id: Идентификационен номер на зареждане на лента
+        cvc_check: Проверка на CVC
+        cvv_result: Резултат от CVV
+        message: Съобщение
+    name_on_card: Име на карта
+    order_state:
+      payment_confirm: Потвърдете плащането
+    payment_has_been_cancelled: Плащането е отменено.
+    payment_successfully_authorized: Плащането беше успешно разрешено.
+    please_wait_for_confirmation_popup: Моля, изчакайте да се появи изскачащият прозорец за потвърждение на плащането.
+    shipment: Пратка
+    stripe:
+      ach:
+        account_holder_name: Име на титуляра на акаунта
+        account_holder_type: Тип на титуляра на акаунт
+        account_number: Номер на сметка
+        first_deposit: Първи депозит
+        routing_number: Маршрутен номер
+        second_deposit: Втори депозит
+        verify_account_number: Потвърдете номера на акаунта
+        verify_bank_account: Потвърдете банковата сметка
+    tax: Данък
+    total: Обща сума

@@ -1,0 +1,50 @@
+---
+de:
+  activerecord:
+    attributes:
+      spree/check:
+        account_holder_name: Name des Kontoinhabers
+        account_holder_type: Kontoinhabertyp
+        account_number: Kontonummer
+        routing_number: Routing-Nummer
+  spree:
+    bank_transfer: Banküberweisung
+    check: Prüfen
+    log_entry:
+      braintree:
+        avs_result:
+          message: Botschaft
+          postal_match: Postspiel
+          street_match: Street Match
+        avs_result_title: AVS-Ergebnis
+        cc_token: Braintree Kreditkarten-Token
+        customer_id: Braintree Kunden-ID
+        cvv_result: CVV-Ergebnis
+        message: Botschaft
+        status: Status
+      stripe:
+        address_zip_check: Adress-ZIP-Prüfung
+        card_id: Streifenkarten-ID
+        charge_id: Stripe Charge ID
+        cvc_check: CVC-Prüfung
+        cvv_result: CVV-Ergebnis
+        message: Botschaft
+    name_on_card: Name auf der Karte
+    order_state:
+      payment_confirm: Überprüfen Sie die Zahlung
+    payment_has_been_cancelled: Die Zahlung wurde storniert.
+    payment_successfully_authorized: Die Zahlung wurde erfolgreich autorisiert.
+    please_wait_for_confirmation_popup: Bitte warten Sie, bis das Popup zur Zahlungsbestätigung angezeigt wird.
+    shipment: Sendung
+    stripe:
+      ach:
+        account_holder_name: Name des Kontoinhabers
+        account_holder_type: Kontoinhabertyp
+        account_number: Kontonummer
+        first_deposit: Erste Einzahlung
+        routing_number: Routing-Nummer
+        second_deposit: Zweite Einzahlung
+        verify_account_number: Überprüfen Sie die Kontonummer
+        verify_bank_account: Überprüfen Sie das Bankkonto
+    tax: MwSt
+    total: Gesamt
