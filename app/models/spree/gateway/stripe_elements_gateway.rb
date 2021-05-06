@@ -29,6 +29,7 @@ module Spree
         if get_preference(:intents)
           payment.source.update!(
             cc_type: payment.source.cc_type,
+            tokenization_method: response.params['sources']['data'].first['tokenization_method'],
             gateway_customer_profile_id: response.params['id'],
             gateway_payment_profile_id: response.params['sources']['data'].first['id']
           )
