@@ -1,6 +1,8 @@
 os: linux
 dist: bionic
 
+cache: bundler
+
 addons:
   apt:
     sources:
@@ -24,7 +26,10 @@ env:
 
 gemfile:
   - gemfiles/spree_3_7.gemfile
-  - gemfiles/spree_4_2.gemfile
+  - gemfiles/spree_4_1.gemfile
+  - gemfiles/spree_4_2_rails_6_1.gemfile
+  - gemfiles/spree_4_2_rails_6_0.gemfile
+  - gemfiles/spree_4_2_rails_5_2.gemfile
   - gemfiles/spree_master.gemfile
 
 jobs:
@@ -33,6 +38,10 @@ jobs:
   exclude:
   - rvm: 3.0
     gemfile: gemfiles/spree_3_7.gemfile
+  - rvm: 3.0
+    gemfile: gemfiles/spree_4_2_rails_5_2.gemfile
+  - rvm: 3.0
+    gemfile: gemfiles/spree_4_2_rails_6_0.gemfile
 
 before_install:
   - mysql -u root -e "GRANT ALL ON *.* TO 'travis'@'%';"

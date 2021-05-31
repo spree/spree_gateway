@@ -29,6 +29,11 @@ describe "Stripe checkout", type: :feature, js: true do
   let!(:zone) { create(:zone) }
 
   before do
+    if Spree.version.to_f >= 4.2
+      payment_method = Spree::PaymentMethod.first
+      payment_method.update!(stores: [Spree::Store.first])
+    end
+
     user = create(:user)
 
     order = OrderWalkthrough.up_to(:delivery)
