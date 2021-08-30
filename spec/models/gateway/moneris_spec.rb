@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::Gateway::Moneris do
-  let(:gateway) { described_class.create!(name: 'Moneris') }
+  let(:gateway) { described_class.create!(name: 'Moneris', stores: [::Spree::Store.default]) }
 
   context '.provider_class' do
     it 'is a Moneris gateway' do

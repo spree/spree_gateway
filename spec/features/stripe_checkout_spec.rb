@@ -8,9 +8,10 @@ describe "Stripe checkout", type: :feature, js: true do
   let!(:mug) { create(:product, :name => "RoR Mug") }
   let!(:stripe_payment_method) do
     Spree::Gateway::StripeGateway.create!(
-      :name => "Stripe",
-      :preferred_secret_key => "sk_test_VCZnDv3GLU15TRvn8i2EsaAN",
-      :preferred_publishable_key => "pk_test_Cuf0PNtiAkkMpTVC2gwYDMIg"
+      name: 'Stripe',
+      preferred_secret_key: 'sk_test_VCZnDv3GLU15TRvn8i2EsaAN',
+      preferred_publishable_key: 'pk_test_Cuf0PNtiAkkMpTVC2gwYDMIg',
+      stores: [::Spree::Store.default]
     )
   end
 

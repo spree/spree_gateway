@@ -4,7 +4,7 @@ describe Spree::Gateway::PinGateway do
 
   before do
     Spree::Gateway.update_all(active: false)
-    @gateway = described_class.create!(name: 'Pin Gateway', active: true)
+    @gateway = described_class.create!(name: 'Pin Gateway', active: true, stores: [::Spree::Store.default])
     @gateway.set_preference(:api_key, 'W_VzkRCZSILiKWUS-dndUg')
     @gateway.save!
 

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::Gateway::PayPalGateway do
-  let(:gateway) { described_class.create!(name: 'PayPal') }
+  let(:gateway) { described_class.create!(name: 'PayPal', stores: [::Spree::Store.default]) }
 
   context '.provider_class' do
     it 'is a PayPal gateway' do

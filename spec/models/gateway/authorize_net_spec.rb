@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::Gateway::AuthorizeNet do
-  let (:gateway) { described_class.create!(name: 'Authorize.net') }
+  let (:gateway) { described_class.create!(name: 'Authorize.net', stores: [::Spree::Store.default]) }
 
   context '.provider_class' do
     it 'is a AuthorizeNet gateway' do

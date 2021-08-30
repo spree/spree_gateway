@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::Gateway::PayflowPro do
-  let(:gateway) { described_class.create!(name: 'PayflowPro') }
+  let(:gateway) { described_class.create!(name: 'PayflowPro', stores: [::Spree::Store.default]) }
 
   context '.provider_class' do
     it 'is a Payflow gateway' do

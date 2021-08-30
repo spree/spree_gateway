@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::Gateway::Beanstream do
-  let(:gateway) { described_class.create!(name: 'Beanstream') }
+  let(:gateway) { described_class.create!(name: 'Beanstream', stores: [::Spree::Store.default]) }
 
   context '.provider_class' do
     it 'is a Beanstream gateway' do
