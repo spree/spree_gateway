@@ -143,5 +143,9 @@ module Spree
       url = 'https://spreecommerce.org'
       "#{name_with_version} #{url}"
     end
+
+    def publishable_preference_keys
+      %i[publishable_key test_mode]
+    end
   end
 end
