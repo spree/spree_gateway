@@ -1,4 +1,4 @@
-module Spree
+module SpreeGateway
   module PaymentDecorator
     def handle_response(response, success_state, failure_state)
       if response.success? && response.respond_to?(:params)
@@ -33,4 +33,4 @@ module Spree
   end
 end
 
-Spree::Payment.prepend(Spree::PaymentDecorator)
+::Spree::Payment.prepend(::SpreeGateway::PaymentDecorator)

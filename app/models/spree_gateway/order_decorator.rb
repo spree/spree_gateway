@@ -1,4 +1,4 @@
-module Spree
+module SpreeGateway
   module OrderDecorator
     def self.prepended(base)
       return if base.checkout_steps.key?(:payment_confirm)
@@ -25,4 +25,4 @@ module Spree
   end
 end
 
-Spree::Order.prepend(Spree::OrderDecorator)
+::Spree::Order.prepend(::SpreeGateway::OrderDecorator)

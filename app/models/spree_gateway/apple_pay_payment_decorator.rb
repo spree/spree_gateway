@@ -1,4 +1,4 @@
-module Spree
+module SpreeGateway
   module ApplePayPaymentDecorator
     def apple_pay?
       payment_method.is_a? Spree::Gateway::StripeApplePayGateway
@@ -6,4 +6,4 @@ module Spree
   end
 end
 
-Spree::Payment.prepend Spree::ApplePayPaymentDecorator
+::Spree::Payment.prepend(::SpreeGateway::ApplePayPaymentDecorator)

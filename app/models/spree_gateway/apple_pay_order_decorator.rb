@@ -1,4 +1,4 @@
-module Spree
+module SpreeGateway
   module ApplePayOrderDecorator
     def confirmation_required?
       return false if paid_with_apple_pay?
@@ -17,4 +17,4 @@ module Spree
   end
 end
 
-Spree::Order.prepend Spree::ApplePayOrderDecorator
+::Spree::Order.prepend(::SpreeGateway::ApplePayOrderDecorator)
