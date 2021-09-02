@@ -54,7 +54,7 @@ module Spree
       return money, creditcard, options
     end
 
-    def publishable_preference_keys
+    def public_preference_keys
       %i[publishable_key test_mode intents]
     end
   end

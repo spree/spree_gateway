@@ -144,7 +144,7 @@ module Spree
       "#{name_with_version} #{url}"
     end
 
-    def publishable_preference_keys
+    def public_preference_keys
       %i[publishable_key test_mode]
     end
   end
