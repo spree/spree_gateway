@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::Gateway::CardSave do
-  let(:gateway) { described_class.create!(name: 'CardSave') }
+  let(:gateway) { described_class.create!(name: 'CardSave', stores: [::Spree::Store.default]) }
 
   context '.provider_class' do
     it 'is a CardSave gateway' do

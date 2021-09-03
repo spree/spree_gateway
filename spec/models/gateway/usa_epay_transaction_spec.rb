@@ -3,11 +3,11 @@ require 'spec_helper'
 describe Spree::Gateway::UsaEpayTransaction do
   before do
     Spree::Gateway.update_all(active: false)
-    @gateway = Spree::Gateway::UsaEpayTransaction.create!(name: 'USA EPay Gateway', active: true)
+    @gateway = Spree::Gateway::UsaEpayTransaction.create!(name: 'USA EPay Gateway', active: true, stores: [::Spree::Store.default])
     @gateway.set_preference(:login, '0r19zQBdp5nS8i3t4hFxz0di13yf56q1')
     @gateway.save!
 
-    country = create(:country, name: 'United States', iso_name: 'UNITED STATES', iso3: 'USA', iso: 'US', numcode: 840)
+    country = Spree::Country.find_by(name: 'United States of America')
     state = create(:state, name: 'Maryland', abbr: 'MD', country: country)
     address = create(:address,
       firstname: 'John',

@@ -1,6 +1,6 @@
 # Spree Gateway
 
-[![Build Status](https://api.travis-ci.org/spree/spree_gateway.svg?branch=master)](https://travis-ci.org/spree/spree_gateway)
+[![Build Status](https://api.travis-ci.org/spree/spree_gateway.svg?branch=main)](https://travis-ci.org/spree/spree_gateway)
 [![Code Climate](https://codeclimate.com/github/spree/spree_gateway.svg)](https://codeclimate.com/github/spree/spree_gateway)
 
 Community supported Spree Payment Method Gateways. It works as a wrapper for
@@ -100,6 +100,6 @@ We are [available for hire][spark].
 
 [1]: http://www.fsf.org/licensing/essays/free-sw.html
 [2]: https://github.com/spree/spree_gateway/issues
-[3]: https://github.com/spree/spree_gateway/blob/master/LICENSE.md
+[3]: https://github.com/spree/spree_gateway/blob/main/LICENSE.md
 [4]: https://github.com/spree
 [5]: https://github.com/spree/spree_gateway/graphs/contributors

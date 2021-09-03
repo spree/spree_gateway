@@ -9,7 +9,8 @@ describe 'Stripe Elements 3ds checkout', type: :feature, js: true do
         name: 'Stripe',
         preferred_secret_key: 'sk_test_VCZnDv3GLU15TRvn8i2EsaAN',
         preferred_publishable_key: 'pk_test_Cuf0PNtiAkkMpTVC2gwYDMIg',
-        preferred_intents: preferred_intents
+        preferred_intents: preferred_intents,
+        stores: [::Spree::Store.default]
     )
   end
 

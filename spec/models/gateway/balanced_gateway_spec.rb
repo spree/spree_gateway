@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::Gateway::BalancedGateway do
-  let(:gateway) { described_class.create!(name: 'Balanced') }
+  let(:gateway) { described_class.create!(name: 'Balanced', stores: [::Spree::Store.default]) }
 
   context '.provider_class' do
     it 'is a Balanced gateway' do

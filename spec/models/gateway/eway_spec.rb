@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::Gateway::Eway do
-  let(:gateway) { described_class.create!(name: 'Eway') }
+  let(:gateway) { described_class.create!(name: 'Eway', stores: [::Spree::Store.default]) }
 
   context '.provider_class' do
     it 'is a Eway gateway' do

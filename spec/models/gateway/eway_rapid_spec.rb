@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::Gateway::EwayRapid do
-  let(:gateway) { described_class.create!(name: 'eWAY Rapid') }
+  let(:gateway) { described_class.create!(name: 'eWAY Rapid', stores: [::Spree::Store.default]) }
 
   describe '#provider_class' do
     it 'should be an eWAY Rapid gateway' do

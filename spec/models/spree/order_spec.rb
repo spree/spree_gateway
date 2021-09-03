@@ -6,14 +6,16 @@ describe Spree::Order do
   let(:stripe_apple_pay_payment_method) do
     Spree::Gateway::StripeApplePayGateway.create!(
       name: 'ApplePay',
-      preferred_domain_verification_certificate: FFaker::Lorem.characters(20)
+      preferred_domain_verification_certificate: FFaker::Lorem.characters(20),
+      stores: [::Spree::Store.default]
     )
   end
   let(:stripe_credit_card_payment_method) do
     Spree::Gateway::StripeGateway.create!(
       name: 'CreditCard',
       preferred_secret_key: FFaker::Lorem.characters(20),
-      preferred_publishable_key: FFaker::Lorem.characters(20)
+      preferred_publishable_key: FFaker::Lorem.characters(20),
+      stores: [::Spree::Store.default]
     )
   end
 
