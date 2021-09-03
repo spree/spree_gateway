@@ -53,5 +53,9 @@ module Spree
       options[:execute_threed] = get_preference(:intents)
       return money, creditcard, options
     end
+
+    def public_preference_keys
+      %i[publishable_key test_mode intents]
+    end
   end
 end
