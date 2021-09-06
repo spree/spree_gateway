@@ -28,8 +28,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  spree_version = '>= 4.3.0.rc1'
-  s.add_dependency 'spree_core', spree_version
+  s.add_dependency 'spree_core', '>= 3.7.0'
   s.add_dependency 'spree_extension'
 
   s.add_development_dependency 'braintree', '~> 3.0.0'
