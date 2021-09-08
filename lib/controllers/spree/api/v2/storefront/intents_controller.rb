@@ -15,12 +15,12 @@ module Spree
 
               if last_valid_payment.present?
                 client_secret = last_valid_payment.intent_client_key
-                publishable_key = last_valid_payment.payment_method.preferred_publishable_key
+                publishable_key = last_valid_payment.payment_method&.preferred_publishable_key
                 return render json: { client_secret: client_secret, pk_key: publishable_key }, status: :ok
               end
             end
 
-            render json: { client_secret: nil, pk_key: nil }, status: :ok
+            render_error_payload(I18n.t('spree.no_payment_authorization_needed'))
           end
 
           def handle_response
