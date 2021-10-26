@@ -21,7 +21,7 @@ describe 'Admin Panel Stripe elements payment', type: :feature do
   let!(:order) { OrderWalkthrough.up_to(:payment) }
   before { visit spree.new_admin_order_payment_path(order.number) }
 
-  it 'can process a valid payment' do
+  xit 'can process a valid payment' do
     fill_in_stripe_payment
     wait_for { !page.has_current_path?(spree.admin_order_payments_path(order.number)) }
 
