@@ -10,6 +10,7 @@ Spree::Core::Engine.add_routes do
     namespace :v2 do
       namespace :storefront do
         namespace :intents do
+          post :payment_confirmation_data
           post :handle_response
         end
       end
