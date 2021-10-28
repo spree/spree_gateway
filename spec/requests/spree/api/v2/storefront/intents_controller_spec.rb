@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Spree::Api::V2::Storefront::IntentsController, type: :request do
-  let(:order) { create(:order, user: user, store: store, currency: currency) }
-  let(:store) { Spree::Store.default }
+describe 'Api V2 Storefront Intents Spec', type: :request do
+  let!(:store) { Spree::Store.default }
   let(:currency) { store.default_currency }
   let(:user)  { create(:user) }
+  let(:order) { create(:order, user: user, store: store, currency: currency) }
   let(:params) { {} }
 
   include_context 'API v2 tokens'
@@ -12,13 +12,6 @@ describe Spree::Api::V2::Storefront::IntentsController, type: :request do
   describe '#payment_confirmation_data' do
     subject :post_payment_confirmation_data do
       post '/api/v2/storefront/intents/payment_confirmation_data', headers: headers, params: params
-    end
-
-    before do
-      allow(described_class).to receive_messages(current_store: store)
-      allow(described_class).to receive_messages(try_spree_current_user: user)
-      allow(described_class).to receive_messages(spree_current_order: order)
-      allow(described_class).to receive_messages(order_token: order.token)
     end
 
     include_context 'API v2 tokens'
@@ -39,7 +32,7 @@ describe Spree::Api::V2::Storefront::IntentsController, type: :request do
           gateway = Spree::Gateway::StripeElementsGateway.new(active: true)
           gateway.set_preference :secret_key, secret_key
           gateway.set_preference :intents, 'true'
-          gateway.name = described_class.to_s
+          gateway.name = 'Stripe Elements'
           gateway.stores << order.store
           allow(gateway).to receive(:options_for_purchase_or_auth).and_return ['money','cc','opts']
           allow(gateway).to receive_messages provider: provider
