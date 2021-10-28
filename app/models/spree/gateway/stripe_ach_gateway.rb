@@ -6,11 +6,7 @@ module Spree
     end
 
     def payment_source_class
-      nil
-    end
-
-    def source_required?
-      false
+      Check
     end
 
     def verify(source, gateway_options)
