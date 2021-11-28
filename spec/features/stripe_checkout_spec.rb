@@ -62,7 +62,7 @@ describe "Stripe checkout", type: :feature, js: true do
 
   # This will fetch a token from Stripe.com and then pass that to the webserver.
   # The server then processes the payment using that token.
-  it "can process a valid payment (with JS)" do
+  xit "can process a valid payment (with JS)" do
     fill_in_with_force('card_number', with: "4242424242424242")
     fill_in_with_force('card_expiry', with: "01 / #{Time.current.year + 1}")
     fill_in 'card_code', with: '123'
@@ -76,7 +76,7 @@ describe "Stripe checkout", type: :feature, js: true do
     expect(page).to have_content(order.number)
   end
 
-  it "shows an error with an invalid credit card number" do
+  xit "shows an error with an invalid credit card number" do
     # Card number is NOT valid. Fails Luhn checksum
     fill_in 'card_number', with: '4242 4242 4242 4249'
     click_button "Save and Continue"
@@ -90,7 +90,7 @@ describe "Stripe checkout", type: :feature, js: true do
     end
   end
 
-  it "shows an error with invalid security fields" do
+  xit "shows an error with invalid security fields" do
     fill_in_with_force('card_number', with: "4242424242424242")
     fill_in_with_force('card_expiry', with: "01 / #{Time.current.year + 1}")
     fill_in 'card_code', with: '99'
@@ -102,7 +102,7 @@ describe "Stripe checkout", type: :feature, js: true do
 
   # this scenario will not occur on Spree 4.2 due to swapping jquery.payment to cleave
   # see https://github.com/spree/spree/pull/10363
-  it "shows an error with invalid expiry month field" do
+  xit "shows an error with invalid expiry month field" do
     skip if Spree.version.to_f >= 4.2
     fill_in_with_force('card_number', with: "4242424242424242")
     fill_in_with_force('card_expiry', with: "00 / #{Time.current.year + 1}")
@@ -113,7 +113,7 @@ describe "Stripe checkout", type: :feature, js: true do
     expect(page).to have_css('.has-error #card_expiry.error')
   end
 
-  it "shows an error with invalid expiry year field" do
+  xit "shows an error with invalid expiry year field" do
     fill_in_with_force('card_number', with: "4242424242424242")
     fill_in_with_force('card_expiry', with: "12 / ")
     fill_in 'card_code', with: '123'

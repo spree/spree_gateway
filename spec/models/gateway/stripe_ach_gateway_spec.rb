@@ -123,7 +123,6 @@ describe Spree::Gateway::StripeAchGateway do
   end
 
   context 'capturing' do
-
     after do
       subject.capture(1234, 'response_code', {})
     end
@@ -144,27 +143,13 @@ describe Spree::Gateway::StripeAchGateway do
       gateway.stub(:options_for_purchase_or_auth).and_return(['money', 'check', 'opts'])
       gateway.stub(:provider).and_return provider
       gateway.stub source_required: true
+      gateway.name = described_class.to_s
+      gateway.stores << Spree::Store.first
       gateway
     end
-
-    let(:order) { Spree::Order.create }
-
-    let(:check) do
-      # mock_model(Spree::Check, :gateway_customer_profile_id => 'cus_abcde',
-      # :imported => false)
-      create :check, gateway_customer_profile_id: 'cus_abcde', imported: false
-    end
-
-    let(:payment) do
-      payment = Spree::Payment.new
-      payment.source = check
-      payment.order = order
-      payment.payment_method = gateway
-      payment.amount = 98.55
-      payment.state = 'pending'
-      payment.response_code = '12345'
-      payment
-    end
+    let(:check) { create :check, gateway_customer_profile_id: 'cus_abcde', imported: false }
+    let(:order) { create(:order, bill_address: create(:address), ship_address: create(:address), store: Spree::Store.first) }
+    let(:payment) { create(:payment, source: check, order: order, payment_method: gateway, amount: 98.55, state: 'pending', response_code: '12345') }
 
     after do
       payment.capture!

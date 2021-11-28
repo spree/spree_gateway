@@ -158,16 +158,12 @@ describe Spree::Gateway::StripeGateway do
       gateway.stub(:options_for_purchase_or_auth).and_return(['money','cc','opts'])
       gateway.stub(:provider).and_return provider
       gateway.stub :source_required => true
+      gateway.name = described_class.to_s
+      gateway.stores << Spree::Store.first
       gateway
     end
-
-    let(:order) { Spree::Order.create }
-
-    let(:card) do
-      # mock_model(Spree::CreditCard, :gateway_customer_profile_id => 'cus_abcde',
-                                    # :imported => false)
-      create :credit_card, gateway_customer_profile_id: 'cus_abcde', imported: false
-    end
+    let(:order) { create(:order, bill_address: create(:address), ship_address: create(:address), store: Spree::Store.first) }
+    let(:card) { create :credit_card, gateway_customer_profile_id: 'cus_abcde', imported: false }
 
     let(:payment) do
       payment = Spree::Payment.new
