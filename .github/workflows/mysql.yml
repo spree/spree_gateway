@@ -1,0 +1,57 @@
+name: MySQL tests
+
+on:
+  [push]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    env:
+      DB: mysql # conditions the RDBMS to use with test_app
+      DB_PASSWORD: root
+      DB_USERNAME: root
+      DB_HOST: 127.0.0.1
+      ImageOS: ubuntu20
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: --entrypoint redis-server
+
+    strategy:
+      matrix:
+        ruby: ['2.7', '3.0']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Ruby and install gems
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '13'
+
+      - name: Setup chromedriver
+        uses: nanasess/setup-chromedriver@master
+        with:
+          chromedriver-version: '92.0.4515.107'
+
+      - name: Start Ubuntu MySQL
+        run: sudo service mysql start
+
+      - name: Check Ruby version
+        run: ruby --version
+
+      - name: Run tests
+        run: |
+          bundle exec rake test_app
+          bundle exec rake spec
