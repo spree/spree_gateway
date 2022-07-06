@@ -4,7 +4,7 @@ module SpreeGateway
 
     config.autoload_paths += %W(#{config.root}/lib)
 
-    initializer "spree.gateway.payment_methods", :after => "spree.register.payment_methods" do |app|
+    config.after_initialize do |app|
       app.config.spree.payment_methods << Spree::Gateway::AuthorizeNet
       app.config.spree.payment_methods << Spree::Gateway::AuthorizeNetCim
       app.config.spree.payment_methods << Spree::Gateway::BalancedGateway
