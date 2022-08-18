@@ -1,6 +1,7 @@
 module Spree
   class Gateway::StripeElementsGateway < Gateway::StripeGateway
     preference :intents, :boolean, default: true
+    preference :endpoint_secret, :string
 
     def method_type
       'stripe_elements'
@@ -11,6 +12,28 @@ module Spree
         ActiveMerchant::Billing::StripePaymentIntentsGateway
       else
         ActiveMerchant::Billing::StripeGateway
+      end
+    end
+
+    def source_required?
+      if get_preference(:intents)
+        # Source is not present as the payment intent is created prior
+        # to payment details being entered. Therefore must be set to false.
+        false
+      else
+        true
+      end
+    end
+
+    def payment_profiles_supported?
+      # Stripe API does not support adding a customer to a payment method AFTER
+      # payment intent has being created (as is the case with the 'store' method
+      # in the current Spree implementation.
+      # Instead need to create customer at the time the payment intent is created.
+      if get_preference(:intents)
+        false
+      else
+        true
       end
     end
 
@@ -44,6 +67,10 @@ module Spree
       else
         payment.send(:gateway_error, response.message)
       end
+    end
+
+    def create_intent(money, card, options)
+      provider.create_intent(money, card, options)
     end
 
     private
