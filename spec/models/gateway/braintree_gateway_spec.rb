@@ -80,7 +80,7 @@ describe Spree::Gateway::BraintreeGateway do
 
   describe 'payment profile failure' do
     before do
-      country = Spree::Country.default
+      country = Spree::Store.default.default_country
       state   = country.states.first
       address = create(:address,
         firstname: 'John',
