@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_gateway'
   s.version     = SpreeGateway.version
-  s.summary     = 'Additional Payment Gateways for Spree Commerce'
+  s.summary     = 'Collection of Payment Gateways for Spree Commerce such as Stripe, Braintree, etc.'
   s.description = s.summary
 
   s.author       = 'Spree Commerce'
@@ -28,10 +28,10 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'spree_core', '>= 3.7.0'
+  s.add_dependency 'spree_core', '>= 3.7'
   s.add_dependency 'spree_extension'
 
-  s.add_development_dependency 'braintree', '~> 3.0.0'
+  s.add_development_dependency 'braintree', '~> 4.20'
   s.add_development_dependency 'rspec-activemodel-mocks'
   s.add_development_dependency 'spree_dev_tools'
 end
