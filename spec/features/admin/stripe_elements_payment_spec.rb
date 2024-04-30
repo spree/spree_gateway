@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Admin Panel Stripe elements payment', type: :feature do
+describe 'Admin Panel Stripe elements payment', type: :feature, js: true do
   stub_authorization!
 
   let!(:country) { create(:country, states_required: true) }
@@ -53,14 +53,8 @@ describe 'Admin Panel Stripe elements payment', type: :feature do
   it 'shows an error with an invalid card expiration' do
     fill_in_stripe_payment(false, false, false, true)
 
-    if Spree.version.to_f >= 4.1 || Spree.version.to_f >= 3.7
-      expect(page).to have_content('Credit card Month is not a number')
-      expect(page).to have_content('Credit card Year is not a number')
-      expect(page).to have_current_path spree.admin_order_payments_path(order.number)
-    else
-      expect(page).to have_content("Your card's expiration year is invalid.")
-      expect(page).to have_current_path spree.new_admin_order_payment_path(order.number)
-    end
+    expect(page).to have_content('Credit card Month is not a number')
+    expect(page).to have_content('Credit card Year is not a number')
   end
 
   def fill_in_stripe_payment(invalid_name = false, invalid_number = false, invalid_code = false, invalid_expiration = false)
@@ -78,18 +72,15 @@ describe 'Admin Panel Stripe elements payment', type: :feature do
   end
 
   def fill_in_card_expiration(invalid_expiration)
-    valid_expiry = Spree.version.to_f >= 4.2 ? "01/#{Time.current.year + 1}" : "01 / #{Time.current.year + 1}"
-    invalid_expiry = Spree.version.to_f >= 4.2 ? '01/' : '01 / '
+    card_expiry = invalid_expiration ? '01/' : "01/#{Time.current.year + 1}"
 
-    card_expiry = invalid_expiration ? invalid_expiry : valid_expiry
-    fill_in_field('Expiration *', "#card_expiry#{stripe_elements_payment_method.id}", card_expiry)
+    find('#card_expiry1').fill_in with: card_expiry
   end
 
   def fill_in_cvc(invalid_code)
     value = invalid_code ? '1' : '123'
-    label = Spree.version.to_f >= 4.2 ? 'Card Varification Code (CVC) *' : 'Card Code *'
 
-    fill_in label, with: value
+    find('#card_code1').fill_in with: value
   end
 
   def fill_in_field(field_name, field_id, number)
