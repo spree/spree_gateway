@@ -1,5 +1,7 @@
 module SpreeGateway
-  def self.version
-    '3.10.0'
+  VERSION = '3.10'.freeze
+
+  def gem_version
+    Gem::Version.new(VERSION)
   end
 end

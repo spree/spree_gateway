@@ -7,7 +7,7 @@ require 'spree_gateway/version'
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_gateway'
-  s.version     = SpreeGateway.version
+  s.version     = SpreeGateway::VERSION
   s.summary     = 'Collection of Payment Gateways for Spree Commerce such as Stripe, Braintree, etc.'
   s.description = s.summary
 
