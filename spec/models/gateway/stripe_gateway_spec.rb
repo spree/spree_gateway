@@ -158,6 +158,7 @@ describe Spree::Gateway::StripeGateway do
       gateway.stub(:options_for_purchase_or_auth).and_return(['money','cc','opts'])
       gateway.stub(:provider).and_return provider
       gateway.stub :source_required => true
+      gateway.stores = [Spree::Store.default]
       gateway
     end
 

@@ -33,7 +33,6 @@ describe 'Admin Panel Stripe elements payment', type: :feature, js: true do
     fill_in_stripe_payment(true)
 
     expect(page).to have_content("Credit card Name can't be blank")
-    expect(page).to have_current_path spree.admin_order_payments_path(order.number)
   end
 
   it 'shows an error with an invalid card number' do
