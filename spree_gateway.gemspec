@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'spree_core', '>= 3.7'
   s.add_dependency 'spree_extension'
+  s.add_dependency 'stripe'
 
   s.add_development_dependency 'braintree', '~> 4.20'
   s.add_development_dependency 'rspec-activemodel-mocks'

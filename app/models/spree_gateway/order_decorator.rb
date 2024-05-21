@@ -19,6 +19,10 @@ module SpreeGateway
       super
     end
 
+    def create_payment_intent!
+      process_payments_with(:create_intent!)
+    end
+
     def intents?
       payments.valid.map { |p| p.payment_method&.has_preference?(:intents) && p.payment_method&.get_preference(:intents) }.any?
     end
