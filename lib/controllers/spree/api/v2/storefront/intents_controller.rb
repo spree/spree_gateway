@@ -5,6 +5,22 @@ module Spree
         class IntentsController < ::Spree::Api::V2::BaseController
           include Spree::Api::V2::Storefront::OrderConcern
 
+          def create
+            spree_authorize! :update, spree_current_order, order_token
+
+            spree_current_order.create_payment_intent!
+            spree_current_order.reload
+
+            last_valid_payment = spree_current_order.payments.valid.where.not(intent_client_key: nil).last
+
+            if last_valid_payment.present?
+              client_secret = last_valid_payment.intent_client_key
+              return render json: { client_secret: client_secret }, status: :ok
+            end
+
+            render_error_payload(I18n.t('spree.no_payment_intent_created'))
+          end
+
           def payment_confirmation_data
             spree_authorize! :update, spree_current_order, order_token
 

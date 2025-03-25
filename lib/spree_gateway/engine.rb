@@ -44,6 +44,9 @@ module SpreeGateway
       Dir.glob(File.join(File.dirname(__FILE__), '../../app/**/spree_gateway/*_decorator*.rb')) do |c|
         Rails.application.config.cache_classes ? require(c) : load(c)
       end
+      Dir.glob(File.join(File.dirname(__FILE__), '../../app/**/spree_gateway/**/*_decorator*.rb')) do |c|
+        Rails.application.config.cache_classes ? require(c) : load(c)
+      end
       Dir.glob(File.join(File.dirname(__FILE__), '../../lib/active_merchant/**/*_decorator*.rb')) do |c|
         Rails.application.config.cache_classes ? require(c) : load(c)
       end

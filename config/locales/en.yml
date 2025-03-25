@@ -13,6 +13,7 @@ en:
     please_wait_for_confirmation_popup: Please wait for payment confirmation popup to appear.
     payment_successfully_authorized: The payment was successfully authorized.
     no_payment_authorization_needed: Payment autorization not needed.
+    no_payment_intent_created: No payment intent created.
     order_state:
       payment_confirm: Verify payment
     log_entry:
@@ -35,6 +36,8 @@ en:
         cvc_check: CVC Check
         address_zip_check: Address ZIP check
     stripe:
+      response:
+        success: Webhook successfully handled
       ach:
         account_holder_name: Account Holder Name
         account_holder_type: Account Holder Type
