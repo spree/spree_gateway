@@ -1,17 +1,18 @@
 # Spree Gateway
 
-[![Build Status](https://api.travis-ci.org/spree/spree_gateway.svg?branch=main)](https://travis-ci.org/spree/spree_gateway)
-[![Code Climate](https://codeclimate.com/github/spree/spree_gateway.svg)](https://codeclimate.com/github/spree/spree_gateway)
-
 Community supported Spree Payment Method Gateways. It works as a wrapper for
 [active_merchant](https://github.com/activemerchant/active_merchant) gateway. 
 
+> [!NOTE]  
+> For **Stripe** support, please go to [Spree Stripe](https://github.com/spree/spree_stripe) 
+
+> [!NOTE]  
+> For **Braintree & PayPal** support head over to [Spree Braintree](https://github.com/spree-contrib/spree_braintree_vzero)
+
 Supported payment gateways:
 * Authorize.net (with CIM support)
-* Apple Pay (via Stripe)
 * BanWire
 * Bambora (previously Beanstream)
-* Braintree
 * CyberSource
 * ePay
 * eWay
@@ -26,11 +27,8 @@ Supported payment gateways:
 * sage Pay
 * SecurePay
 * Spreedly
-* Stripe (with Stripe Elements)
 * USAePay
 * Worldpay (previously Cardsave)
-
-For`PayPal` support head over to [braintree_vzero](https://github.com/spree-contrib/spree_braintree_vzero) extension.
 
 ## Installation
 
