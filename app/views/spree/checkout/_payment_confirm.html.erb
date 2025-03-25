@@ -8,7 +8,11 @@
     var form = document.getElementById('checkout_form_payment_confirm');
 
     function confirmCardPaymentResponseHandler(response) {
-      $.post("/api/v2/storefront/intents/handle_response", { response: response, order_token: "<%= @order.token %>" }).done(function (result) {
+      var url = 'api/v2/storefront/intents/handle_response';
+      if ( typeof Spree.pathFor == 'function' ) {
+        url = Spree.pathFor(url)
+      }
+      $.post(url, { response: response, order_token: "<%= @order.token %>" }).done(function (result) {
           // conditional needs for spree 3.7
           if(form.elements["commit"]) {
               form.elements["commit"].disabled = false;
